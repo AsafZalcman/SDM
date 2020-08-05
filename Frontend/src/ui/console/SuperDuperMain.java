@@ -1,8 +1,12 @@
 package ui.console;
 
+import xml.XmlManager;
+
+import java.io.FileNotFoundException;
+
 public class SuperDuperMain {
     public static void main(String[] args) {
-        MenuItem XML_item = new MenuItem("initialize system", () -> System.out.println("not implemented"));
+        MenuItem XML_item = new MenuItem("initialize system", () -> loadSuperDuperMarketXmlFile());
         MainMenu menu = new MainMenu(
                 XML_item,
                 new MenuItem("show all shops", () -> System.out.println("not implemented")),
@@ -17,5 +21,15 @@ public class SuperDuperMain {
                 new MenuItem("Exit", () -> System.out.println("see you next time!!!!")));
         //maybe "back" button should be a default in subMenu
         menu.run();
+    }
+
+    private static  void loadSuperDuperMarketXmlFile()
+    {
+        XmlManager xmlManager = new XmlManager();
+        try {
+            xmlManager.loadSuperDuperMarketXmlFile("C:\\Users\\asafz\\Downloads\\ex1-small.xml");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
