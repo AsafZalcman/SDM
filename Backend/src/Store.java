@@ -1,9 +1,12 @@
+import interfaces.IDelivery;
 import utils.Location;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public class Store {
+public class Store implements IDelivery {
     private int m_StoreID;
     private String m_StoreName;
     private double m_PPK;
@@ -34,5 +37,20 @@ public class Store {
 
     public void setM_PPK(double m_PPK) {
         this.m_PPK = m_PPK;
+    }
+
+    @Override
+    public Collection<Object> getDetails() {
+        List<Object> details = new ArrayList<>();
+        details.add(this.m_StoreID);
+        details.add(this.m_StoreName);
+        details.add(this.m_PPK);
+        return details;
+    }
+
+    @Override
+    public double getDeliveryPrice(Location i_DestLocation, double i_PPK) {
+        double deliveryPrice = this.m_Location.distance(i_DestLocation) * i_PPK;
+        return deliveryPrice;
     }
 }

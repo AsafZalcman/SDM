@@ -1,8 +1,4 @@
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SuperDuperManager {
     private Map<Integer, Store> m_StoreID2Store;
@@ -26,6 +22,7 @@ public class SuperDuperManager {
         }
         return storeDetails;
     }
+
     public void addNewStore(Store i_newStore){
         m_StoreID2Store.put(i_newStore.getM_StoreID(), i_newStore);
     }
