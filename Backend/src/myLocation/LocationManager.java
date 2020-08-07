@@ -1,7 +1,5 @@
 package myLocation;
 
-import xml.jaxb.schema.generated.Location;
-
 public class LocationManager {
     public static final int X_UPPER_LIMIT = 50;
     public static final int X_LOWER_LIMIT = 1;

@@ -3,8 +3,6 @@ package models;
 import interfaces.IDelivery;
 import interfaces.IUniquely;
 import myLocation.Location;
-import xml.jaxb.schema.generated.SDMSell;
-import xml.jaxb.schema.generated.SDMStore;
 
 import java.util.*;
 
@@ -14,34 +12,21 @@ public class Store implements IDelivery, IUniquely {
     private double m_PPK;
     private final Location m_Location;
     private Map<Integer, StoreItem> m_IdToStoreItem;
-    private List<Order> m_StoreOrders;
+    private List<Order> m_Orders;
+    private double m_TotalCostOfDelivery = 0;
 
-    public Store(int i_StoreID, String i_StoreName, Location i_Location, Collection<StoreItem> i_Items) {
-        m_StoreID = i_StoreID;
-        m_StoreName = i_StoreName;
-        m_Location = i_Location;
-        createIdToStoreMapFromCollection(i_Items);
-        m_StoreOrders=new ArrayList<>();
-    }
-
-    public Store(int i_StoreID, String i_StoreName, Location i_Location,double i_PPK) {
+    public Store(int i_StoreID, String i_StoreName, Location i_Location, double i_PPK) {
         this.m_StoreID = i_StoreID;
         this.m_StoreName = i_StoreName;
         this.m_Location = i_Location;
-        this.m_PPK=i_PPK;
+        this.m_PPK = i_PPK;
         m_IdToStoreItem = new HashMap<>();
-        m_StoreOrders=new ArrayList<>();
+        m_Orders = new ArrayList<>();
     }
 
-    public Store(SDMStore i_JaxbStore) {
-        this(i_JaxbStore.getId(), i_JaxbStore.getName(), new Location(i_JaxbStore.getLocation()),i_JaxbStore.getDeliveryPpk());
-        List<StoreItem> storeItems = new ArrayList<>(i_JaxbStore.getSDMPrices().getSDMSell().size());
-        for (SDMSell sdmSell : i_JaxbStore.getSDMPrices().getSDMSell()
-        ) {
-            storeItems.add(new StoreItem(sdmSell));
-        }
-
-        createIdToStoreMapFromCollection(storeItems);
+    public Store(int i_StoreID, String i_StoreName, Location i_Location, double i_PPK, Collection<StoreItem> i_Items) {
+        this(i_StoreID, i_StoreName, i_Location, i_PPK);
+        createIdToStoreMapFromCollection(i_Items);
     }
 
     private void createIdToStoreMapFromCollection(Collection<StoreItem> i_Items) {
@@ -82,12 +67,45 @@ public class Store implements IDelivery, IUniquely {
         return m_StoreID;
     }
 
+    public Collection<Integer> getAllItemsId() {
+        return m_IdToStoreItem.keySet();
+    }
+
+    public Collection<StoreItem> getAllItems() {
+        return m_IdToStoreItem.values();
+    }
+
+    public StoreItem getStoreItem(int i_Id) {
+        return m_IdToStoreItem.get(i_Id);
+    }
+
+    public double getTotalCostOfDelivery() {
+        return m_TotalCostOfDelivery;
+    }
+
+    public Order createOrder(Date i_orderDate, Location i_customerLocation, Map<Integer, Integer> i_itemIdToAmountOfSellMap) {
+        Map<Integer, StoreItem> itemIdToStoreItemsMap = new HashMap<>();
+        //maybe use clone and set AmountOfSells
+        m_IdToStoreItem.values().forEach(storeItem ->
+                itemIdToStoreItemsMap.put(storeItem.getItemId(), new StoreItem(storeItem.getItemId(), storeItem.getPrice(), i_itemIdToAmountOfSellMap.get(storeItem.getItemId()))));
+        Order order = new Order(i_orderDate, i_customerLocation, getDeliveryPrice(i_customerLocation), itemIdToStoreItemsMap);
+        m_Orders.add(order);
+        m_TotalCostOfDelivery += order.getDeliveryPrice();
+        for (StoreItem item : order.getStoreItems()
+        ) {
+            m_IdToStoreItem.get(item.getItemId()).addAmountOfSells(item.getAmountOfSells());
+        }
+
+        return order;
+    }
+
+    //only for debug
     @Override
     public String toString() {
 
         StringBuilder itemsString = new StringBuilder();
-        for (StoreItem item: m_IdToStoreItem.values()
-             ) {
+        for (StoreItem item : m_IdToStoreItem.values()
+        ) {
             itemsString.append(item.toString());
         }
         return "Store{" +
@@ -98,4 +116,5 @@ public class Store implements IDelivery, IUniquely {
                 ", m_IdToStoreItem=" + itemsString +
                 '}';
     }
+
 }
