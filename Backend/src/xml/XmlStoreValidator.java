@@ -29,13 +29,13 @@ public class XmlStoreValidator implements XmlValidator {
                     .map(SDMItem::getId)
                     .collect(Collectors.toList())
                     .contains(sdmSell.getItemId())) {
-                throw new XmlValidatorException("Store id " + i_Store.getId() + " sells an item with " + sdmSell.getItemId() + " id, which not exists in the SDM-Items");
+                throw new XmlValidatorException("models.Store id " + i_Store.getId() + " sells an item with " + sdmSell.getItemId() + " id, which not exists in the SDM-Items");
             }
         }
     }
 
     private void validateStoreLocation(SDMStore i_Store) throws XmlValidatorException {
-        if(!LocationManager.isValidLocation(i_Store.getLocation()))
+        if(!LocationManager.isValidLocation(i_Store.getLocation().getX(),i_Store.getLocation().getY()))
         {
             throw new XmlValidatorException("The store named " + i_Store.getName() + " have illegal location (" + i_Store.getLocation().getX() + ","+i_Store.getLocation().getY()+"): x value must be between "
                     + LocationManager.X_LOWER_LIMIT + " to "+ LocationManager.X_UPPER_LIMIT + " and y value must be between "

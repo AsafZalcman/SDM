@@ -1,5 +1,6 @@
 package ui.console;
 
+import utils.SuperDuperManager;
 import xml.XmlManager;
 
 import java.io.FileNotFoundException;
@@ -25,11 +26,15 @@ public class SuperDuperMain {
 
     private static  void loadSuperDuperMarketXmlFile()
     {
-        XmlManager xmlManager = new XmlManager();
+        SuperDuperManager superDuperManager = new SuperDuperManager();
         try {
-            xmlManager.loadSuperDuperMarketXmlFile("C:\\Users\\asafz\\Downloads\\ex1-small.xml");
+            superDuperManager.loadSuperDuperDataFromXml("C:\\Users\\asafz\\Downloads\\ex1-small.xml");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
+        System.out.println(superDuperManager);
+
     }
+
 }
