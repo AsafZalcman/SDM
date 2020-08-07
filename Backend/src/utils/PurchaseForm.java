@@ -1,16 +1,26 @@
 package utils;
 
 public enum PurchaseForm {
-    QUANTITY{
+    QUANTITY("Quantity"){
         @Override
         public String toString() {
-            return "$classname{}";
+            return getValue();
         }
-    }, WEIGHT{
+    }, WEIGHT("Weight"){
         @Override
         public String toString() {
-            return "$classname{}";
+            return getValue();
         }
     };
+    private final String m_Value;
+    PurchaseForm(String i_Value)
+    {
+        m_Value=i_Value;
+    }
+
+    public String getValue()
+    {
+        return m_Value;
+    }
 
 }

@@ -1,5 +1,6 @@
 package xml;
 
+import xml.jaxb.IJaxbDataLoader;
 import xml.jaxb.schema.generated.SuperDuperMarketDescriptor;
 
 import javax.xml.bind.JAXBContext;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class XmlManager {
+public class XmlManager implements IJaxbDataLoader {
 
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "xml.jaxb.schema.generated";
     private final static String XML_SUFFIX = ".xml";
@@ -22,31 +23,34 @@ public class XmlManager {
     public XmlManager(Collection<XmlValidator> validators) {
         this.m_Validators = validators;
     }
-    public XmlManager() {
+    public XmlManager()
+    {
         m_Validators = new ArrayList<>();
         m_Validators.add(new XmlItemsValidator());
         m_Validators.add(new XmlItemValidator());
         m_Validators.add(new XmlStoresValidator());
-        m_Validators.add(new XmlStoreValidator());
+        m_Validators.add(new XmlStoreValidator());;
     }
 
-    public void loadSuperDuperMarketXmlFile(String i_PathToFile) throws IOException, JAXBException, XmlValidatorException {
-            if(!isWithXmlSuffix(i_PathToFile))
-            {
-                throw new IllegalArgumentException("\"" + i_PathToFile + "\" file dos'ent have " + XML_SUFFIX + " suffix");
+    @Override
+    public SuperDuperMarketDescriptor load(String i_PathToFile) throws Exception {
+        if (!isWithXmlSuffix(i_PathToFile)) {
+            throw new IllegalArgumentException("\"" + i_PathToFile + "\" file dos'ent have " + XML_SUFFIX + " suffix");
+        }
+        try (InputStream inputStream = new FileInputStream(i_PathToFile)) {
+            SuperDuperMarketDescriptor superDuperMarketDescriptor = deserializeFrom(inputStream);
+            for (XmlValidator validator : m_Validators
+            ) {
+                validator.validate(superDuperMarketDescriptor);
             }
-            try (InputStream inputStream = new FileInputStream(i_PathToFile)){
-                SuperDuperMarketDescriptor superDuperMarketDescriptor = deserializeFrom(inputStream);
-                for (XmlValidator validator: m_Validators
-                     ) {
-                    validator.validate(superDuperMarketDescriptor);
-                }
+            return superDuperMarketDescriptor;
 
-                System.out.println("PASS!!!!!!");
-
-            } catch (FileNotFoundException e) {
-                throw new FileNotFoundException("\"" + i_PathToFile + "\"" + " file is not exists");
-            }}
+        } catch (FileNotFoundException e) {
+            throw new FileNotFoundException("\"" + i_PathToFile + "\"" + " file is not exists");
+        } catch (IOException | JAXBException e) {
+            throw new Exception("A general glitch occurred while loading \"" + i_PathToFile + "\"" + "\n" + e.getMessage());
+        }
+    }
 
         private static SuperDuperMarketDescriptor deserializeFrom(InputStream i_InputStream) throws JAXBException {
             JAXBContext jc = JAXBContext.newInstance(JAXB_XML_GAME_PACKAGE_NAME);
@@ -58,4 +62,4 @@ public class XmlManager {
         {
             return i_PathToFile.endsWith(XML_SUFFIX);
         }
-    }
+}
