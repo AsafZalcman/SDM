@@ -35,7 +35,7 @@ public class XmlManager implements IJaxbDataLoader {
     @Override
     public SuperDuperMarketDescriptor load(String i_PathToFile) throws Exception {
         if (!isWithXmlSuffix(i_PathToFile)) {
-            throw new IllegalArgumentException("\"" + i_PathToFile + "\" file dos'ent have " + XML_SUFFIX + " suffix");
+            throw new IllegalArgumentException("Error:\"" + i_PathToFile + "\" file dos'ent have " + XML_SUFFIX + " suffix");
         }
         try (InputStream inputStream = new FileInputStream(i_PathToFile)) {
             SuperDuperMarketDescriptor superDuperMarketDescriptor = deserializeFrom(inputStream);
@@ -46,7 +46,7 @@ public class XmlManager implements IJaxbDataLoader {
             return superDuperMarketDescriptor;
 
         } catch (FileNotFoundException e) {
-            throw new FileNotFoundException("\"" + i_PathToFile + "\"" + " file is not exists");
+            throw new FileNotFoundException("Error:\"" + i_PathToFile + "\"" + " file is not exists");
         } catch (IOException | JAXBException e) {
             throw new Exception("A general glitch occurred while loading \"" + i_PathToFile + "\"" + "\n" + e.getMessage());
         }

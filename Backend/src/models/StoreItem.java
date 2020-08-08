@@ -1,20 +1,18 @@
 package models;
 
-import xml.jaxb.schema.generated.SDMSell;
-
 public class StoreItem {//extends Item {
     private double m_Price;
     private final Integer m_ItemId;
     private int m_AmountOfSells = 0;
 
-    public StoreItem(double i_Price, int i_ItemId) {
-        this.m_Price = i_Price;
+    public StoreItem( int i_ItemId,double i_Price) {
         this.m_ItemId = i_ItemId;
+        this.m_Price = i_Price;
     }
 
-    public StoreItem(SDMSell i_JaxbStoreItem) {
-        m_Price = i_JaxbStoreItem.getPrice();
-        m_ItemId = i_JaxbStoreItem.getItemId();
+    public StoreItem( int i_ItemId,double i_Price,int i_AmountOfSells) {
+        this(i_ItemId,i_Price);
+        m_AmountOfSells=i_AmountOfSells;
     }
 
     public double getPrice() {
@@ -33,8 +31,8 @@ public class StoreItem {//extends Item {
         return m_AmountOfSells;
     }
 
-    public void sold() {
-        this.m_AmountOfSells++;
+    public void addAmountOfSells(double i_AmountOfSells) {
+        this.m_AmountOfSells+=i_AmountOfSells;
     }
 
     @Override
