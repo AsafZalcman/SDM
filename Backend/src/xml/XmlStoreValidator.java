@@ -1,5 +1,6 @@
 package xml;
 
+import myLocation.LocationException;
 import myLocation.LocationManager;
 import xml.jaxb.schema.generated.*;
 
@@ -35,11 +36,11 @@ public class XmlStoreValidator implements XmlValidator {
     }
 
     private void validateStoreLocation(SDMStore i_Store) throws XmlValidatorException {
-        if(!LocationManager.isValidLocation(i_Store.getLocation().getX(),i_Store.getLocation().getY()))
-        {
-            throw new XmlValidatorException("The store named " + i_Store.getName() + " have illegal location (" + i_Store.getLocation().getX() + ","+i_Store.getLocation().getY()+"): x value must be between "
-                    + LocationManager.X_LOWER_LIMIT + " to "+ LocationManager.X_UPPER_LIMIT + " and y value must be between "
-                    + LocationManager.Y_LOWER_LIMIT + " to " + LocationManager.Y_UPPER_LIMIT);
+        try {
+           LocationManager.isValidLocation(i_Store.getLocation().getX(),i_Store.getLocation().getY());
+
+        } catch (LocationException e) {
+            throw new XmlValidatorException("The store named " + i_Store.getName() + " have illegal location (" + i_Store.getLocation().getX() + ","+i_Store.getLocation().getY()+"):" +e.getMessage());
         }
     }
 
