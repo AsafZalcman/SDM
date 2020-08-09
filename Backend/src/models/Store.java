@@ -83,20 +83,29 @@ public class Store implements IDelivery, IUniquely {
         return m_TotalCostOfDelivery;
     }
 
-    public Order createOrder(Date i_orderDate, Location i_customerLocation, Map<Integer, Integer> i_itemIdToAmountOfSellMap) {
+    public Order createOrder(Date i_orderDate, Location i_customerLocation, Map<Integer, Double> i_itemIdToAmountOfSellMap) {
         Map<Integer, StoreItem> itemIdToStoreItemsMap = new HashMap<>();
-        //maybe use clone and set AmountOfSells
-        m_IdToStoreItem.values().forEach(storeItem ->
-                itemIdToStoreItemsMap.put(storeItem.getItemId(), new StoreItem(storeItem.getItemId(), storeItem.getPrice(), i_itemIdToAmountOfSellMap.get(storeItem.getItemId()))));
-        Order order = new Order(i_orderDate, i_customerLocation, getDeliveryPrice(i_customerLocation), itemIdToStoreItemsMap);
-        m_Orders.add(order);
-        m_TotalCostOfDelivery += order.getDeliveryPrice();
-        for (StoreItem item : order.getStoreItems()
+        i_itemIdToAmountOfSellMap.keySet().forEach(itemId -> {
+            StoreItem storeItem = new StoreItem(m_IdToStoreItem.get(itemId));
+            storeItem.setAmountOfSell(i_itemIdToAmountOfSellMap.get(storeItem.getItemId()));
+            itemIdToStoreItemsMap.put(storeItem.getItemId(),storeItem);
+        });
+        return new Order(i_orderDate, i_customerLocation, getDeliveryPrice(i_customerLocation), itemIdToStoreItemsMap);
+    }
+
+    public void addOrder(Order i_Order)
+    {
+        m_Orders.add(i_Order);
+        m_TotalCostOfDelivery += i_Order.getDeliveryPrice();
+        for (StoreItem item : i_Order.getStoreItems()
         ) {
             m_IdToStoreItem.get(item.getItemId()).addAmountOfSells(item.getAmountOfSells());
         }
+    }
 
-        return order;
+    public Location getLocation()
+    {
+        return m_Location;
     }
 
     //only for debug

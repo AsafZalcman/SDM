@@ -4,6 +4,8 @@ import models.Item;
 import models.Store;
 import models.StoreItem;
 import myLocation.Location;
+import myLocation.LocationException;
+import myLocation.LocationManager;
 import utils.PurchaseForm;
 import xml.jaxb.schema.generated.SDMItem;
 import xml.jaxb.schema.generated.SDMSell;
@@ -48,15 +50,14 @@ public class JaxbConverter {
     }
 
 
-    private Store convertToStore(SDMStore i_JaxbStore)
-    {
+    private Store convertToStore(SDMStore i_JaxbStore) {
         List<StoreItem> storeItems = new ArrayList<>(i_JaxbStore.getSDMPrices().getSDMSell().size());
         for (SDMSell sdmSell : i_JaxbStore.getSDMPrices().getSDMSell()
         ) {
             storeItems.add(convertToStoreItem(sdmSell));
         }
-
-       return new Store(i_JaxbStore.getId(), i_JaxbStore.getName(), new Location(i_JaxbStore.getLocation()),i_JaxbStore.getDeliveryPpk(),storeItems);
+        LocationManager.addLocation(i_JaxbStore.getLocation().getX(),i_JaxbStore.getLocation().getY());
+       return new Store(i_JaxbStore.getId(), i_JaxbStore.getName(), new Location(i_JaxbStore.getLocation().getX(),i_JaxbStore.getLocation().getY()),i_JaxbStore.getDeliveryPpk(),storeItems);
     }
 
     private StoreItem convertToStoreItem(SDMSell i_JaxbStoreItem) {

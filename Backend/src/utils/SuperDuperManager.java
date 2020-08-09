@@ -1,27 +1,24 @@
 package utils;
 
-import models.*;
-import myLocation.Location;
+import models.Item;
+import models.Store;
 import xml.jaxb.JaxbConverter;
 import xml.jaxb.JaxbConverterFactory;
 import java.util.*;
 
 public class SuperDuperManager {
-    private Map<Integer, Store> m_StoreID2Store;
-    private Map<Integer, StorageOrder> m_OrderID2Order; // maybe we need list and not map
-    private Map<Integer, Item> m_ItemID2Item;
     private static SuperDuperManager m_Instance = null;
+    private OrderManager m_OrderManager;
+    private StoreManager m_StoreManager;
+    private ItemManager m_ItemManager;
 
 
     private SuperDuperManager() {
-        m_StoreID2Store = new HashMap<>();
-        m_OrderID2Order = new HashMap<>();
-        m_ItemID2Item = new HashMap<>();
+        m_OrderManager=new OrderManager(); // after we will implement the bonus, we should replace this line in xml method
     }
 
     public static SuperDuperManager getInstance() {
         if (m_Instance == null) {
-            //synchronized block to remove overhead
             synchronized (SuperDuperManager.class) {
                 if (m_Instance == null) {
                     m_Instance = new SuperDuperManager();
@@ -31,32 +28,26 @@ public class SuperDuperManager {
         return m_Instance;
     }
 
-    public List<ArrayList<Object>> getStoreIDNamePPK() {
-        List<ArrayList<Object>> storeDetails = new ArrayList<>();
-        for (Map.Entry<Integer, Store> entry : m_StoreID2Store.entrySet()) {
-            ArrayList<Object> store = new ArrayList<>();
-            store.add(entry.getKey());
-            store.add((entry.getValue().getStoreName()));
-            store.add(entry.getValue().getPPK());
-            storeDetails.add(store);
-        }
-        return storeDetails;
+    public StoreManager getStoreManager()
+    {
+        return m_StoreManager;
+    }
+
+    public ItemManager getItemManager()
+    {
+        return m_ItemManager;
+    }
+
+    public OrderManager getOrderManager()
+    {
+        return m_OrderManager;
     }
 
     public void loadSuperDuperDataFromXml(String i_PathToFile) throws Exception {
         JaxbConverter jaxbConverter = JaxbConverterFactory.create(JaxbConverterFactory.JaxbConverterType.XML);
         jaxbConverter.loadJaxbData(i_PathToFile);
-        Collection<Item> items = jaxbConverter.getItems();
-        Collection<Store> stores = jaxbConverter.getStores();
-        for (Item item : items
-        ) {
-            m_ItemID2Item.put(item.getId(), item);
-        }
-
-        for (Store store : stores
-        ) {
-            m_StoreID2Store.put(store.getId(), store);
-        }
+        m_ItemManager = new ItemManager(jaxbConverter.getItems());
+        m_StoreManager = new StoreManager(jaxbConverter.getStores());
     }
 
     /**
@@ -96,37 +87,20 @@ public class SuperDuperManager {
 //      }
 //  }
 
-    public void createOrder(Integer i_StoreId,Date i_OrderDate, Location i_CustomerLocation,Map<Integer,Integer> i_ItemIdToAmountOfSellMap) {
-        Store store = m_StoreID2Store.get(i_StoreId);
-        Order createdOrder = store.createOrder(i_OrderDate, i_CustomerLocation, i_ItemIdToAmountOfSellMap);
-        StorageOrder storageOrder = new StorageOrder(createdOrder, store.getId(), store.getStoreName());
-        m_OrderID2Order.put(storageOrder.getM_OrderID(), storageOrder);
-
-    }
-    //should be dto
-    public Collection<StoreItem> getAllItemsInShops(int i_StoreId)
-    {
-        return m_StoreID2Store.get(i_StoreId).getAllItems();
-    }
-
 //only for debug
-    @Override
-    public String toString() {
-        StringBuilder items = new StringBuilder("items:");
-        for (Item item : m_ItemID2Item.values()
-        ) {
-            items.append(item);
-        }
+   @Override
+   public String toString() {
+       StringBuilder items = new StringBuilder("items:");
+       for (Item item : m_ItemManager.getAllItems()
+       ) {
+           items.append(item);
+       }
 
-        StringBuilder stores = new StringBuilder("stores:");
-        for (Store store : m_StoreID2Store.values()
-        ) {
-            stores.append(store);
-        }
-        return items + "\n" + stores;
-    }
-
-    public void addNewStore(Store i_newStore) {
-        m_StoreID2Store.put(i_newStore.getId(), i_newStore);
-    }
+       StringBuilder stores = new StringBuilder("stores:");
+       for (Store store : m_StoreManager.getAllStores()
+       ) {
+           stores.append(store);
+       }
+       return items + "\n" + stores;
+   }
 }

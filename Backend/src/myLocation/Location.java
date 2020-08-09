@@ -4,9 +4,9 @@ import java.awt.*;
 
 public class Location extends Point {
 
-    public Location (xml.jaxb.schema.generated.Location i_JaxbLocation)
+    public Location(int x,int y)
     {
-        super(i_JaxbLocation.getX(),i_JaxbLocation.getY());
+        super(x,y);
     }
 
 }

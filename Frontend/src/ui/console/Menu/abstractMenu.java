@@ -1,8 +1,7 @@
-package ui.console;
+package ui.console.Menu;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public abstract class abstractMenu extends ArrayList<IMenuComponent> {
@@ -25,10 +24,12 @@ public abstract class abstractMenu extends ArrayList<IMenuComponent> {
     {
         Scanner scanner = new Scanner(System.in);
         int userChoice;
+        String userChoiceStr;
         while (true) {
             try {
-                userChoice = scanner.nextInt();
-            } catch (InputMismatchException e) {
+                userChoiceStr = scanner.nextLine();
+                userChoice = Integer.parseInt(userChoiceStr);
+            } catch (NumberFormatException e) {
               //  e.printStackTrace();
                 System.out.println("You must select a number between 1 to " + this.size() + "please try again");
 

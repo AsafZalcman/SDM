@@ -1,4 +1,4 @@
-package ui.console;
+package ui.console.Menu;
 
 public class SubMenu extends abstractMenu implements IMenuComponent {
 
