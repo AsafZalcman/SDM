@@ -23,7 +23,6 @@ public class Order {
         m_TotalOrderPrice = m_TotalItemsPrice + m_DeliveryPrice;
     }
 
-
     public Date getOrderDate() {
         return m_OrderDate;
     }
@@ -53,5 +52,4 @@ public class Order {
     {
         return m_IdToStoreItem.values();
     }
-
 }

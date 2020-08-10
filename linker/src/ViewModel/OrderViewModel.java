@@ -2,16 +2,16 @@ package ViewModel;
 
 import DtoModel.ItemDto;
 import DtoModel.OrderDto;
+import DtoModel.StorageOrderDto;
 import models.*;
-import myLocation.Location;
 import myLocation.LocationException;
 import utils.OrderManager;
-import utils.StorageOrder;
 import utils.SuperDuperManager;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class OrderViewModel {
     public final OrderDto getCurrentOrder()
@@ -65,6 +65,11 @@ public class OrderViewModel {
     public void executeOrder()
     {
         SuperDuperManager.getInstance().getOrderManager().executeOrder();
+    }
+
+    public Collection<StorageOrderDto> getAllOrders()
+    {
+        return SuperDuperManager.getInstance().getOrderManager().getStorageOrders().stream().map(StorageOrderDto::new).collect(Collectors.toList());
     }
 
 }

@@ -69,7 +69,7 @@ public class ConsoleManager {
 
     private void showOrdersHistory() {
         if (isDataLoaded()) {
-
+            m_OrderConsoleManager.ShowAllOrdersHistory();
         }
     }
 

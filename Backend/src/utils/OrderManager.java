@@ -1,6 +1,5 @@
 package utils;
 
-import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 import models.Item;
 import models.Order;
 import models.Store;
@@ -107,4 +106,8 @@ public class OrderManager {
         return b_IsCreated;
     }
 
+    public final Collection<StorageOrder> getStorageOrders()
+    {
+        return m_StorageOrders;
+    }
 }

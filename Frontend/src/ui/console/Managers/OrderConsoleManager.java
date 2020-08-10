@@ -2,6 +2,7 @@ package ui.console.Managers;
 
 import DtoModel.ItemDto;
 import DtoModel.OrderDto;
+import DtoModel.StorageOrderDto;
 import ViewModel.OrderViewModel;
 import myLocation.LocationException;
 import java.text.DecimalFormat;
@@ -15,6 +16,7 @@ public class OrderConsoleManager {
     private StoreConsoleManager m_StoreConsoleManager = new StoreConsoleManager();
     private ItemConsoleManager m_ItemConsoleManager = new ItemConsoleManager();
     private int m_StoreId;
+    private DecimalFormat m_DecimalFormat =new DecimalFormat("##.##");
 
     private OrderViewModel m_OrderViewModel = new OrderViewModel();
 
@@ -79,8 +81,7 @@ public class OrderConsoleManager {
             counter++;
         }
 
-        DecimalFormat decimalFormat =new DecimalFormat("##.##");
-        System.out.println("Delivery price:" + decimalFormat.format(orderDto.getDeliveryPrice()) +" Distance from Store:" + decimalFormat.format(orderDto.getDistanceFromSource()) + " Price for Km:" +orderDto.getPPK());
+        System.out.println("Delivery price:" + m_DecimalFormat.format(orderDto.getDeliveryPrice()) +" Distance from Store:" + m_DecimalFormat.format(orderDto.getDistanceFromSource()) + " Price for Km:" +orderDto.getPPK());
 
     }
 
@@ -134,11 +135,11 @@ public class OrderConsoleManager {
         Scanner scanner = new Scanner(System.in);
         int x,y;
         while (true) {
-            System.out.println("Please enter your x cordinate");
+            System.out.println("Please enter your x coordinate");
             String userChoice = scanner.nextLine();
             try {
                 x = Integer.parseInt(userChoice);
-                System.out.println("Please enter your y cordinate");
+                System.out.println("Please enter your y coordinate");
                 userChoice = scanner.nextLine();
                 y = Integer.parseInt(userChoice);
             } catch (InputMismatchException e) {
@@ -152,6 +153,22 @@ public class OrderConsoleManager {
                 continue;
             }
             break;
+        }
+    }
+
+    public void ShowAllOrdersHistory()
+    {
+        int counter =1;
+        for (StorageOrderDto storageOrderDto: m_OrderViewModel.getAllOrders()
+             ) {
+            System.out.println(counter +". id:"+storageOrderDto.getOrderID()+", date:"+storageOrderDto.getDate()+", Store id:" +storageOrderDto.getStoreID()
+            +", Store name:"+storageOrderDto.getStoreName() +", Number of different items:" +storageOrderDto.getTotalItemsKind() +", Number of items:" +storageOrderDto.getTotalItemsCount()
+            +", Price of all items:" + storageOrderDto.getTotalItemsPrice()+", Delivery price:" +m_DecimalFormat.format(storageOrderDto.getDeliveryPrice()) + ", Order price:" + m_DecimalFormat.format(storageOrderDto.getTotalOrderPrice()));
+            counter++;
+        }
+        if(counter==1)
+        {
+            System.out.println("No orders to show");
         }
     }
 }
