@@ -2,8 +2,12 @@ package utils;
 
 import models.Item;
 import models.Store;
+import models.StoreItem;
+import myLocation.LocationException;
 import xml.jaxb.JaxbConverter;
 import xml.jaxb.JaxbConverterFactory;
+
+import java.text.ParseException;
 import java.util.*;
 
 public class SuperDuperManager {
@@ -48,6 +52,53 @@ public class SuperDuperManager {
         jaxbConverter.loadJaxbData(i_PathToFile);
         m_ItemManager = new ItemManager(jaxbConverter.getItems());
         m_StoreManager = new StoreManager(jaxbConverter.getStores());
+        initializeStorageItems();
+    }
+
+    private void initializeStorageItems() {
+        for(Integer itemID: m_ItemManager.getAllItemsId()){
+            m_ItemManager.setNewStoreSellItForStorageItem(itemID, m_StoreManager.howManyStoreSellTheInputItem(itemID));
+            m_ItemManager.setNewAvgPriceForStorageItem(itemID, m_StoreManager.getItemAvgPrice(itemID));
+        }
+    }
+
+    public Store getStore(Integer i_StoreID){
+        return m_StoreManager.getStore(i_StoreID);
+    }
+
+    public void setStoreToOrder(Store i_Store){
+        m_OrderManager.setStore(i_Store);
+    }
+
+    public void setDateToOrder(String i_OrderDate) throws ParseException{
+        m_OrderManager.setOrderDate(i_OrderDate);
+    }
+
+    public void setCustomerLocationToOrder(int i_X, int i_Y) throws LocationException{
+        m_OrderManager.setCustomerLocation(i_X, i_Y);
+    }
+
+    public Item getItem(Integer i_ItemID){
+        return m_ItemManager.getItem(i_ItemID);
+    }
+
+    public void addItemToOrder(Item i_Item, Double i_AmountOfSells) throws Exception {
+        m_OrderManager.addItem(i_Item, i_AmountOfSells);
+    }
+
+    public void creatNewOrder(){
+        m_OrderManager.create();
+    }
+
+    public void executeNewOrder(){
+        m_OrderManager.executeOrder();
+
+        //Stream??
+        for(StoreItem storeItem: m_OrderManager.getCurrentOrder().getStoreItems()){
+            m_ItemManager.addStorageItemSales(storeItem.getItemId(), storeItem.getAmountOfSells());
+        }
+
+        m_OrderManager.cleanup();
     }
 
     /**

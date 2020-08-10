@@ -36,6 +36,10 @@ public class Store implements IDelivery, IUniquely {
         }
     }
 
+    public boolean isItemExists(Integer i_StoreItemID){
+        return m_IdToStoreItem.containsKey(i_StoreItemID);
+    }
+
     public String getStoreName() {
         return m_StoreName;
     }
@@ -75,7 +79,11 @@ public class Store implements IDelivery, IUniquely {
         return m_IdToStoreItem.values();
     }
 
-    public StoreItem getStoreItem(int i_Id) {
+    public double getStoreItemPrice(Integer i_StoreItemID){
+        return this.isItemExists(i_StoreItemID) ? m_IdToStoreItem.get(i_StoreItemID).getPrice() : 0;
+    }
+
+    public StoreItem getStoreItem(Integer i_Id) {
         return m_IdToStoreItem.get(i_Id);
     }
 

@@ -14,12 +14,15 @@ import java.util.Map;
 public class ItemManager {
 
     private Map<Integer, Item> m_ItemID2Item;
+    private Map<Integer, StorageItem> m_ItemID2StorageItem;
 
     public ItemManager(Collection<Item> i_Items) {
         m_ItemID2Item = new HashMap<>();
+        m_ItemID2StorageItem = new HashMap<>();
         for (Item item : i_Items
         ) {
             this.addItem(item);
+            m_ItemID2StorageItem.put(item.getId(), new StorageItem());
         }
     }
 
@@ -27,7 +30,7 @@ public class ItemManager {
     {
         m_ItemID2Item.put(i_Item.getId(), i_Item);
     }
-    public Item getItem(int i_Id)
+    public Item getItem(Integer i_Id)
     {
         return m_ItemID2Item.get(i_Id);
     }
@@ -41,5 +44,18 @@ public class ItemManager {
     {
         return m_ItemID2Item.values();
     }
+
+    public void setNewStoreSellItForStorageItem(Integer i_ItemID, int i_Value){
+        m_ItemID2StorageItem.get(i_ItemID).setStoresSellIt(i_Value);
+    }
+
+    public void setNewAvgPriceForStorageItem(Integer i_ItemID, double i_Value){
+        m_ItemID2StorageItem.get(i_ItemID).setAvgPrice(i_Value);
+    }
+
+    public void addStorageItemSales(Integer i_ItemID, double i_Value){
+        m_ItemID2StorageItem.get(i_ItemID).addSales(i_Value);
+    }
+
 
 }

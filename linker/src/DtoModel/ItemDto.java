@@ -8,7 +8,7 @@ import java.util.Objects;
 public class ItemDto {
     private  Integer m_ItemId;
     private  String m_ItemName;
-    private PurchaseForm m_PurchaseForm;
+    private  PurchaseForm m_PurchaseForm;
     private  Double m_Price;
     private  Double m_AmountOfSell;
 

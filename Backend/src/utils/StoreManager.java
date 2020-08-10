@@ -52,9 +52,39 @@ public class StoreManager {
         return m_StoreID2Store.get(i_StoreId).getAllItems();
     }
 
-    public Store getStore(int i_StoreId)
+    public Store getStore(Integer i_StoreId)
     {
         return m_StoreID2Store.get(i_StoreId);
+    }
+
+    public int howManyStoreSellTheInputItem(Integer i_ItemID){
+        //Stream??
+        int result = 0;
+        for(Store store: m_StoreID2Store.values()){
+            if(store.isItemExists(i_ItemID)){
+                result++;
+            }
+        }
+        return result;
+    }
+
+    public double getItemAvgPrice(Integer i_itemID) {
+        /*
+        DoubleSummaryStatistics statistics = m_StoreID2Store.values().stream().filter(store -> {
+            return store.isItemExists(i_itemID);
+        }).map((Store i_Id) -> Store.getStoreItem(i_itemID)).mapToDouble(StoreItem::getPrice).summaryStatistics();
+        return statistics.getAverage();
+        */
+        //Stream??
+        int storeCounter = 0;
+        double itemTotalPrice = 0.0;
+        for(Store store: m_StoreID2Store.values()){
+            if(store.isItemExists(i_itemID)){
+                storeCounter++;
+                itemTotalPrice += store.getStoreItemPrice(i_itemID);
+            }
+        }
+        return itemTotalPrice/storeCounter;
     }
 
 //   //only for debug

@@ -76,12 +76,13 @@ public class OrderManager {
         m_CurrentOrder = m_CurrentStore.createOrder(m_CurrentOrderDate,m_CurrentCustomerLocation,m_CurrentIdToStoreItem);
         b_IsCreated=true;
     }
+
     public void executeOrder()
     {
         m_CurrentStore.addOrder(m_CurrentOrder);
         m_StorageOrders.add(new StorageOrder(++counter,m_CurrentOrder, m_CurrentStore.getId(), m_CurrentStore.getStoreName()));
-        cleanup();
     }
+
     public void cleanup()
     {
         m_CurrentStore=null;
