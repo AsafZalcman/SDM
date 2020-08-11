@@ -1,6 +1,7 @@
 package utils;
 
 import models.Item;
+import models.Order;
 import models.Store;
 import models.StoreItem;
 import myLocation.LocationException;
@@ -32,20 +33,20 @@ public class SuperDuperManager {
         return m_Instance;
     }
 
-    public StoreManager getStoreManager()
-    {
-        return m_StoreManager;
-    }
+//   public StoreManager getStoreManager()
+//   {
+//       return m_StoreManager;
+//   }
 
-    public ItemManager getItemManager()
-    {
-        return m_ItemManager;
-    }
+//   public ItemManager getItemManager()
+//   {
+//       return m_ItemManager;
+//   }
 
-    public OrderManager getOrderManager()
-    {
-        return m_OrderManager;
-    }
+//   public OrderManager getOrderManager()
+//   {
+//       return m_OrderManager;
+//   }
 
     public void loadSuperDuperDataFromXml(String i_PathToFile) throws Exception {
         JaxbConverter jaxbConverter = JaxbConverterFactory.create(JaxbConverterFactory.JaxbConverterType.XML);
@@ -99,6 +100,11 @@ public class SuperDuperManager {
         }
 
         m_OrderManager.cleanup();
+    }
+
+    public Order getCurrentOrder()
+    {
+       return m_OrderManager.getCurrentOrder();
     }
 
     /**

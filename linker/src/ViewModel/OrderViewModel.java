@@ -22,13 +22,8 @@ public class OrderViewModel {
 
     public final OrderDto getCurrentOrder()
     {
-        OrderManager orderManager = SuperDuperManager.getInstance().getOrderManager();
-        if(!orderManager.isOrderCreated())
-        {
-            throw new NullPointerException("First create the order");
-        }
-        Order order = orderManager.getCurrentOrder();
-        Store store = orderManager.getStore();
+        Order order = m_SuperDuperManager.getCurrentOrder();
+        Store store = m_SuperDuperManager.getStore();
         Collection<ItemDto> itemsDto = new ArrayList<>();
 
         ItemDto itemDto;
