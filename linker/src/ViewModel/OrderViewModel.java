@@ -24,7 +24,7 @@ public class OrderViewModel {
     public final OrderDto getCurrentOrder()
     {
         Order order = m_SuperDuperManager.getCurrentOrder();
-        Store store = orderManager.getStore();
+    //    Store store = orderManager.getStore();
         Collection<ItemDto> itemsDto = new ArrayList<>();
 
         ItemDto itemDto;
@@ -33,8 +33,8 @@ public class OrderViewModel {
             itemDto= new ItemDto(item);
             itemsDto.add(itemDto);
         }
-
-        return new OrderDto(itemsDto,order.getCustomerLocation(),store.getLocation(),store.getPPK());
+return null;
+  //      return new OrderDto(itemsDto,order.getCustomerLocation(),store.getLocation(),store.getPPK());
     }
 
     public void setStoreForOrder(int i_StoreId) throws Exception {

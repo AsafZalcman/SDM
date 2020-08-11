@@ -32,7 +32,7 @@ public class Store implements IDelivery, IUniquely {
     private void createIdToStoreMapFromCollection(Collection<StoreItem> i_Items) {
         for (StoreItem storeItem : i_Items
         ) {
-            m_IdToStoreItem.put(storeItem.getItemId(), storeItem);
+            m_IdToStoreItem.put(storeItem.getItem().getId(), storeItem);
         }
     }
 
@@ -95,8 +95,8 @@ public class Store implements IDelivery, IUniquely {
         Map<Integer, StoreItem> itemIdToStoreItemsMap = new HashMap<>();
         i_itemIdToAmountOfSellMap.keySet().forEach(itemId -> {
             StoreItem storeItem = new StoreItem(m_IdToStoreItem.get(itemId));
-            storeItem.setAmountOfSell(i_itemIdToAmountOfSellMap.get(storeItem.getItemId()));
-            itemIdToStoreItemsMap.put(storeItem.getItemId(),storeItem);
+            storeItem.setAmountOfSell(i_itemIdToAmountOfSellMap.get(storeItem.getItem().getId()));
+            itemIdToStoreItemsMap.put(storeItem.getItem().getId(),storeItem);
         });
         return new Order(i_orderDate, i_customerLocation, getDeliveryPrice(i_customerLocation), itemIdToStoreItemsMap);
     }
@@ -107,7 +107,7 @@ public class Store implements IDelivery, IUniquely {
         m_TotalCostOfDelivery += i_Order.getDeliveryPrice();
         for (StoreItem item : i_Order.getStoreItems()
         ) {
-            m_IdToStoreItem.get(item.getItemId()).addAmountOfSells(item.getAmountOfSells());
+            m_IdToStoreItem.get(item.getItem().getId()).addAmountOfSells(item.getAmountOfSells());
         }
     }
 
