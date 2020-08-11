@@ -23,7 +23,6 @@ public class OrderViewModel {
     public final OrderDto getCurrentOrder()
     {
         Order order = m_SuperDuperManager.getCurrentOrder();
-        Store store = m_SuperDuperManager.getStore();
         Collection<ItemDto> itemsDto = new ArrayList<>();
 
         ItemDto itemDto;

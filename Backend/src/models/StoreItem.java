@@ -2,21 +2,21 @@ package models;
 
 public class StoreItem {//extends Item {
     private double m_Price;
-    private final Integer m_ItemId;
+    private final Item m_Item;
     private double m_AmountOfSells = 0;
 
-    public StoreItem(int i_ItemId, double i_Price) {
-        this.m_ItemId = i_ItemId;
+    public StoreItem(Item i_Item, double i_Price) {
+        this.m_Item = i_Item;
         this.m_Price = i_Price;
     }
 
-    public StoreItem(int i_ItemId, double i_Price, double i_AmountOfSells) {
-        this(i_ItemId, i_Price);
+    public StoreItem(Item i_Item, double i_Price, double i_AmountOfSells) {
+        this(i_Item, i_Price);
         m_AmountOfSells = i_AmountOfSells;
     }
 
     public StoreItem(StoreItem i_StoreItem) {
-        this(i_StoreItem.getItemId(), i_StoreItem.getPrice(), i_StoreItem.getAmountOfSells());
+        this(i_StoreItem.getItem(), i_StoreItem.getPrice(), i_StoreItem.getAmountOfSells());
     }
 
     public double getPrice() {
@@ -27,8 +27,8 @@ public class StoreItem {//extends Item {
         this.m_Price = i_Price;
     }
 
-    public int getItemId() {
-        return m_ItemId;
+    public Item getItem() {
+        return m_Item;
     }
 
     public double getAmountOfSells() {
@@ -46,7 +46,7 @@ public class StoreItem {//extends Item {
     @Override
     public String toString() {
         return "StoreItem{" +
-                "Id=" + m_ItemId +
+                m_Item.toString()+
                 ",price=" + m_Price +
                 ",AmountOfSells=" + m_AmountOfSells +
                 '}';
