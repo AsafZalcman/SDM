@@ -12,6 +12,7 @@ import utils.SuperDuperManager;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class OrderViewModel {
     private SuperDuperManager m_SuperDuperManager;
@@ -23,14 +24,13 @@ public class OrderViewModel {
     public final OrderDto getCurrentOrder()
     {
         Order order = m_SuperDuperManager.getCurrentOrder();
+        Store store = orderManager.getStore();
         Collection<ItemDto> itemsDto = new ArrayList<>();
 
         ItemDto itemDto;
-        Item currentItem;
         for (StoreItem item: order.getStoreItems()
         ) {
-            currentItem = SuperDuperManager.getInstance().getItemManager().getItem(item.getItemId());
-             itemDto= new ItemDto(currentItem.getId(),currentItem.getItemName(),currentItem.getPurchaseForm(),item.getPrice(),item.getAmountOfSells());
+            itemDto= new ItemDto(item);
             itemsDto.add(itemDto);
         }
 
@@ -69,5 +69,4 @@ public class OrderViewModel {
     {
         m_SuperDuperManager.executeNewOrder();
     }
-
 }
