@@ -50,18 +50,33 @@ public class OrderManager {
         this.m_CurrentCustomerLocation = new Location(x,y);
     }
 
-    public void addItem(Item item, double amountOfSells) throws Exception {
+    public void addItem(Item i_Item, double i_AmountOfSells) throws Exception {
 
-        if(!m_CurrentStore.getAllItemsId().contains(item.getId()))
+        if(i_Item.getPurchaseForm() == PurchaseForm.QUANTITY)
         {
-            throw new Exception("The item with " + item.getId() + " id is not for sell in the requested store");
+            if ((i_AmountOfSells != Math.floor(i_AmountOfSells)) || Double.isInfinite(i_AmountOfSells)) {
+                throw new Exception("Item with " + i_Item.getId() + " id is sold only in whole numbers");
+            }
         }
 
-        if(item.getPurchaseForm() == PurchaseForm.QUANTITY)
+        Store tempStore;
+        if(m_CurrentStore == null)
         {
-            if ((amountOfSells != Math.floor(amountOfSells)) || Double.isInfinite(amountOfSells)) {
-                throw new Exception("Item with " + item.getId() + " id is sold only in whole numbers");
-            }
+            tempStore = SuperDuperManager.getInstance().getCheapestStoreForItem(i_Item.getId());
+        }
+        else
+        {
+            tempStore=m_CurrentStore;
+        }
+
+        addItemFromCurrentStore(tempStore,i_Item,i_AmountOfSells);
+    }
+
+    private void addItemFromCurrentStore(Store i_Store,Item i_Item, double i_AmountOfSells) throws Exception
+    {
+        if(!i_Store.getAllItemsId().contains(i_Item.getId()))
+        {
+            throw new Exception("The item with " + i_Item.getId() + " id is not for sell in the requested store");
         }
 
         if(m_StoresToItemsMap == null)
@@ -69,17 +84,17 @@ public class OrderManager {
             m_StoresToItemsMap = new HashMap<>();
         }
 
-        m_CurrentIdToStoreItem = m_StoresToItemsMap.get(m_CurrentStore);
+        m_CurrentIdToStoreItem = m_StoresToItemsMap.get(i_Store);
 
         if(m_CurrentIdToStoreItem == null)
         {
             m_CurrentIdToStoreItem=new HashMap<>();
         }
 
-        double currentAmountOfSells =m_CurrentIdToStoreItem.getOrDefault(item.getId(),0.0);
+        double currentAmountOfSells =m_CurrentIdToStoreItem.getOrDefault(i_Item.getId(),0.0);
 
-        m_CurrentIdToStoreItem.put(item.getId(),amountOfSells+currentAmountOfSells);
-        m_StoresToItemsMap.put(m_CurrentStore,m_CurrentIdToStoreItem);
+        m_CurrentIdToStoreItem.put(i_Item.getId(),i_AmountOfSells+currentAmountOfSells);
+        m_StoresToItemsMap.put(i_Store,m_CurrentIdToStoreItem);
     }
 
     public void create()

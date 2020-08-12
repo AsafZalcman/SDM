@@ -19,7 +19,7 @@ public class SuperDuperManager {
 
 
     private SuperDuperManager() {
-        m_OrderManager=new OrderManager(); // after we will implement the bonus, we should replace this line in xml method
+        m_OrderManager = new OrderManager(); // after we will implement the bonus, we should replace this line in xml method
     }
 
     public static SuperDuperManager getInstance() {
@@ -33,20 +33,17 @@ public class SuperDuperManager {
         return m_Instance;
     }
 
-  public StoreManager getStoreManager()
-  {
-      return m_StoreManager;
-  }
+    public StoreManager getStoreManager() {
+        return m_StoreManager;
+    }
 
-  public ItemManager getItemManager()
-  {
-      return m_ItemManager;
-  }
+    public ItemManager getItemManager() {
+        return m_ItemManager;
+    }
 
-  public OrderManager getOrderManager()
-  {
-      return m_OrderManager;
-  }
+    public OrderManager getOrderManager() {
+        return m_OrderManager;
+    }
 
     public void loadSuperDuperDataFromXml(String i_PathToFile) throws Exception {
         JaxbConverter jaxbConverter = JaxbConverterFactory.create(JaxbConverterFactory.JaxbConverterType.XML);
@@ -57,29 +54,29 @@ public class SuperDuperManager {
     }
 
     private void initializeStorageItems() {
-        for(Integer itemID: m_ItemManager.getAllItemsId()){
+        for (Integer itemID : m_ItemManager.getAllItemsId()) {
             m_ItemManager.setNewStoreSellItForStorageItem(itemID, m_StoreManager.howManyStoreSellTheInputItem(itemID));
             m_ItemManager.setNewAvgPriceForStorageItem(itemID, m_StoreManager.getItemAvgPrice(itemID));
         }
     }
 
-    public Store getStore(Integer i_StoreID){
+    public Store getStore(Integer i_StoreID) {
         return m_StoreManager.getStore(i_StoreID);
     }
 
-    public void setStoreToOrder(Store i_Store){
+    public void setStoreToOrder(Store i_Store) {
         m_OrderManager.setStore(i_Store);
     }
 
-    public void setDateToOrder(String i_OrderDate) throws ParseException{
+    public void setDateToOrder(String i_OrderDate) throws ParseException {
         m_OrderManager.setOrderDate(i_OrderDate);
     }
 
-    public void setCustomerLocationToOrder(int i_X, int i_Y) throws LocationException{
+    public void setCustomerLocationToOrder(int i_X, int i_Y) throws LocationException {
         m_OrderManager.setCustomerLocation(i_X, i_Y);
     }
 
-    public Item getItem(Integer i_ItemID){
+    public Item getItem(Integer i_ItemID) {
         return m_ItemManager.getItem(i_ItemID);
     }
 
@@ -87,32 +84,31 @@ public class SuperDuperManager {
         m_OrderManager.addItem(i_Item, i_AmountOfSells);
     }
 
-    public void creatNewOrder(){
+    public void creatNewOrder() {
         m_OrderManager.create();
     }
 
-    public void executeNewOrder(){
+    public void executeNewOrder() {
         m_OrderManager.executeOrder();
 
         //Stream??
-        for(StoreItem storeItem: m_OrderManager.getCurrentOrder().getStoreItems()){
+        for (StoreItem storeItem : m_OrderManager.getCurrentOrder().getStoreItems()) {
             m_ItemManager.addStorageItemSales(storeItem.getItem().getId(), storeItem.getAmountOfSells());
         }
 
         m_OrderManager.cleanup();
     }
 
-    public Order getCurrentOrder()
-    {
-       return m_OrderManager.getCurrentOrder();
+    public Order getCurrentOrder() {
+        return m_OrderManager.getCurrentOrder();
     }
 
     /**
-    //should be collection of our dto maybe
-    //very bad implement!!!!!
-    // we should think about poly between the dto
-    //maybe implement factory for the dto.
-    //maybe the dto creation should be inside the corresponding class (with store its not possible with the current impl)
+     * //should be collection of our dto maybe
+     * //very bad implement!!!!!
+     * // we should think about poly between the dto
+     * //maybe implement factory for the dto.
+     * //maybe the dto creation should be inside the corresponding class (with store its not possible with the current impl)
      **/
 //  public Collection<DtoStore> getAllStores()
 //  {
@@ -145,19 +141,23 @@ public class SuperDuperManager {
 //  }
 
 //only for debug
-   @Override
-   public String toString() {
-       StringBuilder items = new StringBuilder("items:");
-       for (Item item : m_ItemManager.getAllItems()
-       ) {
-           items.append(item);
-       }
+    @Override
+    public String toString() {
+        StringBuilder items = new StringBuilder("items:");
+        for (Item item : m_ItemManager.getAllItems()
+        ) {
+            items.append(item);
+        }
 
-       StringBuilder stores = new StringBuilder("stores:");
-       for (Store store : m_StoreManager.getAllStores()
-       ) {
-           stores.append(store);
-       }
-       return items + "\n" + stores;
-   }
+        StringBuilder stores = new StringBuilder("stores:");
+        for (Store store : m_StoreManager.getAllStores()
+        ) {
+            stores.append(store);
+        }
+        return items + "\n" + stores;
+    }
+
+    public Store getCheapestStoreForItem(int i_ItemId) {
+        return m_StoreManager.getCheapestStoreForItem(i_ItemId);
+    }
 }

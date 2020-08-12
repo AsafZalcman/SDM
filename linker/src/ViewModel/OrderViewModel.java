@@ -4,12 +4,8 @@ import DtoModel.ItemDto;
 import DtoModel.OrderDto;
 import DtoModel.StorageOrderDto;
 import models.*;
-import myLocation.Location;
 import myLocation.LocationException;
-import utils.OrderManager;
-import utils.StorageOrder;
 import utils.SuperDuperManager;
-
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,19 +18,18 @@ public class OrderViewModel {
         this.m_SuperDuperManager = SuperDuperManager.getInstance();
     }
 
-    public final StorageOrderDto getCurrentOrder()
-    {
+    public final StorageOrderDto getCurrentOrder() {
         Order order = m_SuperDuperManager.getCurrentOrder();
-    //    Store store = orderManager.getStore();
+        //    Store store = orderManager.getStore();
         Collection<ItemDto> itemsDto = new ArrayList<>();
 
         ItemDto itemDto;
-        for (StoreItem item: order.getStoreItems()
+        for (StoreItem item : order.getStoreItems()
         ) {
-            itemDto= new ItemDto(item);
+            itemDto = new ItemDto(item);
             itemsDto.add(itemDto);
         }
-    return new OrderDto(order,store.getLocation(),store.getPPK());
+        return new OrderDto(order, store.getLocation(), store.getPPK());
     }
 
     public void setStoreForOrder(int i_StoreId) throws Exception {
@@ -53,7 +48,7 @@ public class OrderViewModel {
         m_SuperDuperManager.setCustomerLocationToOrder(x, y);
     }
 
-    public void addItemToOrder(Integer itemId,Double amountOfSells) throws Exception {
+    public void addItemToOrder(Integer itemId, Double amountOfSells) throws Exception {
         Item item = m_SuperDuperManager.getItem(itemId);
         if (item == null) {
             throw new Exception("Item with:" + itemId + " id is not exists");
@@ -65,8 +60,11 @@ public class OrderViewModel {
         m_SuperDuperManager.creatNewOrder();
     }
 
-    public void executeOrder()
-    {
+    public void executeOrder() {
         m_SuperDuperManager.executeNewOrder();
+    }
+    public Collection<StorageOrderDto> getAllOrders()
+    {
+        return SuperDuperManager.getInstance().getOrderManager().getStorageOrders().stream().map(StorageOrderDto::new).collect(Collectors.toList());
     }
 }
