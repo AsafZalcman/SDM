@@ -31,17 +31,8 @@ public class OrderManager {
         m_CurrentStore =i_Store;
     }
 
-    public void setOrderDate(String i_OrderDate) throws ParseException {
-
-        DateFormat format = new SimpleDateFormat("dd/mm-hh:mm", Locale.ENGLISH);
-        Date date;
-        try {
-            date = format.parse(i_OrderDate);
-        } catch (ParseException e) {
-            throw new ParseException("the given date: " + i_OrderDate + " is not in the correct pattern, which is dd/mm-hh:mm",e.getErrorOffset());
-        }
-
-        this.m_CurrentOrderDate = date;
+    public void setOrderDate(Date i_OrderDate) {
+        this.m_CurrentOrderDate = i_OrderDate;
     }
 
     public void setCustomerLocation(int x, int y) throws LocationException {
@@ -59,22 +50,12 @@ public class OrderManager {
             }
         }
 
-        Store tempStore;
-        if(m_CurrentStore == null)
-        {
-            tempStore = SuperDuperManager.getInstance().getCheapestStoreForItem(i_Item.getId());
-        }
-        else
-        {
-            tempStore=m_CurrentStore;
-        }
-
-        addItemFromCurrentStore(tempStore,i_Item,i_AmountOfSells);
+        addItemFromCurrentStore(i_Item,i_AmountOfSells);
     }
 
-    private void addItemFromCurrentStore(Store i_Store,Item i_Item, double i_AmountOfSells) throws Exception
+    private void addItemFromCurrentStore(Item i_Item, double i_AmountOfSells) throws Exception
     {
-        if(!i_Store.getAllItemsId().contains(i_Item.getId()))
+        if(!m_CurrentStore.getAllItemsId().contains(i_Item.getId()))
         {
             throw new Exception("The item with " + i_Item.getId() + " id is not for sell in the requested store");
         }
@@ -84,7 +65,7 @@ public class OrderManager {
             m_StoresToItemsMap = new HashMap<>();
         }
 
-        m_CurrentIdToStoreItem = m_StoresToItemsMap.get(i_Store);
+        m_CurrentIdToStoreItem = m_StoresToItemsMap.get(m_CurrentStore);
 
         if(m_CurrentIdToStoreItem == null)
         {
@@ -94,7 +75,7 @@ public class OrderManager {
         double currentAmountOfSells =m_CurrentIdToStoreItem.getOrDefault(i_Item.getId(),0.0);
 
         m_CurrentIdToStoreItem.put(i_Item.getId(),i_AmountOfSells+currentAmountOfSells);
-        m_StoresToItemsMap.put(i_Store,m_CurrentIdToStoreItem);
+        m_StoresToItemsMap.put(m_CurrentStore,m_CurrentIdToStoreItem);
     }
 
     public void create()
@@ -122,7 +103,6 @@ public class OrderManager {
         }
 
         m_StorageOrders.add(new StorageOrder(++counter,m_CurrentOrder, m_StoresToItemsMap.keySet()));
-        cleanup();
     }
     public void cleanup()
     {

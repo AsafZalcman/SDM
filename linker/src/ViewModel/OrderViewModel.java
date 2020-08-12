@@ -9,6 +9,7 @@ import utils.SuperDuperManager;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 public class OrderViewModel {
@@ -18,7 +19,7 @@ public class OrderViewModel {
         this.m_SuperDuperManager = SuperDuperManager.getInstance();
     }
 
-    public final StorageOrderDto getCurrentOrder() {
+    public final OrderDto getCurrentOrder() {
         Order order = m_SuperDuperManager.getCurrentOrder();
         //    Store store = orderManager.getStore();
         Collection<ItemDto> itemsDto = new ArrayList<>();
@@ -29,7 +30,9 @@ public class OrderViewModel {
             itemDto = new ItemDto(item);
             itemsDto.add(itemDto);
         }
-        return new OrderDto(order, store.getLocation(), store.getPPK());
+        //return new OrderDto(order, store.getLocation(), store.getPPK());
+        return new OrderDto(order);
+
     }
 
     public void setStoreForOrder(int i_StoreId) throws Exception {
@@ -40,7 +43,7 @@ public class OrderViewModel {
         m_SuperDuperManager.setStoreToOrder(store);
     }
 
-    public void setDateForOrder(String i_Date) throws ParseException {
+    public void setDateForOrder(Date i_Date) {
         m_SuperDuperManager.setDateToOrder(i_Date);
     }
 
@@ -57,7 +60,7 @@ public class OrderViewModel {
     }
 
     public void createOrder() {
-        m_SuperDuperManager.creatNewOrder();
+        m_SuperDuperManager.createNewOrder();
     }
 
     public void executeOrder() {

@@ -16,7 +16,7 @@ public class ItemConsoleManager {
         int counter =1;
         for (ItemDto itemDto: m_ItemViewModel.getAllItems()
         ) {
-            res.append(counter + ". " + getBasicDataFromItem(itemDto));
+            res.append(counter + ". " + getBasicDataFromItem(itemDto) +"\n");
             counter++;
         }
         return res.toString();

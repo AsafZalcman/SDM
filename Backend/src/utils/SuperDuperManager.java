@@ -68,7 +68,7 @@ public class SuperDuperManager {
         m_OrderManager.setStore(i_Store);
     }
 
-    public void setDateToOrder(String i_OrderDate) throws ParseException {
+    public void setDateToOrder(Date i_OrderDate) {
         m_OrderManager.setOrderDate(i_OrderDate);
     }
 
@@ -81,10 +81,17 @@ public class SuperDuperManager {
     }
 
     public void addItemToOrder(Item i_Item, Double i_AmountOfSells) throws Exception {
-        m_OrderManager.addItem(i_Item, i_AmountOfSells);
+        if(m_OrderManager.getStore()==null) {
+            m_OrderManager.setStore(getCheapestStoreForItem(i_Item.getId()));
+            m_OrderManager.addItem(i_Item, i_AmountOfSells);
+            m_OrderManager.setStore(null);
+        }
+        else {
+            m_OrderManager.addItem(i_Item, i_AmountOfSells);
+        }
     }
 
-    public void creatNewOrder() {
+    public void createNewOrder() {
         m_OrderManager.create();
     }
 

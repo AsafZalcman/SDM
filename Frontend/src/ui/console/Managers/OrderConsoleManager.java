@@ -5,12 +5,12 @@ import DtoModel.OrderDto;
 import DtoModel.StorageOrderDto;
 import ViewModel.OrderViewModel;
 import myLocation.LocationException;
+
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class OrderConsoleManager {
 
@@ -19,6 +19,7 @@ public class OrderConsoleManager {
     private ItemConsoleManager m_ItemConsoleManager = new ItemConsoleManager();
     private int m_StoreId;
     private DecimalFormat m_DecimalFormat =new DecimalFormat("##.##");
+    private final String DATE_PATTERN = "dd/mm-hh:mm";
 
     private OrderViewModel m_OrderViewModel = new OrderViewModel();
 
@@ -57,7 +58,6 @@ public class OrderConsoleManager {
 
     private boolean addItemToOrder() {
         final String EXIT= "q";
-        Scanner scanner = new Scanner(System.in);
         String userChoiceStr;
         int itemId;
         double amountOfSell;
@@ -93,7 +93,6 @@ public class OrderConsoleManager {
         return true;
     }
 
-
     private void showOrderDetails()
     {
         OrderDto orderDto = m_OrderViewModel.getCurrentOrder();
@@ -104,13 +103,12 @@ public class OrderConsoleManager {
             System.out.println(counter + ".\n" + m_ItemConsoleManager.getBasicDataFromItem(itemDto)+"\n" + m_ItemConsoleManager.getPriceField(itemDto) + "\nAmount:" + itemDto.getAmountOfSell() + "\nTotal price:" + itemDto.getTotalPrice());
             counter++;
         }
-
-        System.out.println("Delivery price:" + m_DecimalFormat.format(orderDto.getDeliveryPrice()) +"\nDistance from Store:" + m_DecimalFormat.format(orderDto.getDistanceFromSource()) + "\nPrice for Km:" +orderDto.getPPK());
+        String additionalValuesForStaticOrder = orderDto.isDynamicOrder()? "":"\nDistance from Store:" + m_DecimalFormat.format(orderDto.getDistanceFromSource()) + "\nPrice for Km:" +orderDto.getPPK();
+        System.out.println("Delivery price:" + m_DecimalFormat.format(orderDto.getDeliveryPrice()) + additionalValuesForStaticOrder);
     }
 
     private void approveOrder()
     {
-        Scanner scanner = new Scanner(System.in);
         showOrderDetails();
         System.out.println("Are you accept the order? press y for yes, or any other option to abort");
         String userChoice = scanner.nextLine();
@@ -138,24 +136,25 @@ public class OrderConsoleManager {
         }
     }
     private void getOrderDateFromUser() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter a date for the order with dd/mm-hh:mm format");
+        System.out.println("Please enter a date for the order with " + DATE_PATTERN + " format");
         String userChoice;
+        DateFormat format = new SimpleDateFormat(DATE_PATTERN, Locale.ENGLISH);
+        Date date;
         while (true) {
             userChoice = scanner.nextLine();
             try {
-                m_OrderViewModel.setDateForOrder(userChoice);
+                date = format.parse(userChoice);
             } catch (ParseException e) {
-                System.out.println("Error:" + e.getMessage() + ",please try again");
+                System.out.println("the given date: " + userChoice + " is not in the correct pattern, which is " + DATE_PATTERN);
                 continue;
             }
+            m_OrderViewModel.setDateForOrder(date);
             break;
         }
     }
 
     private void getUserLocation()
     {
-        Scanner scanner = new Scanner(System.in);
         int x,y;
         while (true) {
             System.out.println("Please enter your x coordinate");
@@ -183,21 +182,14 @@ public class OrderConsoleManager {
     {
         int counter =1;
         String storeDetails;
+        DateFormat format = new SimpleDateFormat(DATE_PATTERN, Locale.ENGLISH);
 
         for (StorageOrderDto storageOrderDto: m_OrderViewModel.getAllOrders()
         ) {
-            Collection<String> currentStoresId = storageOrderDto.getStoreName();
-            if(currentStoresId.size() ==1)
-            {
-                 storeDetails= "Store id:" + Arrays.toString(currentStoresId.toArray()) + "\nStore name:" + Arrays.toString(storageOrderDto.getStoreName().toArray());
-            }
-            else
-            {
-                storeDetails ="Number of Stores that took part in this order:" + currentStoresId.size();
-            }
-            System.out.println(counter +".\nid:"+storageOrderDto.getOrderID()+"\ndate:"+storageOrderDto.getDate()+"\n" +storeDetails +"\nNumber of different items:" +storageOrderDto.getTotalItemsKind() +"" + "\nNumber of items:" +storageOrderDto.getTotalItemsCount()
-                    +"\nPrice of all items:" + storageOrderDto.getTotalItemsPrice()+"\nDelivery price:" +m_DecimalFormat.format(storageOrderDto.getDeliveryPrice()) + "\nOrder price:" + m_DecimalFormat.format(storageOrderDto.getTotalOrderPrice()));
-
+            OrderDto tempOrder = storageOrderDto.getOrderDto();
+            storeDetails =storageOrderDto.getOrderDto().isDynamicOrder()?"Number of Stores that took part in this order:" + storageOrderDto.getNumberOfStores():"Store id:" + storageOrderDto.getOrderDto().getStoreId() + "\nStore name:" +storageOrderDto.getOrderDto().getStoreName();
+            System.out.println(counter +".\nid:"+storageOrderDto.getOrderID()+"\ndate:"+format.format(tempOrder.getDate())+"\n" +storeDetails +"\nNumber of different items:" +tempOrder.getTotalItemsKind() +"" + "\nNumber of items:" +tempOrder.getTotalItemsCount()
+                    +"\nPrice of all items:" + tempOrder.getTotalItemsPrice()+"\nDelivery price:" +m_DecimalFormat.format(tempOrder.getDeliveryPrice()) + "\nOrder price:" + m_DecimalFormat.format(tempOrder.getTotalOrderPrice()));
             counter++;
         }
         if(counter==1)

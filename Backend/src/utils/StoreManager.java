@@ -91,7 +91,7 @@ public class StoreManager {
     {
         return   m_StoreID2Store.values().stream()
                 .filter(store -> store.isItemExists(i_ItemId))
-                .reduce((prev, current) -> (prev.getStoreItemPrice(i_ItemId) > current.getStoreItemPrice(i_ItemId)) ? prev : current).orElse(null);
+                .reduce((prev, current) -> (prev.getStoreItemPrice(i_ItemId) < current.getStoreItemPrice(i_ItemId)) ? prev : current).orElse(null);
     }
 
 //   //only for debug
