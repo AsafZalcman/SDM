@@ -106,7 +106,7 @@ public class OrderManager {
             entry.getKey().addOrder(entry.getValue());
         }
 
-   //     m_StorageOrders.add(new StorageOrder(++counter,m_CurrentOrder, m_StoresToItemsMap.keySet()));
+        m_StorageOrders.add(new StorageOrder(++counter,m_CurrentOrder, m_StoresToItemsMap.keySet()));
         cleanup();
     }
     public void cleanup()

@@ -1,34 +1,39 @@
 package utils;
 
 import models.Order;
+import models.Store;
+
+import java.util.Collection;
 
 //maybeShouldBeDto
 public class StorageOrder {
     private final int m_OrderID;
     private final Order m_Order;
-    private final int m_StoreID;
-    private final String m_StoreName;
+    private final Collection<Store> m_OrderStores;
 
-    public StorageOrder(int i_Id,Order i_Order, int i_StoreID, String i_StoreName) {
+    public StorageOrder(int i_Id, Order i_Order, Collection<Store> i_OrderStores) {
         m_Order = i_Order;
-        m_StoreID = i_StoreID;
-        m_StoreName = i_StoreName;
+        m_OrderStores = i_OrderStores;
         this.m_OrderID = i_Id;
     }
 
-    public int getM_OrderID() {
+    public int getOrderID() {
         return m_OrderID;
     }
 
-    public Order getM_Order() {
+    public Order getOrder() {
         return m_Order;
     }
 
-    public int getM_StoreID() {
-        return m_StoreID;
+    public final Collection<Store> getOrderStores()
+    {
+        return m_OrderStores;
     }
+ // public int getStoreID() {
+ //     return m_StoreID;
+ // }
 
-    public String getM_StoreName() {
-        return m_StoreName;
-    }
+ // public String getStoreName() {
+ //     return m_StoreName;
+ // }
 }

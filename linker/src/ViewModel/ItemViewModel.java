@@ -23,13 +23,10 @@ public class ItemViewModel {
     public Collection<ItemDto> getAllItemsOfStore(int i_StoreId)
     {
        Store store= SuperDuperManager.getInstance().getStoreManager().getStore(i_StoreId);
-        ItemManager itemManager = SuperDuperManager.getInstance().getItemManager();
         Collection<ItemDto> res = new ArrayList<>();
-        Item currentItem;
         for (StoreItem storeItem:store.getAllItems()
              ) {
-            currentItem = itemManager.getItem(storeItem.getItemId());
-            res.add(new ItemDto(currentItem.getId(),currentItem.getItemName(),currentItem.getPurchaseForm(),storeItem.getPrice(),storeItem.getAmountOfSells()));
+            res.add(new ItemDto(storeItem));
         }
         return res;
     }

@@ -1,21 +1,19 @@
 package DtoModel;
 
+import models.Order;
 import myLocation.Location;
 
 import java.util.Collection;
+import java.util.Date;
+import java.util.stream.Collectors;
 
 public class OrderDto
 {
+    private final Order m_Order;
     private final Collection<ItemDto> m_ItemsDto;
-    private final Location m_DestLocation;
-    private final Location m_SourceLocation;
-    private final double m_PPK;
-
-    public OrderDto(Collection<ItemDto> i_ItemsDto, Location i_DestLocation, Location i_SourceLocation, double i_PPK) {
-        m_ItemsDto = i_ItemsDto;
-        m_DestLocation = i_DestLocation;
-        m_SourceLocation = i_SourceLocation;
-        m_PPK = i_PPK;
+    public OrderDto(Order i_Order) {
+        m_Order = i_Order;
+        m_ItemsDto=m_Order.getStoreItems().stream().map(ItemDto::new).collect(Collectors.toList());
     }
 
     public Collection<ItemDto> getItemsDto() {
@@ -23,24 +21,10 @@ public class OrderDto
     }
 
     public Location getDestLocation() {
-        return m_DestLocation;
-    }
-
-    public Location getSourceLocation() {
-        return m_SourceLocation;
-    }
-
-    public double getPPK() {
-        return m_PPK;
-    }
-
-    public double getDistanceFromSource() {
-        return m_DestLocation.distance(m_SourceLocation);
+        return m_Order.getCustomerLocation();
     }
 
     public double getDeliveryPrice() {
-        return getDistanceFromSource() * m_PPK;
+        return m_Order.getDeliveryPrice();
     }
-
-
 }

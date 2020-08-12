@@ -2,6 +2,7 @@ package ViewModel;
 
 import DtoModel.ItemDto;
 import DtoModel.OrderDto;
+import DtoModel.StorageOrderDto;
 import models.*;
 import myLocation.Location;
 import myLocation.LocationException;
@@ -21,7 +22,7 @@ public class OrderViewModel {
         this.m_SuperDuperManager = SuperDuperManager.getInstance();
     }
 
-    public final OrderDto getCurrentOrder()
+    public final StorageOrderDto getCurrentOrder()
     {
         Order order = m_SuperDuperManager.getCurrentOrder();
     //    Store store = orderManager.getStore();
@@ -33,8 +34,7 @@ public class OrderViewModel {
             itemDto= new ItemDto(item);
             itemsDto.add(itemDto);
         }
-return null;
-  //      return new OrderDto(itemsDto,order.getCustomerLocation(),store.getLocation(),store.getPPK());
+    return new OrderDto(order,store.getLocation(),store.getPPK());
     }
 
     public void setStoreForOrder(int i_StoreId) throws Exception {
