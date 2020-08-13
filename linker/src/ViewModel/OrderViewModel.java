@@ -67,9 +67,4 @@ public class OrderViewModel {
     {
         return SuperDuperManager.getInstance().getOrderManager().getStorageOrders().stream().map(StorageOrderDto::new).collect(Collectors.toList());
     }
-
-    public Collection<StorageOrderDto> getAllOrders()
-    {
-        return SuperDuperManager.getInstance().getOrderManager().getStorageOrders().stream().map(StorageOrderDto::new).collect(Collectors.toList());
-    }
 }
