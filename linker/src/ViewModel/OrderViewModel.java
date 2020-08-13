@@ -5,6 +5,7 @@ import DtoModel.OrderDto;
 import DtoModel.StorageOrderDto;
 import models.*;
 import myLocation.LocationException;
+import utils.OrderManager;
 import utils.SuperDuperManager;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -21,18 +22,14 @@ public class OrderViewModel {
 
     public final OrderDto getCurrentOrder() {
         Order order = m_SuperDuperManager.getCurrentOrder();
-        //    Store store = orderManager.getStore();
         Collection<ItemDto> itemsDto = new ArrayList<>();
-
         ItemDto itemDto;
         for (StoreItem item : order.getStoreItems()
         ) {
             itemDto = new ItemDto(item);
             itemsDto.add(itemDto);
         }
-        //return new OrderDto(order, store.getLocation(), store.getPPK());
         return new OrderDto(order);
-
     }
 
     public void setStoreForOrder(int i_StoreId) throws Exception {
@@ -66,6 +63,11 @@ public class OrderViewModel {
     public void executeOrder() {
         m_SuperDuperManager.executeNewOrder();
     }
+    public Collection<StorageOrderDto> getAllOrders()
+    {
+        return SuperDuperManager.getInstance().getOrderManager().getStorageOrders().stream().map(StorageOrderDto::new).collect(Collectors.toList());
+    }
+
     public Collection<StorageOrderDto> getAllOrders()
     {
         return SuperDuperManager.getInstance().getOrderManager().getStorageOrders().stream().map(StorageOrderDto::new).collect(Collectors.toList());

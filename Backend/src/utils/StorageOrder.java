@@ -5,11 +5,11 @@ import models.Store;
 
 import java.util.Collection;
 
-//maybeShouldBeDto
 public class StorageOrder {
     private final int m_OrderID;
     private final Order m_Order;
     private final Collection<Store> m_OrderStores;
+
 
     public StorageOrder(int i_Id, Order i_Order, Collection<Store> i_OrderStores) {
         m_Order = i_Order;
@@ -25,15 +25,10 @@ public class StorageOrder {
         return m_Order;
     }
 
+
     public final Collection<Store> getOrderStores()
     {
         return m_OrderStores;
-    }
- // public int getStoreID() {
- //     return m_StoreID;
- // }
 
- // public String getStoreName() {
- //     return m_StoreName;
- // }
+    }
 }
