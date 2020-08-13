@@ -134,4 +134,9 @@ public class Store implements IDelivery, IUniquely {
                 '}';
     }
 
+    public Collection<Order> getOrders()
+    {
+        return m_Orders;
+    }
+
 }
