@@ -7,69 +7,69 @@ import models.*;
 import myLocation.LocationException;
 import utils.OrderManager;
 import utils.SuperDuperManager;
-
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 public class OrderViewModel {
-    public final OrderDto getCurrentOrder()
-    {
-        OrderManager orderManager = SuperDuperManager.getInstance().getOrderManager();
-        if(!orderManager.isOrderCreated())
-        {
-            throw new NullPointerException("First create the order");
-        }
-        Order order = orderManager.getCurrentOrder();
-        Store store = orderManager.getStore();
-        Collection<ItemDto> itemsDto = new ArrayList<>();
+    private SuperDuperManager m_SuperDuperManager;
 
+    public OrderViewModel() {
+        this.m_SuperDuperManager = SuperDuperManager.getInstance();
+    }
+
+    public final OrderDto getCurrentOrder() {
+        Order order = m_SuperDuperManager.getCurrentOrder();
+        Collection<ItemDto> itemsDto = new ArrayList<>();
         ItemDto itemDto;
-        Item currentItem;
-        for (StoreItem item: order.getStoreItems()
+        for (StoreItem item : order.getStoreItems()
         ) {
-            currentItem = SuperDuperManager.getInstance().getItemManager().getItem(item.getItemId());
-             itemDto= new ItemDto(currentItem.getId(),currentItem.getItemName(),currentItem.getPurchaseForm(),item.getPrice(),item.getAmountOfSells());
+            itemDto = new ItemDto(item);
             itemsDto.add(itemDto);
         }
-
-        return new OrderDto(itemsDto,order.getCustomerLocation(),store.getLocation(),store.getPPK());
+        return new OrderDto(order);
     }
 
     public void setStoreForOrder(int i_StoreId) throws Exception {
-        Store store = SuperDuperManager.getInstance().getStoreManager().getStore(i_StoreId);
+        Store store = m_SuperDuperManager.getStore(i_StoreId);
         if (store == null) {
             throw new Exception("Store with " + i_StoreId + " id is not exists");
         }
-        SuperDuperManager.getInstance().getOrderManager().setStore(store);
+        m_SuperDuperManager.setStoreToOrder(store);
     }
-    public void setDateForOrder(String i_Date) throws ParseException {
-        SuperDuperManager.getInstance().getOrderManager().setOrderDate(i_Date);
+
+    public void setDateForOrder(Date i_Date) {
+        m_SuperDuperManager.setDateToOrder(i_Date);
     }
+
     public void setLocationForOrder(int x, int y) throws LocationException {
-        SuperDuperManager.getInstance().getOrderManager().setCustomerLocation(x, y);
+        m_SuperDuperManager.setCustomerLocationToOrder(x, y);
     }
-    public void addItemToOrder(Integer itemId,Double amountOfSells) throws Exception {
-        Item item = SuperDuperManager.getInstance().getItemManager().getItem(itemId);
+
+    public void addItemToOrder(Integer itemId, Double amountOfSells) throws Exception {
+        Item item = m_SuperDuperManager.getItem(itemId);
         if (item == null) {
             throw new Exception("Item with:" + itemId + " id is not exists");
         }
-        SuperDuperManager.getInstance().getOrderManager().addItem(item, amountOfSells);
+        m_SuperDuperManager.addItemToOrder(item, amountOfSells);
     }
 
     public void createOrder() {
-        SuperDuperManager.getInstance().getOrderManager().create();
+        m_SuperDuperManager.createNewOrder();
     }
 
-    public void executeOrder()
+    public void executeOrder() {
+        m_SuperDuperManager.executeNewOrder();
+    }
+    public Collection<StorageOrderDto> getAllOrders()
     {
-        SuperDuperManager.getInstance().getOrderManager().executeOrder();
+        return SuperDuperManager.getInstance().getOrderManager().getStorageOrders().stream().map(StorageOrderDto::new).collect(Collectors.toList());
     }
 
     public Collection<StorageOrderDto> getAllOrders()
     {
         return SuperDuperManager.getInstance().getOrderManager().getStorageOrders().stream().map(StorageOrderDto::new).collect(Collectors.toList());
     }
-
 }

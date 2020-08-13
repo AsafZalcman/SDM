@@ -1,68 +1,32 @@
 package DtoModel;
 
+import models.Store;
+import models.StoreItem;
 import utils.StorageOrder;
-
+import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 public class StorageOrderDto {
-    private final int m_OrderID;
-    private final Date m_OrderDate;
-    private final double m_DeliveryPrice;
-    private final double m_TotalItemsPrice;
-    private final double m_TotalOrderPrice;
-    private final int m_TotalItemsCount;
-    private final int m_StoreID;
-    private final String m_StoreName;
-    private final StorageOrder m_StorageOrder;
-    private final int m_TotalItemsKind;
+  private final StorageOrder m_StorageOrder;
+  private final OrderDto m_OrderDto;
 
-    public StorageOrderDto(StorageOrder i_StorageOrder) {
-        m_StorageOrder = i_StorageOrder;
-        m_OrderDate = m_StorageOrder.getOrder().getOrderDate();
-        m_DeliveryPrice = m_StorageOrder.getOrder().getDeliveryPrice();
-        m_StoreID = m_StorageOrder.getStoreID();
-        m_StoreName = m_StorageOrder.getStoreName();
-        this.m_OrderID = m_StorageOrder.getOrderID();
-        m_TotalItemsCount = m_StorageOrder.getOrder().getStoreItems().stream().map(item -> item.getAmountOfSells() == Math.floor(item.getAmountOfSells()) ? (int) item.getAmountOfSells() : 1).reduce(0, Integer::sum);
-        m_TotalItemsKind = m_StorageOrder.getOrder().getStoreItems().size();
-        m_TotalItemsPrice = m_StorageOrder.getOrder().getTotalItemsPrice();
-        m_TotalOrderPrice = m_StorageOrder.getOrder().getTotalOrderPrice();
+  public StorageOrderDto(StorageOrder i_StorageOrder) {
+      m_StorageOrder = i_StorageOrder;
+      m_OrderDto= new OrderDto(m_StorageOrder.getOrder());
+  }
 
-    }
+  public int getOrderID() {
+      return m_StorageOrder.getOrderID();
+  }
 
-    public int getOrderID() {
-        return m_OrderID;
-    }
+  public int getNumberOfStores()
+  {
+      return m_StorageOrder.getOrderStores().size();
+  }
 
-    public int getStoreID() {
-        return m_StoreID;
-    }
-
-    public String getStoreName() {
-        return m_StoreName;
-    }
-
-    public int getTotalItemsCount() {
-        return m_TotalItemsCount;
-    }
-
-    public Date getDate() {
-        return m_OrderDate;
-    }
-
-    public double getDeliveryPrice() {
-        return m_DeliveryPrice;
-    }
-
-    public double getTotalItemsPrice() {
-        return m_TotalItemsPrice;
-    }
-
-    public double getTotalOrderPrice() {
-        return m_TotalOrderPrice;
-    }
-
-    public int getTotalItemsKind() {
-        return m_TotalItemsKind;
-    }
+  public OrderDto getOrderDto()
+  {
+      return m_OrderDto;
+  }
 }

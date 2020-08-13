@@ -28,9 +28,9 @@ public class ConsoleManager {
                 new MenuItem("show all shops", this::showAllShops),
                 new MenuItem("show all items", this::showAllItems),
                 new SubMenu("make an order", "choose the order way",
-                        new MenuItem("from specific shop",this::makeAnOrder),
-                        new MenuItem("mix shops with the lower cost", () -> System.out.println("not implemented"))),
-
+                        new MenuItem("from specific shop",this::makeStaticOrder),
+                        new MenuItem("mix shops with the lower cost",this::makeDynamicOrder),
+                        new MenuItem("Back",()->{})),
                 new MenuItem("show orders history", this::showOrdersHistory),
                 new MenuItem("Exit", () -> System.out.println("see you next time!!!!")));
     }
@@ -61,9 +61,16 @@ public class ConsoleManager {
         }
     }
 
-    private void makeAnOrder(){
+    private void makeStaticOrder(){
         if (isDataLoaded()) {
-            m_OrderConsoleManager.MakeAnOrder();
+            m_OrderConsoleManager.MakeStaticOrder();
+        }
+    }
+
+    private void makeDynamicOrder()
+    {
+        if (isDataLoaded()) {
+            m_OrderConsoleManager.MakeDynamicOrder();
         }
     }
 

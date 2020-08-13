@@ -5,10 +5,12 @@ import DtoModel.OrderDto;
 import DtoModel.StorageOrderDto;
 import ViewModel.OrderViewModel;
 import myLocation.LocationException;
+
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class OrderConsoleManager {
 
@@ -17,57 +19,79 @@ public class OrderConsoleManager {
     private ItemConsoleManager m_ItemConsoleManager = new ItemConsoleManager();
     private int m_StoreId;
     private DecimalFormat m_DecimalFormat =new DecimalFormat("##.##");
+    private final String DATE_PATTERN = "dd/mm-hh:mm";
+
 
     private OrderViewModel m_OrderViewModel = new OrderViewModel();
 
-    public void MakeAnOrder(){
-            getStoreIdFromUser();
-            getOrderDateFromUser();
-            getUserLocation();
-            addItemsToOrder();
-            approveOrder();
+    public void MakeStaticOrder(){
+        getStoreIdFromUser();
+        getOrderDateFromUser();
+        getUserLocation();
+        addItemsToStaticOrder();
+        approveOrder();
+
     }
 
-    private void addItemsToOrder() {
+    public void MakeDynamicOrder()
+    {
+        getOrderDateFromUser();
+        getUserLocation();
+        addItemsToDynamicOrder();
+        approveOrder();
+
+    }
+
+    private void addItemsToDynamicOrder() {
+        do {
+            System.out.println(m_ItemConsoleManager.getAllItems());
+        } while (addItemToOrder());
+        m_OrderViewModel.createOrder();
+    }
+
+    private void addItemsToStaticOrder() {
+
+        do {
+            System.out.println(m_ItemConsoleManager.getAllItemsWithPrice(m_StoreId));
+        } while (addItemToOrder());
+        m_OrderViewModel.createOrder();
+    }
+
+    private boolean addItemToOrder() {
         final String EXIT= "q";
-        Scanner scanner = new Scanner(System.in);
         String userChoiceStr;
         int itemId;
         double amountOfSell;
-        while (true) {
-            System.out.println(m_ItemConsoleManager.getAllItems(m_StoreId));
-            System.out.println("Please enter the id of the desired item, or press " + EXIT + " to finish");
-            userChoiceStr = scanner.nextLine();
-            if(userChoiceStr.equals(EXIT))
-            {
-                break;
-            }
-            try {
-                itemId = Integer.parseInt(userChoiceStr);
-            }
-            catch (NumberFormatException e)
-            {
-                System.out.println("Error:\"" + userChoiceStr +"\" is not number");
-                continue;
-            }
-            System.out.println("Please enter the amount you want to buy, or press " + EXIT + " to finish");
-            try {
-                userChoiceStr = scanner.nextLine();
-                amountOfSell = Double.parseDouble(userChoiceStr);
-            }
-            catch (NumberFormatException e)
-            {
-                System.out.println("Error:\"" + userChoiceStr +"\" is not number");
-                continue;
-            }
-
-            try {
-                m_OrderViewModel.addItemToOrder(itemId,amountOfSell);
-            } catch (Exception e) {
-                System.out.println("Error:"+e.getMessage());
-            }
+        System.out.println("Please enter the id of the desired item, or press " + EXIT + " to finish");
+        userChoiceStr = scanner.nextLine();
+        if (userChoiceStr.toLowerCase().equals(EXIT)) {
+            return false;
         }
-        m_OrderViewModel.createOrder();
+        try {
+            itemId = Integer.parseInt(userChoiceStr);
+        } catch (NumberFormatException e) {
+            System.out.println("Error:\"" + userChoiceStr + "\" is not number");
+            return true;
+        }
+        System.out.println("Please enter the amount you want to buy");
+        try {
+            userChoiceStr = scanner.nextLine();
+            amountOfSell = Double.parseDouble(userChoiceStr);
+
+        } catch (NumberFormatException e) {
+            System.out.println("Error:\"" + userChoiceStr + "\" is not number");
+            return true;
+        }
+
+        try {
+            m_OrderViewModel.addItemToOrder(itemId, amountOfSell);
+        } catch (Exception e) {
+            System.out.println("Error:" + e.getMessage());
+            return true;
+
+        }
+
+        return true;
     }
 
     private void showOrderDetails()
@@ -77,17 +101,15 @@ public class OrderConsoleManager {
         System.out.println("Order bill:");
         for (ItemDto itemDto:orderDto.getItemsDto()
         ) {
-            System.out.println(counter + ". " + m_ItemConsoleManager.getBasicDataFromItem(itemDto) + " Amount:" + itemDto.getAmountOfSell() + " Total price:" + itemDto.getTotalPrice());
+            System.out.println(counter + ".\n" + m_ItemConsoleManager.getBasicDataFromItem(itemDto)+"\n" + m_ItemConsoleManager.getPriceField(itemDto) + "\nAmount:" + itemDto.getAmountOfSell() + "\nTotal price:" + itemDto.getTotalPrice());
             counter++;
         }
-
-        System.out.println("Delivery price:" + m_DecimalFormat.format(orderDto.getDeliveryPrice()) +" Distance from Store:" + m_DecimalFormat.format(orderDto.getDistanceFromSource()) + " Price for Km:" +orderDto.getPPK());
-
+        String additionalValuesForStaticOrder = orderDto.isDynamicOrder()? "":"\nDistance from Store:" + m_DecimalFormat.format(orderDto.getDistanceFromSource()) + "\nPrice for Km:" +orderDto.getPPK();
+        System.out.println("Delivery price:" + m_DecimalFormat.format(orderDto.getDeliveryPrice()) + additionalValuesForStaticOrder);
     }
 
     private void approveOrder()
     {
-        Scanner scanner = new Scanner(System.in);
         showOrderDetails();
         System.out.println("Are you accept the order? press y for yes, or any other option to abort");
         String userChoice = scanner.nextLine();
@@ -115,24 +137,25 @@ public class OrderConsoleManager {
         }
     }
     private void getOrderDateFromUser() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter a date for the order with dd/mm-hh:mm format");
+        System.out.println("Please enter a date for the order with " + DATE_PATTERN + " format");
         String userChoice;
+        DateFormat format = new SimpleDateFormat(DATE_PATTERN, Locale.ENGLISH);
+        Date date;
         while (true) {
             userChoice = scanner.nextLine();
             try {
-                m_OrderViewModel.setDateForOrder(userChoice);
+                date = format.parse(userChoice);
             } catch (ParseException e) {
-                System.out.println("Error:" + e.getMessage() + ",please try again");
+                System.out.println("the given date: " + userChoice + " is not in the correct pattern, which is " + DATE_PATTERN);
                 continue;
             }
+            m_OrderViewModel.setDateForOrder(date);
             break;
         }
     }
 
     private void getUserLocation()
     {
-        Scanner scanner = new Scanner(System.in);
         int x,y;
         while (true) {
             System.out.println("Please enter your x coordinate");
@@ -159,11 +182,14 @@ public class OrderConsoleManager {
     public void ShowAllOrdersHistory()
     {
         int counter =1;
+        String storeDetails;
+        DateFormat format = new SimpleDateFormat(DATE_PATTERN, Locale.ENGLISH);
         for (StorageOrderDto storageOrderDto: m_OrderViewModel.getAllOrders()
-             ) {
-            System.out.println(counter +". id:"+storageOrderDto.getOrderID()+", date:"+storageOrderDto.getDate()+", Store id:" +storageOrderDto.getStoreID()
-            +", Store name:"+storageOrderDto.getStoreName() +", Number of different items:" +storageOrderDto.getTotalItemsKind() +", Number of items:" +storageOrderDto.getTotalItemsCount()
-            +", Price of all items:" + storageOrderDto.getTotalItemsPrice()+", Delivery price:" +m_DecimalFormat.format(storageOrderDto.getDeliveryPrice()) + ", Order price:" + m_DecimalFormat.format(storageOrderDto.getTotalOrderPrice()));
+        ) {
+            OrderDto tempOrder = storageOrderDto.getOrderDto();
+            storeDetails =storageOrderDto.getOrderDto().isDynamicOrder()?"Number of Stores that took part in this order:" + storageOrderDto.getNumberOfStores():"Store id:" + storageOrderDto.getOrderDto().getStoreId() + "\nStore name:" +storageOrderDto.getOrderDto().getStoreName();
+            System.out.println(counter +".\nid:"+storageOrderDto.getOrderID()+"\ndate:"+format.format(tempOrder.getDate())+"\n" +storeDetails +"\nNumber of different items:" +tempOrder.getTotalItemsKind() +"" + "\nNumber of items:" +tempOrder.getTotalItemsCount()
+                    +"\nPrice of all items:" + tempOrder.getTotalItemsPrice()+"\nDelivery price:" +m_DecimalFormat.format(tempOrder.getDeliveryPrice()) + "\nOrder price:" + m_DecimalFormat.format(tempOrder.getTotalOrderPrice()));
             counter++;
         }
         if(counter==1)

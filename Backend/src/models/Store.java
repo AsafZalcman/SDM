@@ -32,8 +32,12 @@ public class Store implements IDelivery, IUniquely {
     private void createIdToStoreMapFromCollection(Collection<StoreItem> i_Items) {
         for (StoreItem storeItem : i_Items
         ) {
-            m_IdToStoreItem.put(storeItem.getItemId(), storeItem);
+            m_IdToStoreItem.put(storeItem.getItem().getId(), storeItem);
         }
+    }
+
+    public boolean isItemExists(Integer i_StoreItemID){
+        return m_IdToStoreItem.containsKey(i_StoreItemID);
     }
 
     public String getStoreName() {
@@ -75,7 +79,11 @@ public class Store implements IDelivery, IUniquely {
         return m_IdToStoreItem.values();
     }
 
-    public StoreItem getStoreItem(int i_Id) {
+    public double getStoreItemPrice(Integer i_StoreItemID){
+        return this.isItemExists(i_StoreItemID) ? m_IdToStoreItem.get(i_StoreItemID).getPrice() : 0;
+    }
+
+    public StoreItem getStoreItem(Integer i_Id) {
         return m_IdToStoreItem.get(i_Id);
     }
 
@@ -87,8 +95,8 @@ public class Store implements IDelivery, IUniquely {
         Map<Integer, StoreItem> itemIdToStoreItemsMap = new HashMap<>();
         i_itemIdToAmountOfSellMap.keySet().forEach(itemId -> {
             StoreItem storeItem = new StoreItem(m_IdToStoreItem.get(itemId));
-            storeItem.setAmountOfSell(i_itemIdToAmountOfSellMap.get(storeItem.getItemId()));
-            itemIdToStoreItemsMap.put(storeItem.getItemId(),storeItem);
+            storeItem.setAmountOfSell(i_itemIdToAmountOfSellMap.get(storeItem.getItem().getId()));
+            itemIdToStoreItemsMap.put(storeItem.getItem().getId(),storeItem);
         });
         return new Order(i_orderDate, i_customerLocation, getDeliveryPrice(i_customerLocation), itemIdToStoreItemsMap);
     }
@@ -99,7 +107,7 @@ public class Store implements IDelivery, IUniquely {
         m_TotalCostOfDelivery += i_Order.getDeliveryPrice();
         for (StoreItem item : i_Order.getStoreItems()
         ) {
-            m_IdToStoreItem.get(item.getItemId()).addAmountOfSells(item.getAmountOfSells());
+            m_IdToStoreItem.get(item.getItem().getId()).addAmountOfSells(item.getAmountOfSells());
         }
     }
 

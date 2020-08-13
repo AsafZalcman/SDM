@@ -1,6 +1,7 @@
 package DtoModel;
 
 import models.Item;
+import models.StoreItem;
 import utils.PurchaseForm;
 
 import java.util.Objects;
@@ -8,7 +9,7 @@ import java.util.Objects;
 public class ItemDto {
     private  Integer m_ItemId;
     private  String m_ItemName;
-    private PurchaseForm m_PurchaseForm;
+    private  PurchaseForm m_PurchaseForm;
     private  Double m_Price;
     private  Double m_AmountOfSell;
 
@@ -22,6 +23,11 @@ public class ItemDto {
 
     public ItemDto(Item i_Item) {
      this(i_Item.getId(),i_Item.getItemName(),i_Item.getPurchaseForm(),null,null);
+    }
+
+    public ItemDto(StoreItem i_StoreItem)
+    {
+        this(i_StoreItem.getItem().getId(),i_StoreItem.getItem().getItemName(),i_StoreItem.getItem().getPurchaseForm(),i_StoreItem.getPrice(),i_StoreItem.getAmountOfSells());
     }
 
     public Integer getId() {
