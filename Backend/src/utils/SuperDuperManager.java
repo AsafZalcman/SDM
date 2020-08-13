@@ -110,42 +110,9 @@ public class SuperDuperManager {
         return m_OrderManager.getCurrentOrder();
     }
 
-    /**
-     * //should be collection of our dto maybe
-     * //very bad implement!!!!!
-     * // we should think about poly between the dto
-     * //maybe implement factory for the dto.
-     * //maybe the dto creation should be inside the corresponding class (with store its not possible with the current impl)
-     **/
-//  public Collection<DtoStore> getAllStores()
-//  {
-//      DtoItem currentDtoItem;
-//      Item currentItem;
-//      StoreItem currentStoreItem;
-//      DtoStore currentDtoStore;
-//      Collection<DtoItem> currentDtoItems = new ArrayList<>();
-//      Collection<DtoOrder> currentDtoOrders = new ArrayList<>();
-//      Collection<DtoStore> res = new ArrayList<>();
-
-//      for (Store store:m_StoreID2Store.values()
-//           ) {
-//          for (Integer id:store.getAllItems()
-//               ) {
-//              currentItem = m_ItemID2Item.get(id);
-//              currentStoreItem = store.getStoreItem(id);
-//              currentDtoItem = new DtoItem(id,currentItem.getItemName(),currentItem.getPurchaseForm(),currentStoreItem.getPrice(),currentStoreItem.getAmountOfSells());
-//              currentDtoItems.add(currentDtoItem);
-//          }
-//          for (Integer id:store.getAllOrders()
-//               ) {
-//              currentDtoOrders.add(new DtoOrder(m_OrderID2Order.get(id),store.getId(),store.getStoreName()));
-//          }
-
-//          res.add(new DtoStore(store.getId(),store.getStoreName(),store.getPPK(),store.getDeliveryPrice(),))
-//          currentDtoItems.clear();
-//          currentDtoOrders.clear();
-//      }
-//  }
+    public Collection<StorageItem> getAllStorageItems(){
+        return m_ItemManager.getAllStorageItems();
+    }
 
 //only for debug
     @Override

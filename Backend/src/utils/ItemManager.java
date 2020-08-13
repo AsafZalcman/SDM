@@ -22,7 +22,9 @@ public class ItemManager {
         for (Item item : i_Items
         ) {
             this.addItem(item);
-            m_ItemID2StorageItem.put(item.getId(), new StorageItem());
+
+            m_ItemID2StorageItem.put(item.getId(), new StorageItem(item));
+
         }
     }
 
@@ -44,6 +46,8 @@ public class ItemManager {
     {
         return m_ItemID2Item.values();
     }
+
+    public Collection<StorageItem> getAllStorageItems(){ return m_ItemID2StorageItem.values();}
 
     public void setNewStoreSellItForStorageItem(Integer i_ItemID, int i_Value){
         m_ItemID2StorageItem.get(i_ItemID).setStoresSellIt(i_Value);

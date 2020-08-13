@@ -21,7 +21,6 @@ public class OrderConsoleManager {
     private DecimalFormat m_DecimalFormat =new DecimalFormat("##.##");
     private final String DATE_PATTERN = "dd/mm-hh:mm";
 
-
     private OrderViewModel m_OrderViewModel = new OrderViewModel();
 
     public void MakeStaticOrder(){
@@ -39,7 +38,6 @@ public class OrderConsoleManager {
         getUserLocation();
         addItemsToDynamicOrder();
         approveOrder();
-
     }
 
     private void addItemsToDynamicOrder() {
@@ -184,6 +182,7 @@ public class OrderConsoleManager {
         int counter =1;
         String storeDetails;
         DateFormat format = new SimpleDateFormat(DATE_PATTERN, Locale.ENGLISH);
+
         for (StorageOrderDto storageOrderDto: m_OrderViewModel.getAllOrders()
         ) {
             OrderDto tempOrder = storageOrderDto.getOrderDto();

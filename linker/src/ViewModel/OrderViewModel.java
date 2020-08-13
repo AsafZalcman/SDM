@@ -5,9 +5,7 @@ import DtoModel.OrderDto;
 import DtoModel.StorageOrderDto;
 import models.*;
 import myLocation.LocationException;
-import utils.OrderManager;
 import utils.SuperDuperManager;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -29,6 +27,7 @@ public class OrderViewModel {
             itemDto = new ItemDto(item);
             itemsDto.add(itemDto);
         }
+
         return new OrderDto(order);
     }
 

@@ -23,8 +23,6 @@ public class OrderDto
         m_StoreDto=i_StoreDto;
     }
 
-
-
     public Collection<ItemDto> getItemsDto() {
         return m_ItemsDto;
     }

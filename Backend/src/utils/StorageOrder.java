@@ -10,7 +10,6 @@ public class StorageOrder {
     private final Order m_Order;
     private final Collection<Store> m_OrderStores;
 
-
     public StorageOrder(int i_Id, Order i_Order, Collection<Store> i_OrderStores) {
         m_Order = i_Order;
         m_OrderStores = i_OrderStores;
@@ -25,10 +24,9 @@ public class StorageOrder {
         return m_Order;
     }
 
-
     public final Collection<Store> getOrderStores()
     {
         return m_OrderStores;
-
     }
+
 }

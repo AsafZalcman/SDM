@@ -1,6 +1,7 @@
 package ui.console.Managers;
 
 import DtoModel.ItemDto;
+import DtoModel.StorageItemDto;
 import ViewModel.ItemViewModel;
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,6 +21,23 @@ public class ItemConsoleManager {
             counter++;
         }
         return res.toString();
+    }
+
+    public void showAllStorageItems(){
+        StringBuilder res = new StringBuilder();
+        int counter = 1;
+        System.out.println("All items available in the system:");
+        for(StorageItemDto storageItemDto: m_ItemViewModel.getAllStorageItems()){
+            res.append(counter + ". " + "\n" +
+                   "- ID: " + storageItemDto.getItemDto().getId() + "\n" +
+                   "- Name: " + storageItemDto.getItemDto().getItemName() + "\n" +
+                    "- Item Purchase Form: " + storageItemDto.getItemDto().getPurchaseForm() + "\n" +
+                    "- How many stores sell it: " + storageItemDto.getStoresSellIt() + "\n" +
+                    "- Average price: " + storageItemDto.getAvgPrice() + "\n" +
+                    "- Sold so far: " + storageItemDto.getSales() + "\n" );
+            counter++;
+        }
+        System.out.println(res.toString());
     }
 
     //bad name
