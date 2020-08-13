@@ -14,6 +14,7 @@ public class ConsoleManager {
     private boolean b_IsDataLoaded;
     private OrderConsoleManager m_OrderConsoleManager;
     private ItemConsoleManager m_itemConsoleManager;
+    private StoreConsoleManager m_StoreConsoleManager;
 
     public void run() {
         m_MainMenu.run();
@@ -24,7 +25,7 @@ public class ConsoleManager {
         m_SuperDuperManager = SuperDuperManager.getInstance();
         m_OrderConsoleManager= new OrderConsoleManager();
         m_itemConsoleManager = new ItemConsoleManager();
-
+        m_StoreConsoleManager= new StoreConsoleManager();
 
         m_MainMenu = new MainMenu(
                 new MenuItem("initialize system", this::loadSuperDuperMarketXmlFile),
@@ -40,11 +41,10 @@ public class ConsoleManager {
 
     private void loadSuperDuperMarketXmlFile() {
         System.out.println("Please enter full path to you xml file");
-        Scanner scanner = new Scanner(System.in);
-        String pathToFile = scanner.nextLine();
+       // Scanner scanner = new Scanner(System.in);
+       // String pathToFile = scanner.nextLine();
         try {
-            //  m_SuperDuperManager.loadSuperDuperDataFromXml("C:\\Users\\asafz\\Downloads\\te mp\\ex1-small.xml");
-            m_SuperDuperManager.loadSuperDuperDataFromXml(pathToFile);
+            m_SuperDuperManager.loadSuperDuperDataFromXml("C:\\Users\\asafz\\IdeaProjects\\SDM\\Backend\\src\\resources\\xml\\ex1-small.xml");
             b_IsDataLoaded = true;
             System.out.println("Xml file was loaded");
         } catch (Exception e) {
@@ -54,7 +54,7 @@ public class ConsoleManager {
 
     private void showAllShops() {
         if (isDataLoaded()) {
-            System.out.println(m_SuperDuperManager);
+            m_StoreConsoleManager.ShowAllStores();
         }
     }
 
