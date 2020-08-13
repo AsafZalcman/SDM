@@ -110,6 +110,10 @@ public class SuperDuperManager {
         return m_OrderManager.getCurrentOrder();
     }
 
+    public Collection<StorageItem> getAllStorageItems(){
+        return m_ItemManager.getAllStorageItems();
+    }
+
     /**
      * //should be collection of our dto maybe
      * //very bad implement!!!!!

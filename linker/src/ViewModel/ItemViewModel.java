@@ -1,6 +1,7 @@
 package ViewModel;
 
 import DtoModel.ItemDto;
+import DtoModel.StorageItemDto;
 import models.Store;
 import models.StoreItem;
 import utils.SuperDuperManager;
@@ -26,5 +27,10 @@ public class ItemViewModel {
         }
         return res;
     }
+
+    public Collection<StorageItemDto> getAllStorageItems(){
+        return SuperDuperManager.getInstance().getAllStorageItems().stream().map(StorageItemDto::new).collect(Collectors.toList());
+    }
+
 
 }

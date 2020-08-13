@@ -1,14 +1,22 @@
 package utils;
 
+import models.Item;
+
 public class StorageItem{
+    private final Item m_Item;
     private int m_StoresSellIt;//how many stores sell it
     private double m_AvgPrice;
     private double m_Sales;//how many times this item sold
 
-    public StorageItem(){
+    public StorageItem(Item i_Item){
+        m_Item = i_Item;
         m_StoresSellIt = 0;
         m_AvgPrice = 0;
         m_Sales = 0;
+    }
+
+    public Item getItem() {
+        return m_Item;
     }
 
     public int getStoresSellIt() {

@@ -13,6 +13,7 @@ public class ConsoleManager {
     private SuperDuperManager m_SuperDuperManager;
     private boolean b_IsDataLoaded;
     private OrderConsoleManager m_OrderConsoleManager;
+    private ItemConsoleManager m_itemConsoleManager;
 
     public void run() {
         m_MainMenu.run();
@@ -22,6 +23,8 @@ public class ConsoleManager {
         b_IsDataLoaded = false;
         m_SuperDuperManager = SuperDuperManager.getInstance();
         m_OrderConsoleManager= new OrderConsoleManager();
+        m_itemConsoleManager = new ItemConsoleManager();
+
 
         m_MainMenu = new MainMenu(
                 new MenuItem("initialize system", this::loadSuperDuperMarketXmlFile),
@@ -57,7 +60,7 @@ public class ConsoleManager {
 
     private void showAllItems() {
         if (isDataLoaded()) {
-
+            m_itemConsoleManager.showAllStorageItems();
         }
     }
 
