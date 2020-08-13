@@ -44,7 +44,11 @@ public class OrderConsoleManager {
         do {
             System.out.println(m_ItemConsoleManager.getAllItems());
         } while (addItemToOrder());
-        m_OrderViewModel.createOrder();
+        try {
+            m_OrderViewModel.createOrder();
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void addItemsToStaticOrder() {
@@ -52,7 +56,11 @@ public class OrderConsoleManager {
         do {
             System.out.println(m_ItemConsoleManager.getAllItemsWithPrice(m_StoreId));
         } while (addItemToOrder());
-        m_OrderViewModel.createOrder();
+        try {
+            m_OrderViewModel.createOrder();
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private boolean addItemToOrder() {

@@ -80,6 +80,10 @@ public class OrderManager {
 
     public void create()
     {
+        if(m_StoresToItemsMap == null)
+        {
+            throw new IllegalStateException("Cannot create an empty order");
+        }
         Map<Integer,StoreItem> allItems = new HashMap<>();
         Order tempOrder;
         int totalDeliveryPrice =0;
