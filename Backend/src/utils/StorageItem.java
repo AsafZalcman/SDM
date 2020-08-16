@@ -28,11 +28,19 @@ public class StorageItem{
     }
 
     public void setStoresSellIt(int i_StoresSellIt) {
-        m_StoresSellIt += i_StoresSellIt;
+        m_StoresSellIt = i_StoresSellIt;
     }
 
     public void setAvgPrice(double i_AvgPrice) {
+        m_AvgPrice = i_AvgPrice;
+    }
+
+    public void addAvgPrice(double i_AvgPrice){
         m_AvgPrice += i_AvgPrice;
+    }
+
+    public void setSales(double i_Sales){
+        m_Sales = i_Sales;
     }
 
     public void addSales(double i_Sales) {

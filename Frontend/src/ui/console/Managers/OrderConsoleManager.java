@@ -78,6 +78,7 @@ public class OrderConsoleManager {
             System.out.println("Error:\"" + userChoiceStr + "\" is not number");
             return true;
         }
+        //need to add the validation if the item is sold by the current store.
         System.out.println("Please enter the amount you want to buy");
         try {
             userChoiceStr = scanner.nextLine();

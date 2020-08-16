@@ -36,15 +36,16 @@ public class ConsoleManager {
                         new MenuItem("mix shops with the lower cost",this::makeDynamicOrder),
                         new MenuItem("Back",()->{})),
                 new MenuItem("show orders history", this::showOrdersHistory),
+                new MenuItem("update store items/prices", this::updateStoreItems),
                 new MenuItem("Exit", () -> System.out.println("see you next time!!!!")));
     }
 
     private void loadSuperDuperMarketXmlFile() {
         System.out.println("Please enter full path to you xml file");
-       // Scanner scanner = new Scanner(System.in);
-       // String pathToFile = scanner.nextLine();
+        Scanner scanner = new Scanner(System.in);
+        String pathToFile = scanner.nextLine();
         try {
-            m_SuperDuperManager.loadSuperDuperDataFromXml("C:\\Users\\asafz\\IdeaProjects\\SDM\\Backend\\src\\resources\\xml\\ex1-small.xml");
+            m_SuperDuperManager.loadSuperDuperDataFromXml(pathToFile);
             b_IsDataLoaded = true;
             System.out.println("Xml file was loaded");
         } catch (Exception e) {
@@ -89,6 +90,12 @@ public class ConsoleManager {
         }
 
         return b_IsDataLoaded;
+    }
+
+    private void updateStoreItems(){
+        if (isDataLoaded()) {
+            m_StoreConsoleManager.updateStoreItemsMenu();
+        }
     }
 
 }

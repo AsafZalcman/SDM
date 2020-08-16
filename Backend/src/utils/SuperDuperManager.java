@@ -134,4 +134,13 @@ public class SuperDuperManager {
     public Store getCheapestStoreForItem(int i_ItemId) {
         return m_StoreManager.getCheapestStoreForItem(i_ItemId);
     }
+
+    public void updateStoreItemPrice(int i_StoreID, int i_StoreItemID, double i_NewPrice){
+        m_StoreManager.updateStoreItemPrice(i_StoreID, i_StoreItemID, i_NewPrice);
+        m_ItemManager.setNewAvgPriceForStorageItem(i_StoreItemID, m_StoreManager.getItemAvgPrice(i_StoreItemID));
+    }
+
+    public void insertNewItemToStore(int i_StoreID, int i_ItemID){
+
+    }
 }

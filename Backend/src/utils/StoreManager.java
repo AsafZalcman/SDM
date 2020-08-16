@@ -32,6 +32,7 @@ public class StoreManager {
         }
         return storeDetails;
     }
+
      public Collection<Integer> getAllStoresId()
      {
          return m_StoreID2Store.keySet();
@@ -58,7 +59,6 @@ public class StoreManager {
     }
 
     public int howManyStoreSellTheInputItem(Integer i_ItemID){
-        //Stream??
         int result = 0;
         for(Store store: m_StoreID2Store.values()){
             if(store.isItemExists(i_ItemID)){
@@ -75,7 +75,6 @@ public class StoreManager {
         }).map((Store i_Id) -> Store.getStoreItem(i_itemID)).mapToDouble(StoreItem::getPrice).summaryStatistics();
         return statistics.getAverage();
         */
-        //Stream??
         int storeCounter = 0;
         double itemTotalPrice = 0.0;
         for(Store store: m_StoreID2Store.values()){
@@ -92,6 +91,10 @@ public class StoreManager {
         return   m_StoreID2Store.values().stream()
                 .filter(store -> store.isItemExists(i_ItemId))
                 .reduce((prev, current) -> (prev.getStoreItemPrice(i_ItemId) < current.getStoreItemPrice(i_ItemId)) ? prev : current).orElse(null);
+    }
+
+    public void updateStoreItemPrice(int i_StoreID, int i_StoreItemID, double i_NewPrice){
+        m_StoreID2Store.get(i_StoreID).getStoreItem(i_StoreItemID).setPrice(i_NewPrice);
     }
 
 //   //only for debug
