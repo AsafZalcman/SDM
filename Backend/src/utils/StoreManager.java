@@ -97,6 +97,24 @@ public class StoreManager {
         m_StoreID2Store.get(i_StoreID).getStoreItem(i_StoreItemID).setPrice(i_NewPrice);
     }
 
+    public void insertNewItemToStore(int i_StoreID, StoreItem i_NewStoreItem) throws Exception {
+        Store store = m_StoreID2Store.get(i_StoreID);
+        if(store.isItemExists(i_NewStoreItem.getItem().getId())){
+            throw new Exception("Operation failed: The product is already exist in the store");
+        }
+        else {
+            store.addStoreItem(i_NewStoreItem);
+        }
+    }
+
+    public boolean isItemExist(int i_StoreID, int i_ItemID){
+        return m_StoreID2Store.get(i_StoreID).isItemExists(i_ItemID);
+    }
+
+    public boolean isStoreIDExist(int i_storeID) {
+        return m_StoreID2Store.containsKey(i_storeID);
+    }
+
 //   //only for debug
 //   @Override
 //   public String toString() {

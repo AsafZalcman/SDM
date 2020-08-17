@@ -139,4 +139,8 @@ public class Store implements IDelivery, IUniquely {
         return m_Orders;
     }
 
+    public void addStoreItem(StoreItem i_StoreItem){
+        this.m_IdToStoreItem.put(i_StoreItem.getItem().getId(),i_StoreItem);
+    }
+
 }

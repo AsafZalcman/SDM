@@ -61,5 +61,13 @@ public class ItemManager {
         m_ItemID2StorageItem.get(i_ItemID).addSales(i_Value);
     }
 
+    public void addStorageItemSellItValue(Integer i_ItemID, int i_Value){
+        m_ItemID2StorageItem.get(i_ItemID).addStoreSellIt(i_Value);
+    }
+
+    public boolean isItemExist(int i_ItemID){
+        return m_ItemID2Item.containsKey(i_ItemID);
+    }
+
 
 }

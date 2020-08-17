@@ -9,6 +9,11 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 public class StoreViewModel {
+    private SuperDuperManager m_SuperDuperManager;
+
+    public StoreViewModel(){
+        m_SuperDuperManager = SuperDuperManager.getInstance();
+    }
 
     public Collection<StoreDto> getAllStores()
     {
@@ -19,8 +24,8 @@ public class StoreViewModel {
         SuperDuperManager.getInstance().updateStoreItemPrice(i_StoreID, i_StoreItemID, i_NewPrice);
     }
 
-    public void insertNewItemToStore(int i_StoreID, int i_ItemID){
-
+    public boolean isStoreIDExistInTheSystem(int i_StoreID) {
+        return m_SuperDuperManager.isStoreIDExist(i_StoreID);
     }
 }
 

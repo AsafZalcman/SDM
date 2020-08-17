@@ -25,7 +25,7 @@ public class StoreConsoleManager {
 
         Collection<StoreDto> stores = m_StoreViewModel.getAllStores();
         int counter=1;
-        System.out.println("Please enter the Id of the desired store");
+
         for (StoreDto storeDto:stores
         ) {
             System.out.println(counter+".\n"+
@@ -35,13 +35,18 @@ public class StoreConsoleManager {
             counter++;
         }
         while (true) {
+            System.out.println("Please enter the Id of the desired store");
             try {
                 userChoiceStr = scanner.nextLine();
                 userChoice = Integer.parseInt(userChoiceStr);
             }
             catch (NumberFormatException e)
             {
-                System.out.println("Error:\"" + userChoice +"\" is not number");
+                System.out.println("Error: \"" + userChoice +"\" is not number");
+                continue;
+            }
+            if(!m_StoreViewModel.isStoreIDExistInTheSystem(userChoice)){
+                System.out.println("Error: store ID: \"" + userChoice +"\" is not available in the system");
                 continue;
             }
             return userChoice;
@@ -129,12 +134,83 @@ public class StoreConsoleManager {
                 new MenuItem("Delete item", () -> System.out.println("Op1 in")),
                 new MenuItem("Insert new item",() -> insertNewItemToStore(storeID)),
                 new MenuItem("Change item price",() -> changeStoreItemPrice(storeID)),
-                new MenuItem("Exit", () -> System.out.println("All updates were saved!!!!")));
+                new MenuItem("Back to Main Menu", () -> System.out.println("All updates were saved!!!!")));
         m_UpdateStoreMenu.run();
     }
 
     private void insertNewItemToStore(int i_StoreID) {
+        int newItemID = getNewItemIDFromUser();
+        double newItemPrice = getPriceForNewItemFromUser();
+        try {
+            m_ItemViewModel.addNewItemToStore(i_StoreID, newItemID, newItemPrice);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return;
+        }
+    }
 
+    private double getPriceForNewItemFromUser() {
+        System.out.println("Enter price for the new item:");
+
+        Scanner scanner = new Scanner(System.in);
+        String userChoiceStr;
+        Double userChoice = null;
+
+        while (true) {
+            try {
+                userChoiceStr = scanner.nextLine();
+                userChoice = Double.parseDouble(userChoiceStr);
+                if(userChoice < 0){
+                    throw new NumberFormatException();
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Error:\"" + userChoice + "\" is not a positive number");
+                continue;
+            }
+            return userChoice;
+        }
+    }
+
+    private int getNewItemIDFromUser() {
+        Scanner scanner = new Scanner(System.in);
+        String userChoiceStr;
+        Integer userChoice = null;
+
+        Collection<ItemDto> items = m_ItemViewModel.getAllItems();
+        int counter=1;
+        StringBuilder res = new StringBuilder();
+
+        for(ItemDto itemDto: items){
+            res.append(counter).append(". ")
+                    .append("\n")
+                    .append("- ID: ").append(itemDto.getId())
+                    .append("\n")
+                    .append("- Name: ").append(itemDto.getItemName())
+                    .append("\n")
+                    .append("- Purchase Form: ").append(itemDto.getPurchaseForm())
+                    .append("\n");
+            counter++;
+        }
+
+        System.out.println(res.toString());
+
+        while (true) {
+            try {
+                System.out.println("Please enter the Id of the desired item:");
+                userChoiceStr = scanner.nextLine();
+                userChoice = Integer.parseInt(userChoiceStr);
+            }
+            catch (NumberFormatException e)
+            {
+                System.out.println("Error: \"" + userChoice +"\" is not number");
+                continue;
+            }
+            if(!m_ItemViewModel.isItemExistInTheSystem(userChoice)){
+                System.out.println("Error: item ID: \"" + userChoice +"\" is not available in the system");
+                continue;
+            }
+            return userChoice;
+        }
     }
 
     private void changeStoreItemPrice(int i_StoreID){
@@ -146,14 +222,17 @@ public class StoreConsoleManager {
     private double getNewPriceFromUser() {
         Scanner scanner = new Scanner(System.in);
         String userChoiceStr;
-        Integer userChoice = null;
+        Double userChoice = null;
 
         System.out.println("Enter the new price:");
 
         while (true) {
             try {
                 userChoiceStr = scanner.nextLine();
-                userChoice = Integer.parseInt(userChoiceStr);
+                userChoice = Double.parseDouble(userChoiceStr);
+                if(userChoice < 0){
+                    throw new NumberFormatException();
+                }
             }
             catch (NumberFormatException e)
             {
@@ -173,7 +252,6 @@ public class StoreConsoleManager {
         Collection<ItemDto> items = m_ItemViewModel.getAllItemsOfStore(i_StoreID);
         int counter=1;
         StringBuilder res = new StringBuilder();
-        System.out.println("Please enter the Id of the desired item");
 
         for(ItemDto itemDto: items){
             res.append(counter).append(". ")
@@ -190,13 +268,18 @@ public class StoreConsoleManager {
         System.out.println(res.toString());
 
         while (true) {
+            System.out.println("Please enter the Id of the desired item:");
             try {
                 userChoiceStr = scanner.nextLine();
                 userChoice = Integer.parseInt(userChoiceStr);
             }
             catch (NumberFormatException e)
             {
-                System.out.println("Error:\"" + userChoice +"\" is not number");
+                System.out.println("Error: \"" + userChoice +"\" is not number");
+                continue;
+            }
+            if(!m_ItemViewModel.isStoreItemIDBelongToTheStore(i_StoreID, userChoice)){
+                System.out.println("Error: item ID: \"" + userChoice +"\" does not belong to the store ID: \"" + i_StoreID);
                 continue;
             }
             return userChoice;

@@ -31,6 +31,10 @@ public class StorageItem{
         m_StoresSellIt = i_StoresSellIt;
     }
 
+    public void addStoreSellIt(int i_Value){
+        m_StoresSellIt += i_Value;
+    }
+
     public void setAvgPrice(double i_AvgPrice) {
         m_AvgPrice = i_AvgPrice;
     }

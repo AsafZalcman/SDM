@@ -98,7 +98,6 @@ public class SuperDuperManager {
     public void executeNewOrder() {
         m_OrderManager.executeOrder();
 
-        //Stream??
         for (StoreItem storeItem : m_OrderManager.getCurrentOrder().getStoreItems()) {
             m_ItemManager.addStorageItemSales(storeItem.getItem().getId(), storeItem.getAmountOfSells());
         }
@@ -140,7 +139,22 @@ public class SuperDuperManager {
         m_ItemManager.setNewAvgPriceForStorageItem(i_StoreItemID, m_StoreManager.getItemAvgPrice(i_StoreItemID));
     }
 
-    public void insertNewItemToStore(int i_StoreID, int i_ItemID){
+    public void insertNewItemToStore(int i_StoreID, StoreItem i_NewStoreItem) throws Exception {
+            this.m_StoreManager.insertNewItemToStore(i_StoreID, i_NewStoreItem);
+            this.m_ItemManager.addStorageItemSellItValue(i_NewStoreItem.getItem().getId(), 1);
+            int storeItemID = i_NewStoreItem.getItem().getId();
+            this.m_ItemManager.setNewAvgPriceForStorageItem(storeItemID, m_StoreManager.getItemAvgPrice(storeItemID));
+    }
 
+    public boolean isItemExist(int i_ItemID){
+        return m_ItemManager.isItemExist(i_ItemID);
+    }
+
+    public boolean isStoreItemBelongToTheStore(int i_StoreID, int i_ItemID) {
+        return m_StoreManager.isItemExist(i_StoreID, i_ItemID);
+    }
+
+    public boolean isStoreIDExist(int i_StoreID){
+        return m_StoreManager.isStoreIDExist(i_StoreID);
     }
 }
