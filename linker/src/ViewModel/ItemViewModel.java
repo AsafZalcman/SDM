@@ -49,4 +49,8 @@ public class ItemViewModel {
     public boolean isStoreItemIDBelongToTheStore(int i_StoreID, int i_ItemID){
         return m_SuperDuperManager.isStoreItemBelongToTheStore(i_StoreID, i_ItemID);
     }
+
+    public void deleteItemFromStore(int i_storeID, int i_ItemID) throws Exception {
+        m_SuperDuperManager.deleteStoreItem(i_storeID, i_ItemID);
+    }
 }

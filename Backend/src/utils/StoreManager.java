@@ -115,6 +115,10 @@ public class StoreManager {
         return m_StoreID2Store.containsKey(i_storeID);
     }
 
+    public void deleteStoreItem(int i_StoreID, int i_ItemID) {
+        m_StoreID2Store.get(i_StoreID).removeStoreItem(i_ItemID);
+    }
+
 //   //only for debug
 //   @Override
 //   public String toString() {

@@ -131,11 +131,21 @@ public class StoreConsoleManager {
     public void updateStoreItemsMenu(){
         int storeID = getStoreIdFromUser();
         m_UpdateStoreMenu = new UpdateStoreMenu(
-                new MenuItem("Delete item", () -> System.out.println("Op1 in")),
+                new MenuItem("Delete item", () -> deleteItemFromStore(storeID)),
                 new MenuItem("Insert new item",() -> insertNewItemToStore(storeID)),
                 new MenuItem("Change item price",() -> changeStoreItemPrice(storeID)),
                 new MenuItem("Back to Main Menu", () -> System.out.println("All updates were saved!!!!")));
         m_UpdateStoreMenu.run();
+    }
+
+    private void deleteItemFromStore(int i_StoreID) {
+        int itemID = getStoreItemIDFromUser(i_StoreID);
+        try {
+            m_ItemViewModel.deleteItemFromStore(i_StoreID, itemID);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return;
+        }
     }
 
     private void insertNewItemToStore(int i_StoreID) {
@@ -260,7 +270,7 @@ public class StoreConsoleManager {
                     .append("\n")
                     .append("- Name: ").append(itemDto.getItemName())
                     .append("\n")
-                    .append("- Current Price: ").append(itemDto.getPrice())
+                    .append("- Price: ").append(itemDto.getPrice())
                     .append("\n");
             counter++;
         }

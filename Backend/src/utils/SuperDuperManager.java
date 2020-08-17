@@ -157,4 +157,15 @@ public class SuperDuperManager {
     public boolean isStoreIDExist(int i_StoreID){
         return m_StoreManager.isStoreIDExist(i_StoreID);
     }
+
+    public void deleteStoreItem(int i_StoreID, int i_ItemID) throws Exception {
+        if(m_ItemManager.getStorageItemNumberOfStoreSellIt(i_ItemID) <= 1){
+            throw new Exception("Operation failed: This is the only store that sell this item, so it can not be remove");
+        }
+        else{
+            m_StoreManager.deleteStoreItem(i_StoreID, i_ItemID);
+            this.m_ItemManager.addStorageItemSellItValue(i_ItemID, -1);
+            this.m_ItemManager.setNewAvgPriceForStorageItem(i_ItemID, m_StoreManager.getItemAvgPrice(i_ItemID));
+        }
+    }
 }

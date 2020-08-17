@@ -69,5 +69,9 @@ public class ItemManager {
         return m_ItemID2Item.containsKey(i_ItemID);
     }
 
+    public int getStorageItemNumberOfStoreSellIt(int i_ItemID){
+        return m_ItemID2StorageItem.get(i_ItemID).getStoresSellIt();
+    }
+
 
 }
