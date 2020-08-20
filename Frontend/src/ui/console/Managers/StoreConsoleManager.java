@@ -256,8 +256,8 @@ public class StoreConsoleManager {
 
     private int getStoreItemIDFromUser(int i_StoreID) {
         Scanner scanner = new Scanner(System.in);
-        String userChoiceStr;
-        Integer userChoice = null;
+        String userChoiceStr = null;
+        Integer userChoice;
 
         Collection<ItemDto> items = m_ItemViewModel.getAllItemsOfStore(i_StoreID);
         int counter=1;
@@ -285,7 +285,7 @@ public class StoreConsoleManager {
             }
             catch (NumberFormatException e)
             {
-                System.out.println("Error: \"" + userChoice +"\" is not number");
+                System.out.println("Error: \"" + userChoiceStr +"\" is not number");
                 continue;
             }
             if(!m_ItemViewModel.isStoreItemIDBelongToTheStore(i_StoreID, userChoice)){
