@@ -9,4 +9,8 @@ public class Location extends Point {
         super(x,y);
     }
 
+    @Override
+    public String toString() {
+        return x + "," + y;
+    }
 }

@@ -7,11 +7,8 @@ import models.StoreItem;
 import myLocation.Location;
 import myLocation.LocationException;
 import myLocation.LocationManager;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class OrderManager {
     private int counter = 0;
@@ -20,7 +17,7 @@ public class OrderManager {
     private Location m_CurrentCustomerLocation;
     private Map<Integer, Double> m_CurrentIdToStoreItem;
     private Map<Store,Order> m_StoreToOrderMap = new HashMap<>();
-    private Order m_CurrentOrder;
+    private StorageOrder m_CurrentOrder;
     private List<StorageOrder> m_StorageOrders = new ArrayList<>();
     private boolean b_IsCreated = false;
     //badName
@@ -78,26 +75,26 @@ public class OrderManager {
         m_StoresToItemsMap.put(m_CurrentStore,m_CurrentIdToStoreItem);
     }
 
-    public void create()
-    {
-        if(m_StoresToItemsMap == null)
-        {
+    public void create() {
+        if (m_StoresToItemsMap == null) {
             throw new IllegalStateException("Cannot create an empty order");
         }
-        Map<Integer,StoreItem> allItems = new HashMap<>();
+        Map<Integer, StoreItem> allItems = new HashMap<>();
         Order tempOrder;
-        int totalDeliveryPrice =0;
-        for (Map.Entry<Store, Map<Integer,Double>> entry : m_StoresToItemsMap.entrySet()) {
-            tempOrder = entry.getKey().createOrder(m_CurrentOrderDate,m_CurrentCustomerLocation,entry.getValue());
-            m_StoreToOrderMap.put(entry.getKey(),tempOrder);
-            totalDeliveryPrice+=tempOrder.getDeliveryPrice();
-            for (StoreItem storeItems:tempOrder.getStoreItems()
+        int totalDeliveryPrice = 0;
+        for (Map.Entry<Store, Map<Integer, Double>> entry : m_StoresToItemsMap.entrySet()) {
+            tempOrder = entry.getKey().createOrder(m_CurrentOrderDate, m_CurrentCustomerLocation, entry.getValue());
+            m_StoreToOrderMap.put(entry.getKey(), tempOrder);
+            totalDeliveryPrice += tempOrder.getDeliveryPrice();
+            for (StoreItem storeItems : tempOrder.getStoreItems()
             ) {
-                allItems.put(storeItems.getItem().getId(),storeItems);
+                allItems.put(storeItems.getItem().getId(), storeItems);
             }
         }
-        m_CurrentOrder =new Order(m_CurrentOrderDate,m_CurrentCustomerLocation,totalDeliveryPrice,allItems);
-        b_IsCreated=true;
+        m_CurrentOrder = new StorageOrder(++counter, new Order(m_CurrentOrderDate, m_CurrentCustomerLocation, totalDeliveryPrice, allItems), m_StoreToOrderMap.entrySet().stream()
+                .collect(Collectors.toMap(entry -> entry.getKey().getId(),
+                        Map.Entry::getValue)));
+        b_IsCreated = true;
     }
     public void executeOrder()
     {
@@ -106,7 +103,7 @@ public class OrderManager {
             entry.getKey().addOrder(entry.getValue());
         }
 
-        m_StorageOrders.add(new StorageOrder(++counter,m_CurrentOrder, m_StoresToItemsMap.keySet()));
+        m_StorageOrders.add(m_CurrentOrder);
     }
     public void cleanup()
     {
@@ -123,7 +120,7 @@ public class OrderManager {
         return m_CurrentStore;
     }
 
-    public Order getCurrentOrder()
+    public StorageOrder getCurrentOrder()
     {
         return m_CurrentOrder;
     }

@@ -1,6 +1,7 @@
 package ui.console.Utils;
 
 import DtoModel.ItemDto;
+import myLocation.Location;
 
 public class StoreDtoUtil {
 
@@ -15,5 +16,11 @@ public class StoreDtoUtil {
                 : "No deliveries income to show");
         return res.toString();
     }
+
+    public static String getLocationString(Location i_Location) {
+        return "- Location: " +  i_Location;
+    }
+
+
 
 }

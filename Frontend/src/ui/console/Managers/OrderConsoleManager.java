@@ -3,12 +3,12 @@ package ui.console.Managers;
 import DtoModel.ItemDto;
 import DtoModel.OrderDto;
 import DtoModel.StorageOrderDto;
+import DtoModel.StoreDto;
 import ViewModel.OrderViewModel;
 import myLocation.LocationException;
-import ui.console.Utils.FormatUtils;
-import ui.console.Utils.ItemDtoUtils;
-import ui.console.Utils.OrderDtoUtil;
-import ui.console.Utils.UniquelyUtil;
+import ui.console.Menu.MenuItem;
+import ui.console.Menu.SubMenu;
+import ui.console.Utils.*;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -22,23 +22,36 @@ public class OrderConsoleManager {
     private ItemConsoleManager m_ItemConsoleManager = new ItemConsoleManager();
     private int m_StoreId;
     private OrderViewModel m_OrderViewModel = new OrderViewModel();
+    private SubMenu m_OrderOptionsMenu;
 
-    public void MakeStaticOrder(){
+    public OrderConsoleManager() {
+       scanner = new Scanner(System.in);
+        m_StoreConsoleManager = new StoreConsoleManager();
+        m_ItemConsoleManager = new ItemConsoleManager();
+        m_OrderViewModel = new OrderViewModel();
+        m_OrderOptionsMenu = new SubMenu("", "choose order type",
+                new MenuItem("from specific shop",this::makeStaticOrder),
+                new MenuItem("mix shops with the lower cost",this::makeDynamicOrder));
+    }
+
+    public void MakeAnOrder()
+   {
+       getOrderDateFromUser();
+       getUserLocation();
+       m_OrderOptionsMenu.selected();
+       approveOrder();
+
+   }
+    private void makeStaticOrder(){
         getStoreIdFromUser();
-        getOrderDateFromUser();
-        getUserLocation();
         addItemsToStaticOrder();
-        approveOrder();
     }
 
-    public void MakeDynamicOrder()
+    private void makeDynamicOrder()
     {
-        getOrderDateFromUser();
-        getUserLocation();
         addItemsToDynamicOrder();
-        approveOrder();
+        showDynamicOrderDetails();
     }
-
     private void addItemsToDynamicOrder() {
         do {
             System.out.println(m_ItemConsoleManager.getAllItems());
@@ -78,7 +91,6 @@ public class OrderConsoleManager {
             System.out.println("Error:\"" + userChoiceStr + "\" is not number");
             return true;
         }
-        //need to add the validation if the item is sold by the current store.
         System.out.println("Please enter the amount you want to buy");
         try {
             userChoiceStr = scanner.nextLine();
@@ -94,7 +106,6 @@ public class OrderConsoleManager {
         } catch (Exception e) {
             System.out.println("Error:" + e.getMessage());
             return true;
-
         }
 
         return true;
@@ -102,11 +113,11 @@ public class OrderConsoleManager {
 
     private void showOrderDetails()
     {
-        OrderDto orderDto = m_OrderViewModel.getCurrentOrder();
+        StorageOrderDto storageOrderDto = m_OrderViewModel.getCurrentOrder();
         int counter =1;
         System.out.println("Order summary:");
         StringBuilder ordersDetails = new StringBuilder();
-        for (ItemDto itemDto:orderDto.getItemsDto()
+        for (ItemDto itemDto:storageOrderDto.getOrderDto().getItemsDto()
         ) {
             ordersDetails.append(counter)
                     .append(".\n")
@@ -116,11 +127,42 @@ public class OrderConsoleManager {
                     .append("\n")
                     .append(ItemDtoUtils.getAmountOfSellsString(itemDto.getAmountOfSell()))
                     .append("\n")
-                    .append(OrderDtoUtil.getTotalOrderPrice(itemDto.getTotalPrice()));
+                    .append(OrderDtoUtil.getTotalItemCostString(itemDto.getTotalPrice()))
+                    .append("\n");
             counter++;
         }
-        String additionalValuesForStaticOrder = orderDto.isDynamicOrder()? "":"\nDistance from Store:" + FormatUtils.DecimalFormat.format(orderDto.getDistanceFromSource()) + "\nPrice for Km:" +orderDto.getPPK();
-        System.out.println(ordersDetails.toString() + OrderDtoUtil.getDeliveryPrice(orderDto.getDeliveryPrice()) + additionalValuesForStaticOrder);
+        String additionalValuesForStaticOrder = storageOrderDto.isDynamicOrder()? "":OrderDtoUtil.getDistanceFromSourceString(storageOrderDto.getDistanceFromSource()) + "\n" + StoreDtoUtil.getPricePerKmString(storageOrderDto.getPPK()) + "\n";
+        System.out.println("====================\n" +ordersDetails.toString() + OrderDtoUtil.getDeliveryPriceString(storageOrderDto.getOrderDto().getDeliveryPrice()) + "\n" + additionalValuesForStaticOrder + OrderDtoUtil.getTotalOrderPriceString(storageOrderDto.getOrderDto().getTotalOrderPrice()));
+    }
+
+    private void showDynamicOrderDetails()
+    {
+        StorageOrderDto storageOrderDto = m_OrderViewModel.getCurrentOrder();
+        int counter =1;
+        StringBuilder storeDetails = new StringBuilder( "- " + storageOrderDto.getNumberOfStores() + " Stores took part in this order with the following details:");
+        for (Map.Entry<StoreDto,OrderDto> entry: storageOrderDto.getStoresToOrders().entrySet()
+             ) {
+            storeDetails.append(counter)
+                    .append(".\n")
+                    .append(UniquelyUtil.getIdString(entry.getKey().getId()))
+                    .append("\n")
+                    .append(UniquelyUtil.getNameString(entry.getKey().getName()))
+                    .append("\n")
+                    .append(StoreDtoUtil.getLocationString(entry.getKey().getLocation()))
+                    .append("\n")
+                    .append(OrderDtoUtil.getDistanceFromSourceString(entry.getKey().getLocation().distance(entry.getValue().getDestLocation())))
+                    .append("\n")
+                    .append(StoreDtoUtil.getPricePerKmString(entry.getKey().getPPK()))
+                    .append("\n")
+                    .append(OrderDtoUtil.getDeliveryPriceString(entry.getValue().getDeliveryPrice()))
+                    .append("\n")
+                    .append(OrderDtoUtil.getNumberOfDifferentItemsString(entry.getValue().getTotalItemsKind()))
+                    .append("\n")
+                    .append(OrderDtoUtil.getTotalOrderPriceString(entry.getValue().getTotalOrderPrice()))
+                    .append("\n");
+            counter++;
+        }
+        System.out.println(storeDetails.toString());
     }
 
     private void approveOrder()
@@ -202,9 +244,9 @@ public class OrderConsoleManager {
         for (StorageOrderDto storageOrderDto: m_OrderViewModel.getAllOrders()
         ) {
             OrderDto tempOrder = storageOrderDto.getOrderDto();
-            storeDetails = storageOrderDto.getOrderDto().isDynamicOrder() ?
+            storeDetails = storageOrderDto.isDynamicOrder() ?
                     "- Number of Stores that took part in this order: " + storageOrderDto.getNumberOfStores() :
-                    "- Store id: " + storageOrderDto.getOrderDto().getStoreId() + "\n- Store name: " + storageOrderDto.getOrderDto().getStoreName();
+                    "- Store id: " + storageOrderDto.getStoreId() + "\n- Store name: " + storageOrderDto.getStoreName();
             orderDetails.append(counter)
                     .append(".\n")
                     .append(UniquelyUtil.getIdString(storageOrderDto.getOrderID()))
@@ -218,10 +260,10 @@ public class OrderConsoleManager {
                     append("\n")
                     .append(OrderDtoUtil.getItemsCountString(tempOrder.getTotalItemsCount()))
                     .append("\n")
-                    .append(OrderDtoUtil.getTotalOrderPrice(tempOrder.getTotalItemsPrice()))
+                    .append(OrderDtoUtil.getTotalOrderPriceString(tempOrder.getTotalItemsPrice()))
                     .append("\n")
-                    .append(OrderDtoUtil.getDeliveryPrice(tempOrder.getDeliveryPrice())).append("\n")
-                    .append(FormatUtils.DecimalFormat.format(tempOrder.getTotalOrderPrice()));
+                    .append(OrderDtoUtil.getDeliveryPriceString(tempOrder.getDeliveryPrice())).append("\n")
+                    .append(OrderDtoUtil.getTotalOrderPriceString(tempOrder.getTotalOrderPrice()));
             counter++;
         }
         if(counter==1)

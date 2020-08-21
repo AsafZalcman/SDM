@@ -98,14 +98,14 @@ public class SuperDuperManager {
     public void executeNewOrder() {
         m_OrderManager.executeOrder();
 
-        for (StoreItem storeItem : m_OrderManager.getCurrentOrder().getStoreItems()) {
+        for (StoreItem storeItem : m_OrderManager.getCurrentOrder().getOrder().getStoreItems()) {
             m_ItemManager.addStorageItemSales(storeItem.getItem().getId(), storeItem.getAmountOfSells());
         }
 
         m_OrderManager.cleanup();
     }
 
-    public Order getCurrentOrder() {
+    public StorageOrder getCurrentOrder() {
         return m_OrderManager.getCurrentOrder();
     }
 

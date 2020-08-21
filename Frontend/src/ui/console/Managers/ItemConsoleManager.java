@@ -4,9 +4,7 @@ import DtoModel.ItemDto;
 import DtoModel.StorageItemDto;
 import ViewModel.ItemViewModel;
 import ui.console.Utils.ItemDtoUtils;
-
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -65,7 +63,8 @@ public class ItemConsoleManager {
             res.append(counter).append(".\n")
                     .append(ItemDtoUtils.getBasicItemString(tempItemDto))
                     .append("\n")
-                    .append(ItemDtoUtils.getPriceString(tempItemDto));
+                    .append(ItemDtoUtils.getPriceString(tempItemDto))
+                    .append("\n");
             counter++;
         }
         return res.toString();

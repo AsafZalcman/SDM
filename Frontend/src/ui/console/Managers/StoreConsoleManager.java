@@ -20,8 +20,8 @@ public class StoreConsoleManager {
     public int getStoreIdFromUser()
     {
         Scanner scanner = new Scanner(System.in);
-        String userChoiceStr;
-        Integer userChoice = null;
+        String userChoiceStr = null;
+        int userChoice;
 
         Collection<StoreDto> stores = m_StoreViewModel.getAllStores();
         int counter=1;
@@ -42,7 +42,7 @@ public class StoreConsoleManager {
             }
             catch (NumberFormatException e)
             {
-                System.out.println("Error: \"" + userChoice +"\" is not number");
+                System.out.println("Error: \"" + userChoiceStr +"\" is not number");
                 continue;
             }
             if(!m_StoreViewModel.isStoreIDExistInTheSystem(userChoice)){
@@ -93,11 +93,11 @@ public class StoreConsoleManager {
                     .append("\n")
                     .append(OrderDtoUtil.getItemsCountString(orderDto.getTotalItemsCount()))
                     .append("\n")
-                    .append(OrderDtoUtil.getItemsPrice(orderDto.getTotalItemsPrice()))
+                    .append(OrderDtoUtil.getItemsPriceString(orderDto.getTotalItemsPrice()))
                     .append("\n")
-                    .append(OrderDtoUtil.getDeliveryPrice(orderDto.getDeliveryPrice()))
+                    .append(OrderDtoUtil.getDeliveryPriceString(orderDto.getDeliveryPrice()))
                     .append("\n")
-                    .append(OrderDtoUtil.getTotalOrderPrice(orderDto.getTotalOrderPrice()))
+                    .append(OrderDtoUtil.getTotalOrderPriceString(orderDto.getTotalOrderPrice()))
                     .append("\n");
             counter++;
         }
@@ -144,7 +144,6 @@ public class StoreConsoleManager {
             m_ItemViewModel.deleteItemFromStore(i_StoreID, itemID);
         }catch (Exception e){
             System.out.println(e.getMessage());
-            return;
         }
     }
 
@@ -155,16 +154,25 @@ public class StoreConsoleManager {
             m_ItemViewModel.addNewItemToStore(i_StoreID, newItemID, newItemPrice);
         }catch (Exception e){
             System.out.println(e.getMessage());
-            return;
         }
     }
 
     private double getPriceForNewItemFromUser() {
         System.out.println("Enter price for the new item:");
+        return getPriceFromUser();
+    }
 
+
+    private double getNewPriceFromUser() {
+        System.out.println("Enter the new price:");
+        return getPriceFromUser();
+    }
+
+    private double getPriceFromUser()
+    {
         Scanner scanner = new Scanner(System.in);
-        String userChoiceStr;
-        Double userChoice = null;
+        String userChoiceStr = null;
+        double userChoice;
 
         while (true) {
             try {
@@ -173,8 +181,10 @@ public class StoreConsoleManager {
                 if(userChoice < 0){
                     throw new NumberFormatException();
                 }
-            } catch (NumberFormatException e) {
-                System.out.println("Error:\"" + userChoice + "\" is not a positive number");
+            }
+            catch (NumberFormatException e)
+            {
+                System.out.println("Error:\"" + userChoiceStr +"\" is not number");
                 continue;
             }
             return userChoice;
@@ -183,8 +193,8 @@ public class StoreConsoleManager {
 
     private int getNewItemIDFromUser() {
         Scanner scanner = new Scanner(System.in);
-        String userChoiceStr;
-        Integer userChoice = null;
+        String userChoiceStr = null;
+        int userChoice;
 
         Collection<ItemDto> items = m_ItemViewModel.getAllItems();
         int counter=1;
@@ -212,7 +222,7 @@ public class StoreConsoleManager {
             }
             catch (NumberFormatException e)
             {
-                System.out.println("Error: \"" + userChoice +"\" is not number");
+                System.out.println("Error: \"" + userChoiceStr +"\" is not number");
                 continue;
             }
             if(!m_ItemViewModel.isItemExistInTheSystem(userChoice)){
@@ -229,35 +239,10 @@ public class StoreConsoleManager {
         m_StoreViewModel.updateStoreItemPrice(i_StoreID, storeItemID, newPrice);
     }
 
-    private double getNewPriceFromUser() {
-        Scanner scanner = new Scanner(System.in);
-        String userChoiceStr;
-        Double userChoice = null;
-
-        System.out.println("Enter the new price:");
-
-        while (true) {
-            try {
-                userChoiceStr = scanner.nextLine();
-                userChoice = Double.parseDouble(userChoiceStr);
-                if(userChoice < 0){
-                    throw new NumberFormatException();
-                }
-            }
-            catch (NumberFormatException e)
-            {
-                System.out.println("Error:\"" + userChoice +"\" is not number");
-                continue;
-            }
-            return userChoice;
-        }
-
-    }
-
     private int getStoreItemIDFromUser(int i_StoreID) {
         Scanner scanner = new Scanner(System.in);
         String userChoiceStr = null;
-        Integer userChoice;
+        int userChoice;
 
         Collection<ItemDto> items = m_ItemViewModel.getAllItemsOfStore(i_StoreID);
         int counter=1;

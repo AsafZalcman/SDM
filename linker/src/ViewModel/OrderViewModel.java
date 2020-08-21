@@ -1,14 +1,17 @@
 package ViewModel;
 
-import DtoModel.ItemDto;
 import DtoModel.OrderDto;
 import DtoModel.StorageOrderDto;
+import DtoModel.StoreDto;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import models.*;
 import myLocation.LocationException;
+import utils.StorageOrder;
 import utils.SuperDuperManager;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class OrderViewModel {
@@ -18,17 +21,10 @@ public class OrderViewModel {
         this.m_SuperDuperManager = SuperDuperManager.getInstance();
     }
 
-    public final OrderDto getCurrentOrder() {
-        Order order = m_SuperDuperManager.getCurrentOrder();
-        Collection<ItemDto> itemsDto = new ArrayList<>();
-        ItemDto itemDto;
-        for (StoreItem item : order.getStoreItems()
-        ) {
-            itemDto = new ItemDto(item);
-            itemsDto.add(itemDto);
-        }
+    public final StorageOrderDto getCurrentOrder() {
+        StorageOrder order = m_SuperDuperManager.getCurrentOrder();
 
-        return new OrderDto(order);
+        return new StorageOrderDto(order,convertStorageOrderStores(order.getStoresIdToOrder()));
     }
 
     public void setStoreForOrder(int i_StoreId) throws Exception {
@@ -64,6 +60,14 @@ public class OrderViewModel {
     }
     public Collection<StorageOrderDto> getAllOrders()
     {
-        return SuperDuperManager.getInstance().getOrderManager().getStorageOrders().stream().map(StorageOrderDto::new).collect(Collectors.toList());
+        return SuperDuperManager.getInstance().getOrderManager().getStorageOrders().stream()
+             .collect(Collectors.toMap(storageOrder -> storageOrder,storageOrder -> convertStorageOrderStores(storageOrder.getStoresIdToOrder()))).entrySet().stream().map(entry -> new StorageOrderDto(entry.getKey(),entry.getValue())).collect(Collectors.toList());
     }
+
+    private Map<StoreDto,OrderDto> convertStorageOrderStores(Map<Integer,Order>i_StoreIdToOrder) {
+        return i_StoreIdToOrder.entrySet().stream()
+                .collect(Collectors.toMap(entry -> new StoreDto(m_SuperDuperManager.getStore(entry.getKey())),
+                entry -> new OrderDto(entry.getValue())));
+    }
+
 }

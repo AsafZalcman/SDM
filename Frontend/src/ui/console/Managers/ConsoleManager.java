@@ -28,15 +28,12 @@ public class ConsoleManager {
         m_StoreConsoleManager= new StoreConsoleManager();
 
         m_MainMenu = new MainMenu(
-                new MenuItem("initialize system", this::loadSuperDuperMarketXmlFile),
-                new MenuItem("show all shops", this::showAllShops),
-                new MenuItem("show all items", this::showAllItems),
-                new SubMenu("make an order", "choose the order way",
-                        new MenuItem("from specific shop",this::makeStaticOrder),
-                        new MenuItem("mix shops with the lower cost",this::makeDynamicOrder),
-                        new MenuItem("Back",()->{})),
-                new MenuItem("show orders history", this::showOrdersHistory),
-                new MenuItem("update store items/prices", this::updateStoreItems),
+                new MenuItem("Load system data from xml file", this::loadSuperDuperMarketXmlFile),
+                new MenuItem("Show all stores", this::showAllShops),
+                new MenuItem("Show all items", this::showAllItems),
+                new MenuItem("Make an order", this::makeAnOrder),
+                new MenuItem("Show orders history", this::showOrdersHistory),
+                new MenuItem("Update store items/prices", this::updateStoreItems),
                 new MenuItem("Exit", () -> System.out.println("see you next time!!!!")));
     }
 
@@ -65,16 +62,9 @@ public class ConsoleManager {
         }
     }
 
-    private void makeStaticOrder(){
+    private void makeAnOrder(){
         if (isDataLoaded()) {
-            m_OrderConsoleManager.MakeStaticOrder();
-        }
-    }
-
-    private void makeDynamicOrder()
-    {
-        if (isDataLoaded()) {
-            m_OrderConsoleManager.MakeDynamicOrder();
+            m_OrderConsoleManager.MakeAnOrder();
         }
     }
 

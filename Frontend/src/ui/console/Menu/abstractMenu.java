@@ -30,12 +30,12 @@ public abstract class abstractMenu extends ArrayList<IMenuComponent> {
                 userChoiceStr = scanner.nextLine();
                 userChoice = Integer.parseInt(userChoiceStr);
             } catch (NumberFormatException e) {
-                System.out.println("You must select a number between 1 to " + this.size() + "please try again");
+                System.out.println("You must select a number between 1 to " + this.size() + ",please try again");
 
                 continue;
             }
             if (userChoice <= 0 || userChoice > this.size()) {
-                System.out.println("You must select a number between 1 to " + this.size() + "please try again");
+                System.out.println("You must select a number between 1 to " + this.size() + ", please try again");
                 continue;
             }
             return userChoice;
