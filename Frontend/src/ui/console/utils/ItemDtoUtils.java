@@ -12,7 +12,7 @@ public class ItemDtoUtils {
 
     public static String getPriceString(ItemDto i_ItemDto)
     {
-        return i_ItemDto.getPrice() !=null? "- Price: "+  FormatUtils.DecimalFormat.format(i_ItemDto.getPrice()) :"- Price: not for sell";
+        return i_ItemDto.getPrice() !=null? "- Price: "+  FormatUtils.DecimalFormat.format(i_ItemDto.getPrice()) :"- Price: Not for sell";
     }
 
     public static String getAmountOfSellsString(double i_AmountOfSells)

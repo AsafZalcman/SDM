@@ -55,7 +55,7 @@ public class JaxbConverter {
     }
 
     public void loadJaxbData(String i_PathToFile) throws Exception {
-        m_SuperDuperMarketDescriptor=m_IJaxbLoader.load(i_PathToFile);
+        m_SuperDuperMarketDescriptor = m_IJaxbLoader.load(i_PathToFile);
     }
 
 

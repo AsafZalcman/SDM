@@ -1,9 +1,8 @@
 package ui.console.managers;
-
 import ui.console.menu.MainMenu;
 import ui.console.menu.MenuItem;
 import managers.SuperDuperManager;
-
+import static ui.console.utils.FormatUtils.messageFormat;
 import java.util.*;
 
 public class ConsoleManager {
@@ -27,25 +26,25 @@ public class ConsoleManager {
         m_StoreConsoleManager= new StoreConsoleManager();
 
         m_MainMenu = new MainMenu(
-                new MenuItem("Load system data from xml file", this::loadSuperDuperMarketXmlFile),
-                new MenuItem("Show all stores", this::showAllShops),
-                new MenuItem("Show all items", this::showAllItems),
-                new MenuItem("Make an order", this::makeAnOrder),
-                new MenuItem("Show orders history", this::showOrdersHistory),
-                new MenuItem("Update store items/prices", this::updateStoreItems),
-                new MenuItem("Exit", () -> System.out.println("see you next time!!!!")));
+                new MenuItem(" Load system data from xml file", this::loadSuperDuperMarketXmlFile),
+                new MenuItem(" View details of all stores in the system", this::showAllShops),
+                new MenuItem(" View details of all items in the system", this::showAllItems),
+                new MenuItem(" Make an order", this::makeAnOrder),
+                new MenuItem(" View orders history", this::showOrdersHistory),
+                new MenuItem(" Update store items/prices", this::updateStoreItems),
+                new MenuItem(" Exit", () -> System.out.println("See you next time!!!!")));
     }
 
     private void loadSuperDuperMarketXmlFile() {
-        System.out.println("Please enter full path to you xml file");
+        System.out.println("Please enter full path to your xml file:");
         Scanner scanner = new Scanner(System.in);
         String pathToFile = scanner.nextLine();
         try {
             m_SuperDuperManager.loadSuperDuperDataFromXml(pathToFile);
             b_IsDataLoaded = true;
-            System.out.println("Xml file was loaded");
+            System.out.println(messageFormat("Xml file was loaded successfully"));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(messageFormat(e.getMessage()));
         }
     }
 
@@ -75,7 +74,7 @@ public class ConsoleManager {
 
     private boolean isDataLoaded() {
         if (!b_IsDataLoaded) {
-            System.out.println("You cant choose this option before you loaded a data to the system");
+            System.out.println(messageFormat("Error: You can not choose this option before you loaded a data to the system"));
         }
 
         return b_IsDataLoaded;

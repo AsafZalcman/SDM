@@ -47,7 +47,7 @@ public abstract class abstractMenu extends ArrayList<IMenuComponent> {
         int counter=1;
         for (IMenuComponent item:this
         ) {
-            System.out.println(counter + ". " + item.getTitle());
+            System.out.println(counter + ") " + item.getTitle());
             counter++;
         }
     }

@@ -28,7 +28,7 @@ public class OrderViewModel {
     public void setStoreForOrder(int i_StoreId) throws Exception {
         Store store = m_SuperDuperManager.getStore(i_StoreId);
         if (store == null) {
-            throw new Exception("Store with " + i_StoreId + " id is not exists");
+            throw new Exception("Store with ID: " + i_StoreId + " is not exists");
         }
         m_SuperDuperManager.setStoreToOrder(store);
     }
@@ -44,7 +44,7 @@ public class OrderViewModel {
     public void addItemToOrder(Integer itemId, Double amountOfSells) throws Exception {
         Item item = m_SuperDuperManager.getItem(itemId);
         if (item == null) {
-            throw new Exception("Item with:" + itemId + " id is not exists");
+            throw new Exception("Item with ID: " + itemId + " is not exists");
         }
         m_SuperDuperManager.addItemToOrder(item, amountOfSells);
     }

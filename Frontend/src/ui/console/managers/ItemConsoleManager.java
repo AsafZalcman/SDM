@@ -15,6 +15,7 @@ public class ItemConsoleManager {
     public String getAllItems() {
         StringBuilder res = new StringBuilder();
         int counter = 1;
+        System.out.println("Items:");
         for (ItemDto itemDto : m_ItemViewModel.getAllItems()
         ) {
             res.append(counter)
@@ -29,7 +30,7 @@ public class ItemConsoleManager {
     public void showAllStorageItems(){
         StringBuilder res = new StringBuilder();
         int counter = 1;
-        System.out.println("All items available in the system:");
+        System.out.println("\n" + "All items available in the system:");
         for(StorageItemDto storageItemDto: m_ItemViewModel.getAllStorageItems()){
             res.append(counter).append(". ")
                     .append("\n")
@@ -54,6 +55,7 @@ public class ItemConsoleManager {
         StringBuilder res = new StringBuilder();
         ItemDto tempItemDto;
         int counter = 1;
+        System.out.println("Items:");
         for (ItemDto itemDto : allItems
         ) {
             tempItemDto = idToStoreItemsMap.get(itemDto.getId());

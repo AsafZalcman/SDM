@@ -17,11 +17,15 @@ public class OrderDtoUtil {
     }
 
     public static String getDeliveryPriceString(double i_DeliveryPrice) {
-        return "- Delivery price: " + FormatUtils.DecimalFormat.format(i_DeliveryPrice);
+        return "(*) Delivery price: " + FormatUtils.DecimalFormat.format(i_DeliveryPrice);
     }
 
     public static String getTotalOrderPriceString(double i_TotalOrderPrice) {
-        return "- Total order price: " + FormatUtils.DecimalFormat.format(i_TotalOrderPrice);
+        return "(*) Total order price: " + FormatUtils.DecimalFormat.format(i_TotalOrderPrice);
+    }
+
+    public static String getTotalOrderItemsPriceString(double i_TotalOrderPrice) {
+        return "(*) Total order items price: " + FormatUtils.DecimalFormat.format(i_TotalOrderPrice);
     }
 
     public static String getDistanceFromSourceString(double i_DistanceFromSource) {
