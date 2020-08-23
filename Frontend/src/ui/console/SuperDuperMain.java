@@ -1,6 +1,6 @@
 package ui.console;
 
-import ui.console.Managers.ConsoleManager;
+import ui.console.managers.ConsoleManager;
 
 public class SuperDuperMain {
     public static void main(String[] args) {

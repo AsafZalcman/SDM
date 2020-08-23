@@ -1,7 +1,7 @@
 package models;
 
 import interfaces.IUniquely;
-import utils.PurchaseForm;
+import enums.PurchaseForm;
 
 public class Item implements IUniquely {
     private final Integer m_ItemId;
