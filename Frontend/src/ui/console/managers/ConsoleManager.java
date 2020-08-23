@@ -21,9 +21,9 @@ public class ConsoleManager {
     public ConsoleManager() {
         b_IsDataLoaded = false;
         m_SuperDuperManager = SuperDuperManager.getInstance();
-        m_OrderConsoleManager= new OrderConsoleManager();
+        m_OrderConsoleManager = new OrderConsoleManager();
         m_itemConsoleManager = new ItemConsoleManager();
-        m_StoreConsoleManager= new StoreConsoleManager();
+        m_StoreConsoleManager = new StoreConsoleManager();
 
         m_MainMenu = new MainMenu(
                 new MenuItem(" Load system data from xml file", this::loadSuperDuperMarketXmlFile),
@@ -60,7 +60,7 @@ public class ConsoleManager {
         }
     }
 
-    private void makeAnOrder(){
+    private void makeAnOrder() {
         if (isDataLoaded()) {
             m_OrderConsoleManager.MakeAnOrder();
         }
@@ -80,10 +80,9 @@ public class ConsoleManager {
         return b_IsDataLoaded;
     }
 
-    private void updateStoreItems(){
+    private void updateStoreItems() {
         if (isDataLoaded()) {
             m_StoreConsoleManager.updateStoreItemsMenu();
         }
     }
-
 }
