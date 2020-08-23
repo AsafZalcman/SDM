@@ -22,7 +22,7 @@ public class XmlItemsValidator implements XmlValidator {
             itemNameByIdInMap =idsMap.getOrDefault(item.getId(),null);
             if(itemNameByIdInMap!=null)
             {
-                throw new XmlValidatorException("Both i_Items:" + itemNameByIdInMap + " and " + item.getName() + " have the same id: " + item.getId());
+                throw new XmlValidatorException("Error: Both i_Items:" + itemNameByIdInMap + " and " + item.getName() + " have the same id: " + item.getId());
             }
             idsMap.put(item.getId(),item.getName());
         }

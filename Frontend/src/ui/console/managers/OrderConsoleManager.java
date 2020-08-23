@@ -4,11 +4,11 @@ import dtoModel.ItemDto;
 import dtoModel.OrderDto;
 import dtoModel.StorageOrderDto;
 import dtoModel.StoreDto;
-import viewModel.OrderViewModel;
 import myLocation.LocationException;
 import ui.console.menu.MenuItem;
 import ui.console.menu.SubMenu;
 import ui.console.utils.*;
+import viewModel.OrderViewModel;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -17,11 +17,11 @@ import java.util.*;
 
 public class OrderConsoleManager {
 
-    private Scanner scanner = new Scanner(System.in);
-    private StoreConsoleManager m_StoreConsoleManager = new StoreConsoleManager();
-    private ItemConsoleManager m_ItemConsoleManager = new ItemConsoleManager();
+    private Scanner scanner;
+    private StoreConsoleManager m_StoreConsoleManager;
+    private ItemConsoleManager m_ItemConsoleManager;
     private int m_StoreId;
-    private OrderViewModel m_OrderViewModel = new OrderViewModel();
+    private OrderViewModel m_OrderViewModel;
     private SubMenu m_OrderOptionsMenu;
 
     public OrderConsoleManager() {

@@ -11,7 +11,7 @@ public class LocationManager {
         boolean res = x <= X_UPPER_LIMIT && x >= X_LOWER_LIMIT && y <= Y_UPPER_LIMIT && y >= Y_LOWER_LIMIT;
         if(!res)
         {
-            throw new LocationException("x value must be between " +X_LOWER_LIMIT + " to " + X_UPPER_LIMIT + " and y value must be between " +
+            throw new LocationException("X value must be between " +X_LOWER_LIMIT + " to " + X_UPPER_LIMIT + " and Y value must be between " +
                     Y_LOWER_LIMIT + " to " + Y_UPPER_LIMIT);
         }
         return true;
