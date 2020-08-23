@@ -13,7 +13,6 @@ import java.util.Scanner;
 
 public class StoreConsoleManager {
     private StoreViewModel m_StoreViewModel = new StoreViewModel();
-    private UpdateStoreMenu m_UpdateStoreMenu;
     private ItemViewModel m_ItemViewModel = new ItemViewModel();
 
     public int getStoreIdFromUser() {
@@ -123,7 +122,7 @@ public class StoreConsoleManager {
 
     public void updateStoreItemsMenu() {
         int storeID = getStoreIdFromUser();
-        m_UpdateStoreMenu = new UpdateStoreMenu(
+        UpdateStoreMenu m_UpdateStoreMenu = new UpdateStoreMenu(
                 new MenuItem("Delete item", () -> deleteItemFromStore(storeID)),
                 new MenuItem("Insert new item", () -> insertNewItemToStore(storeID)),
                 new MenuItem("Change item price", () -> changeStoreItemPrice(storeID)),
