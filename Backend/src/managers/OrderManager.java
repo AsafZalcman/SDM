@@ -45,7 +45,7 @@ public class OrderManager {
         if(i_Item.getPurchaseForm() == PurchaseForm.QUANTITY)
         {
             if ((i_AmountOfSells != Math.floor(i_AmountOfSells)) || Double.isInfinite(i_AmountOfSells)) {
-                throw new Exception("Error: The item with ID: " + i_Item.getId() + " is sold only in whole numbers");
+                throw new Exception("The item with ID: " + i_Item.getId() + " is sold only in whole numbers");
             }
         }
 

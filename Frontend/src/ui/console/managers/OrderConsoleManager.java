@@ -31,8 +31,8 @@ public class OrderConsoleManager {
         m_ItemConsoleManager = new ItemConsoleManager();
         m_OrderViewModel = new OrderViewModel();
         m_OrderOptionsMenu = new SubMenu("", "Choose an order type:",
-                new MenuItem(" From specific shop",this::makeStaticOrder),
-                new MenuItem(" Mix shops with the lower cost",this::makeDynamicOrder));
+                new MenuItem(" From specific store",this::makeStaticOrder),
+                new MenuItem(" Mix stores with the lower cost",this::makeDynamicOrder));
     }
 
     public void MakeAnOrder()
@@ -109,14 +109,14 @@ public class OrderConsoleManager {
             amountOfSell = Double.parseDouble(userChoiceStr);
 
         } catch (NumberFormatException e) {
-            System.out.println(messageFormat("Error:\"" + userChoiceStr + "\" is not number"));
+            System.out.println(messageFormat("Error: \"" + userChoiceStr + "\" is not number"));
             return true;
         }
 
         try {
             m_OrderViewModel.addItemToOrder(itemId, amountOfSell);
         } catch (Exception e) {
-            System.out.println(messageFormat("Error:" + e.getMessage()));
+            System.out.println(messageFormat("Error: " + e.getMessage()));
             return true;
         }
 
