@@ -20,7 +20,7 @@ public class LocationManager {
     public static boolean isLocationAvailable(int x , int y) throws LocationException {
         isValidLocation(x, y);
         if (m_Locations[x - 1][y - 1]) {
-            throw new LocationException("The location: " +x + "," + y + " is already occupied");
+            throw new LocationException("The location: (" + x + "," + y + ") is already occupied");
         }
 
         return true;

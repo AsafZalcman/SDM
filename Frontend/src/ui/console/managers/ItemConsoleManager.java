@@ -30,7 +30,7 @@ public class ItemConsoleManager {
     public void showAllStorageItems(){
         StringBuilder res = new StringBuilder();
         int counter = 1;
-        System.out.println("\n" + "All items available in the system:");
+        System.out.println("\n" + "The following items are available in the system:");
         for(StorageItemDto storageItemDto: m_ItemViewModel.getAllStorageItems()){
             res.append(counter).append(". ")
                     .append("\n")
@@ -40,7 +40,7 @@ public class ItemConsoleManager {
                     .append(storageItemDto.getStoresSellIt())
                     .append("\n")
                     .append("- Average price: ")
-                    .append(storageItemDto.getAvgPrice())
+                    .append(String.format("%.2f", storageItemDto.getAvgPrice()))
                     .append("\n")
                     .append(ItemDtoUtils.getAmountOfSellsString(storageItemDto.getSales()))
                     .append("\n");
