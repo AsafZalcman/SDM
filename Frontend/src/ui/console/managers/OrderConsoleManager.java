@@ -64,7 +64,7 @@ public class OrderConsoleManager {
             try {
                 m_OrderViewModel.createOrder();
             } catch (IllegalStateException e) {
-                System.out.println(messageFormat(e.getMessage()));
+                System.out.println("Error: " + messageFormat(e.getMessage()));
                 continue;
             }
             break;
@@ -80,7 +80,7 @@ public class OrderConsoleManager {
             try {
                 m_OrderViewModel.createOrder();
             } catch (IllegalStateException e) {
-                System.out.println(messageFormat(e.getMessage()));
+                System.out.println("Error: " + messageFormat(e.getMessage()));
                 continue;
             }
             break;
@@ -189,6 +189,7 @@ public class OrderConsoleManager {
         }
         else
         {
+            m_OrderViewModel.abortOrder();
             System.out.println(messageFormat("Your order was aborted"));
         }
     }

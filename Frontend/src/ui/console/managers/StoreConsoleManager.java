@@ -259,7 +259,7 @@ public class StoreConsoleManager {
         int storeItemID = getStoreItemIDFromUser(i_StoreID);
         double newPrice = getNewPriceFromUser();
         m_StoreViewModel.updateStoreItemPrice(i_StoreID, storeItemID, newPrice);
-        System.out.println(messageFormat("The price for item ID: " + storeItemID + " has been successfully updates to " + newPrice));
+        System.out.println(messageFormat("The price for item ID: " + storeItemID + " has been successfully updates to " + FormatUtils.DecimalFormat.format(newPrice)));
     }
 
     private int getStoreItemIDFromUser(int i_StoreID) {

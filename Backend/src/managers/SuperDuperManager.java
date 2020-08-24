@@ -168,4 +168,8 @@ public class SuperDuperManager {
             this.m_ItemManager.setNewAvgPriceForStorageItem(i_ItemID, m_StoreManager.getItemAvgPrice(i_ItemID));
         }
     }
+
+    public void abortOrder() {
+        m_OrderManager.cleanup();
+    }
 }

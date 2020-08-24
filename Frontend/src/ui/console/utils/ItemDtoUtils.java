@@ -17,7 +17,7 @@ public class ItemDtoUtils {
 
     public static String getAmountOfSellsString(double i_AmountOfSells)
     {
-        return "- Sold so far: " + i_AmountOfSells;
+        return "- Sold so far: " + FormatUtils.DecimalFormat.format(i_AmountOfSells);
     }
 
 }

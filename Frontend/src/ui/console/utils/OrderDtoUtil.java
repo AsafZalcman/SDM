@@ -29,7 +29,7 @@ public class OrderDtoUtil {
     }
 
     public static String getDistanceFromSourceString(double i_DistanceFromSource) {
-        return "- Distance from Store:" + FormatUtils.DecimalFormat.format(i_DistanceFromSource);
+        return "Distance from Store: " + FormatUtils.DecimalFormat.format(i_DistanceFromSource);
     }
 
     public static String getNumberOfDifferentItemsString(int i_NumberOfDifferentItems) {
@@ -38,6 +38,6 @@ public class OrderDtoUtil {
 
     public static String getTotalItemCostString(double i_TotalItemCost)
     {
-      return  "- Total item cost: " + i_TotalItemCost;
+      return  "- Total item cost: " + FormatUtils.DecimalFormat.format(i_TotalItemCost);
     }
 }
