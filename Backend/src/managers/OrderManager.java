@@ -45,7 +45,7 @@ public class OrderManager {
         if(i_Item.getPurchaseForm() == PurchaseForm.QUANTITY)
         {
             if ((i_AmountOfSells != Math.floor(i_AmountOfSells)) || Double.isInfinite(i_AmountOfSells)) {
-                throw new Exception("Error: The item with ID: " + i_Item.getId() + " is sold only in whole numbers");
+                throw new Exception("The item with ID: " + i_Item.getId() + " is sold only in whole numbers");
             }
         }
 
@@ -56,7 +56,7 @@ public class OrderManager {
     {
         if(!m_CurrentStore.getAllItemsId().contains(i_Item.getId()))
         {
-            throw new Exception("Error: The item with ID: " + i_Item.getId() + " is not for sell in the requested store");
+            throw new Exception("The item with ID: " + i_Item.getId() + " is not for sell in the requested store");
         }
 
         if(m_StoresToItemsMap == null)
@@ -79,7 +79,7 @@ public class OrderManager {
 
     public void create() {
         if (m_StoresToItemsMap == null) {
-            throw new IllegalStateException("Error: Cannot create an empty order");
+            throw new IllegalStateException("Cannot create an empty order");
         }
         Map<Integer, StoreItem> allItems = new HashMap<>();
         Order tempOrder;
@@ -111,11 +111,12 @@ public class OrderManager {
     {
         m_CurrentStore=null;
         m_CurrentCustomerLocation=null;
-        m_CurrentIdToStoreItem.clear();
+        m_CurrentIdToStoreItem = null;
         m_CurrentOrderDate=null;
         m_CurrentOrder=null;
         b_IsCreated=false;
         m_StoreToOrderMap.clear();
+        m_StoresToItemsMap = null;
     }
 
     public Store getStore() {

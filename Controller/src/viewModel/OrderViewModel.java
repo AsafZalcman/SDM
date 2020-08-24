@@ -68,4 +68,7 @@ public class OrderViewModel {
                 entry -> new OrderDto(entry.getValue())));
     }
 
+    public void abortOrder() {
+        m_SuperDuperManager.abortOrder();
+    }
 }

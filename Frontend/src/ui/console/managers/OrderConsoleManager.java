@@ -32,7 +32,7 @@ public class OrderConsoleManager {
         m_OrderViewModel = new OrderViewModel();
         m_OrderOptionsMenu = new SubMenu("", "Choose an order type:",
                 new MenuItem(" From specific shop",this::makeStaticOrder),
-                new MenuItem(" Mix shops with the lower cost",this::makeDynamicOrder));
+                new MenuItem(" Mix stores with the lower cost",this::makeDynamicOrder));
     }
 
     public void MakeAnOrder()
@@ -64,7 +64,7 @@ public class OrderConsoleManager {
             try {
                 m_OrderViewModel.createOrder();
             } catch (IllegalStateException e) {
-                System.out.println(messageFormat(e.getMessage()));
+                System.out.println("Error: " + messageFormat(e.getMessage()));
                 continue;
             }
             break;
@@ -80,7 +80,7 @@ public class OrderConsoleManager {
             try {
                 m_OrderViewModel.createOrder();
             } catch (IllegalStateException e) {
-                System.out.println(messageFormat(e.getMessage()));
+                System.out.println("Error: " + messageFormat(e.getMessage()));
                 continue;
             }
             break;
@@ -189,6 +189,7 @@ public class OrderConsoleManager {
         }
         else
         {
+            m_OrderViewModel.abortOrder();
             System.out.println(messageFormat("Your order was aborted"));
         }
     }
