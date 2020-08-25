@@ -11,6 +11,6 @@ public class Location extends Point {
 
     @Override
     public String toString() {
-        return x + "," + y;
+        return "(" + x + "," + y + ")";
     }
 }

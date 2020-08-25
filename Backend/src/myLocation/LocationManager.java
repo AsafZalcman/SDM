@@ -5,7 +5,7 @@ public class LocationManager {
     public static final int X_LOWER_LIMIT = 1;
     public static final int Y_UPPER_LIMIT = 50;
     public static final int Y_LOWER_LIMIT = 1;
-    private static boolean[][] m_Locations = new boolean[50][50];
+    private static boolean[][] m_Locations = new boolean[X_UPPER_LIMIT][Y_UPPER_LIMIT];
 
     public static boolean isValidLocation(int x , int y) throws LocationException {
         boolean res = x <= X_UPPER_LIMIT && x >= X_LOWER_LIMIT && y <= Y_UPPER_LIMIT && y >= Y_LOWER_LIMIT;
@@ -38,5 +38,20 @@ public class LocationManager {
         }
 
         return success;
+    }
+
+    public static void initLocations()
+    {
+        m_Locations = new boolean[X_UPPER_LIMIT][Y_UPPER_LIMIT];
+    }
+
+    public static void setLocations(boolean[][] i_Locations)
+    {
+        m_Locations=i_Locations;
+    }
+
+    public static boolean[][]  getLocations()
+    {
+        return m_Locations;
     }
 }

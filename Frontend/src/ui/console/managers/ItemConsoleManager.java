@@ -42,7 +42,7 @@ public class ItemConsoleManager {
                     .append("- Average price: ")
                     .append(String.format("%.2f", storageItemDto.getAvgPrice()))
                     .append("\n")
-                    .append(ItemDtoUtils.getAmountOfSellsString(storageItemDto.getSales()))
+                    .append(ItemDtoUtils.getAmountOfSellsString(storageItemDto.getSales(), "- Total sold so far in the system: "))
                     .append("\n");
             counter++;
         }
@@ -55,7 +55,7 @@ public class ItemConsoleManager {
         StringBuilder res = new StringBuilder();
         ItemDto tempItemDto;
         int counter = 1;
-        System.out.println("Items:");
+        System.out.println("List of all items available in the system:");
         for (ItemDto itemDto : allItems
         ) {
             tempItemDto = idToStoreItemsMap.get(itemDto.getId());

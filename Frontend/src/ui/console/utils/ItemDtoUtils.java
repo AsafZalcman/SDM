@@ -15,9 +15,9 @@ public class ItemDtoUtils {
         return i_ItemDto.getPrice() !=null? "- Price: "+  FormatUtils.DecimalFormat.format(i_ItemDto.getPrice()) :"- Price: Not for sell";
     }
 
-    public static String getAmountOfSellsString(double i_AmountOfSells)
+    public static String getAmountOfSellsString(double i_AmountOfSells, String i_Title)
     {
-        return "- Sold so far: " + FormatUtils.DecimalFormat.format(i_AmountOfSells);
+        return i_Title + FormatUtils.DecimalFormat.format(i_AmountOfSells);
     }
 
 }

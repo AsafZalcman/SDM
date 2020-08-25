@@ -23,7 +23,7 @@ public class StoreConsoleManager {
         Collection<StoreDto> stores = m_StoreViewModel.getAllStores();
         int counter = 1;
         StringBuilder storesDetails = new StringBuilder();
-        storesDetails.append("Stores:").append("\n");
+        storesDetails.append("List of all stores available in the system:").append("\n");
         for (StoreDto storeDto:stores) {
             storesDetails.append(counter).append(".\n")
                     .append(UniquelyUtil.getIdString(storeDto.getId())).append("\n")
@@ -49,7 +49,7 @@ public class StoreConsoleManager {
             }
             catch (NumberFormatException e)
             {
-                System.out.println(messageFormat("Error: \"" + userChoiceStr +"\" is not number"));
+                System.out.println(messageFormat("Error: \"" + userChoiceStr +"\" is not ID number"));
                 continue;
             }
             if(!m_StoreViewModel.isStoreIDExistInTheSystem(userChoice)){
@@ -140,7 +140,7 @@ public class StoreConsoleManager {
                     .append("\n")
                     .append(ItemDtoUtils.getPriceString(itemDto))
                     .append("\n")
-                    .append(ItemDtoUtils.getAmountOfSellsString(itemDto.getAmountOfSell()))
+                    .append(ItemDtoUtils.getAmountOfSellsString(itemDto.getAmountOfSell(), "- Total sold so far from this store: "))
                     .append("\n");
             counter++;
         }
@@ -293,7 +293,7 @@ public class StoreConsoleManager {
             }
             catch (NumberFormatException e)
             {
-                System.out.println(messageFormat("Error: \"" + userChoiceStr +"\" is not number"));
+                System.out.println(messageFormat("Error: \"" + userChoiceStr +"\" is not ID number"));
                 continue;
             }
             if(!m_ItemViewModel.isStoreItemIDBelongToTheStore(i_StoreID, userChoice)){

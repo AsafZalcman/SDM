@@ -120,6 +120,7 @@ public class OrderConsoleManager {
             return true;
         }
 
+        System.out.println(messageFormat("Item with the ID: " + itemId + " was successfully added to your shopping cart"));
         return true;
     }
 
@@ -137,7 +138,7 @@ public class OrderConsoleManager {
                     .append("\n")
                     .append(ItemDtoUtils.getPriceString(itemDto))
                     .append("\n")
-                    .append(ItemDtoUtils.getAmountOfSellsString(itemDto.getAmountOfSell()))
+                    .append(ItemDtoUtils.getAmountOfSellsString(itemDto.getAmountOfSell(), "- Amount of the item in the order: "))
                     .append("\n")
                     .append(OrderDtoUtil.getTotalItemCostString(itemDto.getTotalPrice()))
                     .append("\n");
@@ -269,7 +270,7 @@ public class OrderConsoleManager {
                     .append("\n")
                     .append(storeDetails)
                     .append("\n")
-                    .append("- Number of different items:")
+                    .append("- Total types of items:")
                     .append(tempOrder.getTotalItemsKind()).
                     append("\n")
                     .append(OrderDtoUtil.getItemsCountString(tempOrder.getTotalItemsCount()))

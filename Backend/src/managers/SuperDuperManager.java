@@ -6,6 +6,7 @@ import models.StoreItem;
 import myLocation.LocationException;
 import models.StorageItem;
 import models.StorageOrder;
+import myLocation.LocationManager;
 import xml.jaxb.JaxbConverter;
 import xml.jaxb.JaxbConverterFactory;
 
@@ -19,7 +20,7 @@ public class SuperDuperManager {
 
 
     private SuperDuperManager() {
-        m_OrderManager = new OrderManager(); // after we will implement the bonus, we should replace this line in xml method
+
     }
 
     public static SuperDuperManager getInstance() {
@@ -46,11 +47,20 @@ public class SuperDuperManager {
     }
 
     public void loadSuperDuperDataFromXml(String i_PathToFile) throws Exception {
-        JaxbConverter jaxbConverter = JaxbConverterFactory.create(JaxbConverterFactory.JaxbConverterType.XML);
-        jaxbConverter.loadJaxbData(i_PathToFile);
-        m_ItemManager = new ItemManager(jaxbConverter.getItems());
-        m_StoreManager = new StoreManager(jaxbConverter.getStores());
-        initializeStorageItems();
+        boolean[][] currentLocations = LocationManager.getLocations();
+        LocationManager.initLocations();
+        try {
+            JaxbConverter jaxbConverter = JaxbConverterFactory.create(JaxbConverterFactory.JaxbConverterType.XML);
+            jaxbConverter.loadJaxbData(i_PathToFile);
+            m_ItemManager = new ItemManager(jaxbConverter.getItems());
+            m_StoreManager = new StoreManager(jaxbConverter.getStores());
+            m_OrderManager = new OrderManager();
+            initializeStorageItems();
+        }catch (Exception e)
+        {
+            LocationManager.setLocations(currentLocations);
+            throw e;
+        }
     }
 
     private void initializeStorageItems() {

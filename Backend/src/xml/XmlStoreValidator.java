@@ -30,7 +30,7 @@ public class XmlStoreValidator implements XmlValidator {
                     .map(SDMItem::getId)
                     .collect(Collectors.toList())
                     .contains(sdmSell.getItemId())) {
-                throw new XmlValidatorException("Error: models.Store id " + i_Store.getId() + " sells an item with " + sdmSell.getItemId() + " id, which not exists in the SDM-Items");
+                throw new XmlValidatorException("Error: Store with the ID: " + i_Store.getId() + " sells an item with the ID: " + sdmSell.getItemId() + " , which not exists in the SDM-Items");
             }
         }
     }
@@ -49,7 +49,7 @@ public class XmlStoreValidator implements XmlValidator {
         for (SDMSell sdmSell : i_Store.getSDMPrices().getSDMSell()
         ) {
             if (idsToAppearsMap.getOrDefault(sdmSell.getItemId(), 0) > 0) {
-                throw new XmlValidatorException("Error: The store named " + i_Store.getName() + " sells the same item with " + sdmSell.getItemId() + " id more than once");
+                throw new XmlValidatorException("Error: The store named " + i_Store.getName() + " sells the same item with the ID: " + sdmSell.getItemId() + " more than once");
             }
             idsToAppearsMap.put(sdmSell.getItemId(), 1);
         }
