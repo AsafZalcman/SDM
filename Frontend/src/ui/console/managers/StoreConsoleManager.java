@@ -11,6 +11,7 @@ import ui.console.utils.*;
 import java.util.Collection;
 import java.util.Scanner;
 
+import static ui.console.utils.FormatUtils.DecimalFormat;
 import static ui.console.utils.FormatUtils.messageFormat;
 
 public class StoreConsoleManager {
@@ -172,7 +173,7 @@ public class StoreConsoleManager {
         double newItemPrice = getPriceForNewItemFromUser();
         try {
             m_ItemViewModel.addNewItemToStore(i_StoreID, newItemID, newItemPrice);
-            System.out.println(messageFormat("Item ID: " + newItemID + " with the price: " + newItemPrice + " was Successfully added to the requested store"));
+            System.out.println(messageFormat("Item ID: " + newItemID + " with the price: " + DecimalFormat.format(newItemPrice) + " was Successfully added to the requested store"));
         }catch (Exception e){
             System.out.println(messageFormat(e.getMessage()));
         }
@@ -278,7 +279,7 @@ public class StoreConsoleManager {
                     .append("\n")
                     .append("- Name: ").append(itemDto.getItemName())
                     .append("\n")
-                    .append("- Price: ").append(itemDto.getPrice())
+                    .append("- Price: ").append(DecimalFormat.format(itemDto.getPrice()))
                     .append("\n");
             counter++;
         }

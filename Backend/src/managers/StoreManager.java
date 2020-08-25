@@ -110,7 +110,7 @@ public class StoreManager {
         return m_StoreID2Store.containsKey(i_storeID);
     }
 
-    public void deleteStoreItem(int i_StoreID, int i_ItemID) {
+    public void deleteStoreItem(int i_StoreID, int i_ItemID) throws Exception {
         m_StoreID2Store.get(i_StoreID).removeStoreItem(i_ItemID);
     }
 

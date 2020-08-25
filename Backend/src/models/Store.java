@@ -143,7 +143,10 @@ public class Store implements IDelivery, IUniquely {
         this.m_IdToStoreItem.put(i_StoreItem.getItem().getId(),i_StoreItem);
     }
 
-    public void removeStoreItem(int i_StoreItemID){
+    public void removeStoreItem(int i_StoreItemID) throws Exception{
+        if(m_IdToStoreItem.size() == 1){
+            throw new Exception("Operation failed: This is the only item that the store selling, so it can not be remove");
+        }
         this.m_IdToStoreItem.remove(i_StoreItemID);
     }
 
