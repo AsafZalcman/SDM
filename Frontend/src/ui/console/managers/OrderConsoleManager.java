@@ -64,7 +64,7 @@ public class OrderConsoleManager {
             try {
                 m_OrderViewModel.createOrder();
             } catch (IllegalStateException e) {
-                System.out.println("Error: " + messageFormat(e.getMessage()));
+                System.out.println(messageFormat("Error: " + e.getMessage()));
                 continue;
             }
             break;
@@ -80,7 +80,7 @@ public class OrderConsoleManager {
             try {
                 m_OrderViewModel.createOrder();
             } catch (IllegalStateException e) {
-                System.out.println("Error: " + messageFormat(e.getMessage()));
+                System.out.println(messageFormat("Error: " + e.getMessage()));
                 continue;
             }
             break;
