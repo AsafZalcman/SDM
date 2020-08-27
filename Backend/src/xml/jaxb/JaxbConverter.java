@@ -65,7 +65,7 @@ public class JaxbConverter {
         ) {
             storeItems.add(convertToStoreItem(sdmSell));
         }
-        LocationManager.addLocation(i_JaxbStore.getLocation().getX(),i_JaxbStore.getLocation().getY());
+        LocationManager.addLocation(i_JaxbStore.getLocation().getX(),i_JaxbStore.getLocation().getY(),i_JaxbStore.getId());
         return new Store(i_JaxbStore.getId(), i_JaxbStore.getName(), new Location(i_JaxbStore.getLocation().getX(),i_JaxbStore.getLocation().getY()),i_JaxbStore.getDeliveryPpk(),storeItems);
     }
 
