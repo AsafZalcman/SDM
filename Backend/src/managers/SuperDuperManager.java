@@ -3,6 +3,7 @@ package managers;
 import models.Item;
 import models.Store;
 import models.StoreItem;
+import myLocation.Location;
 import myLocation.LocationException;
 import models.StorageItem;
 import models.StorageOrder;
@@ -47,7 +48,7 @@ public class SuperDuperManager {
     }
 
     public void loadSuperDuperDataFromXml(String i_PathToFile) throws Exception {
-        boolean[][] currentLocations = LocationManager.getLocations();
+       Map<Location,Integer> currentLocations = LocationManager.getLocations();
         LocationManager.initLocations();
         try {
             JaxbConverter jaxbConverter = JaxbConverterFactory.create(JaxbConverterFactory.JaxbConverterType.XML);

@@ -44,7 +44,7 @@ public class ConsoleManager {
             b_IsDataLoaded = true;
             System.out.println(messageFormat("Xml file was loaded successfully"));
         } catch (Exception e) {
-            System.out.println(messageFormat(e.getMessage()));
+            System.out.println(messageFormat("Error: " + e.getMessage()));
         }
     }
 
