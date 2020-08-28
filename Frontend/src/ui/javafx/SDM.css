@@ -1,0 +1,22 @@
+#sideBarVbox {
+    -fx-background-color: #333645;
+}
+
+.transparentTab {
+  -fx-background-color:transparent ;
+}
+
+.sideBarButtons
+{
+ -fx-background-color: #333645;
+ -fx-font-family: Arial;
+ -fx-font-size: 18;
+ -fx-text-align: center;
+ -fx-font-weight: bold;
+ -fx-text-fill: white;
+}
+.sideBarButtons:hover
+{
+-fx-background-color:#202332;
+}
+

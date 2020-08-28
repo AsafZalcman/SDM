@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane id="mainPain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="tab" stylesheets="@SDM.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.tempController">
+   <children>
+      <VBox id="sideBarVbox" prefHeight="400.0" prefWidth="113.0" stylesheets="@SDM.css">
+         <children>
+            <Label id="titleSideBarLabel" alignment="CENTER" prefHeight="40.0" prefWidth="113.0" styleClass="sideBarLabels" stylesheets="@SDM.css" text="Title" textFill="#f2eeee">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font></Label>
+            <Button fx:id="storesSideBarButton" mnemonicParsing="false" onAction="#storesSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@../SDM.css" text="Stores" />
+         </children>
+      </VBox>
+      <TabPane fx:id="mainTabPain" layoutX="113.0" layoutY="-31.0" prefHeight="431.0" prefWidth="487.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+            <Tab id="StoresTransparentTab" disable="true" styleClass="transparentTab">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="393.0" prefWidth="487.0" stylesheets="@SDM.css">
+                     <children>
+                        <Text layoutX="66.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="text 1 - for debug" wrappingWidth="113.0" />
+                     </children></AnchorPane>
+               </content>
+            </Tab>
+            <Tab id="StoresTransparentTab" fx:id="storesTransparentTab" disable="true" styleClass="transparentTab">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="393.0" prefWidth="487.0" stylesheets="@SDM.css">
+                     <children>
+                        <Text layoutX="43.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="text 2 - for debug" wrappingWidth="198.544921875" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</Pane>
