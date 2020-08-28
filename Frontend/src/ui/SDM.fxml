@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox id="sideBarVbox" prefHeight="400.0" prefWidth="113.0" stylesheets="@SDM.css">
+         <children>
+            <Label id="titleSideBarLabel" alignment="CENTER" prefHeight="40.0" prefWidth="121.0" styleClass="sideBarLabels" stylesheets="@SDM.css" text="Title" textFill="#f2eeee">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font></Label>
+            <Label id="storesSideBarLabel" alignment="CENTER" prefHeight="40.0" prefWidth="121.0" styleClass="sideBarLabels" stylesheets="@SDM.css" text="Stores" textFill="#f2eeee">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+      <TabPane layoutX="113.0" prefHeight="400.0" prefWidth="487.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+            <Tab id="StoresTab" disable="true" text="StoresTab">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</Pane>
