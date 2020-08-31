@@ -2,15 +2,20 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane id="mainPain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="tab" stylesheets="@SDM.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.tempController">
+<Pane id="mainPain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="tab" stylesheets="@SDM.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.SuperDuperController">
    <children>
       <VBox id="sideBarVbox" prefHeight="400.0" prefWidth="113.0" stylesheets="@SDM.css">
          <children>
@@ -18,20 +23,17 @@
                <font>
                   <Font name="System Bold" size="16.0" />
                </font></Label>
-            <Button fx:id="storesSideBarButton" mnemonicParsing="false" onAction="#storesSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@../SDM.css" text="Stores" />
+            <Button id="loadXml" fx:id="loadXmlSideBarButton" mnemonicParsing="false" onAction="#loadXmlBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@../SDM.css" text="Load XML" />
+            <Button fx:id="storesSideBarButton" mnemonicParsing="false" onAction="#storesSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@../SDM.css" text="View Stores" />
+            <Button fx:id="itemsSideBarButton" mnemonicParsing="false" onAction="#itemsSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@../SDM.css" text="View Items" />
+            <Button fx:id="ordersHistorySideBarButton" mnemonicParsing="false" onAction="#ordersHistorySideBarButtonOnClick" prefHeight="45.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@../SDM.css" text="View Orders" />
+            <Button fx:id="viewMapSideBarButton" mnemonicParsing="false" onAction="#viewMapSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@../SDM.css" text="View Map" />
+            <Button fx:id="makeAnOrderSideBarButton" mnemonicParsing="false" onAction="#makeAnOrderSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@../SDM.css" text="Make An Order" />
          </children>
       </VBox>
       <TabPane fx:id="mainTabPain" layoutX="113.0" layoutY="-31.0" prefHeight="431.0" prefWidth="487.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-            <Tab id="StoresTransparentTab" disable="true" styleClass="transparentTab">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="393.0" prefWidth="487.0" stylesheets="@SDM.css">
-                     <children>
-                        <Text layoutX="66.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="text 1 - for debug" wrappingWidth="113.0" />
-                     </children></AnchorPane>
-               </content>
-            </Tab>
-            <Tab id="StoresTransparentTab" fx:id="storesTransparentTab" disable="true" styleClass="transparentTab">
+            <Tab id="StoresTransparentTab" fx:id="storesTransparentTab" styleClass="transparentTab">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="393.0" prefWidth="487.0" stylesheets="@SDM.css">
                      <children>
@@ -40,7 +42,37 @@
                   </AnchorPane>
                </content>
             </Tab>
+            <Tab id="loadXmlTransparentTab" fx:id="loadXmlTransparentTab" styleClass="transparentTab">
+               <content>
+                  <GridPane minHeight="0.0" minWidth="0.0" prefHeight="393.0" prefWidth="487.0">
+                     <children>
+                        <VBox layoutX="14.0" layoutY="26.0" prefHeight="439.0" prefWidth="469.0" GridPane.columnIndex="2" />
+                        <ProgressBar fx:id="loadXmlProgressBar" layoutX="14.0" layoutY="260.0" prefHeight="18.0" prefWidth="369.0" progress="0.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <Label id="xmlFilePathLabel" layoutX="114.0" layoutY="86.0" prefHeight="17.0" prefWidth="397.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" fx:id="xmlFilePathLabel" />
+                        <Button id="openFileButtonXmlTab" fx:id="openFileButton" alignment="CENTER" mnemonicParsing="false" onAction="#openFileButtonOnAction" prefHeight="43.0" prefWidth="99.0" text="Open File" textAlignment="CENTER" />
+                        <Label alignment="CENTER" prefHeight="40.0" prefWidth="100.0" text="Load message:" GridPane.rowIndex="2" />
+                        <Label alignment="CENTER" prefHeight="31.0" prefWidth="100.0" text="Load Progress:" GridPane.rowIndex="3" />
+                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="100.0" text="File:" GridPane.rowIndex="1" />
+                        <Label id="loadXmlPercentLabel" fx:id="loadXmlPercentLabel" prefHeight="17.0" prefWidth="54.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextArea id="xmlLoadMessageTextArea" editable="false" prefHeight="40.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" fx:id="xmlLoadMessageTextArea" />
+                     </children>
+                     <columnConstraints>
+                        <ColumnConstraints maxWidth="127.0" minWidth="10.0" prefWidth="89.0" />
+                        <ColumnConstraints maxWidth="423.0" minWidth="17.0" prefWidth="43.0" />
+                        <ColumnConstraints maxWidth="640.0" minWidth="356.0" prefWidth="356.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="387.0" minHeight="63.0" prefHeight="73.0" />
+                        <RowConstraints maxHeight="339.0" minHeight="10.0" prefHeight="90.0" />
+                        <RowConstraints maxHeight="339.0" minHeight="10.0" prefHeight="119.0" />
+                        <RowConstraints maxHeight="339.0" minHeight="10.0" prefHeight="77.0" />
+                        <RowConstraints maxHeight="339.0" minHeight="10.0" prefHeight="183.0" />
+                     </rowConstraints>
+                  </GridPane>
+               </content>
+            </Tab>
         </tabs>
       </TabPane>
+      <Label id="xmlFilePathLabel" fx:id="loadXmlMessageLabel" prefHeight="17.0" prefWidth="398.0" />
    </children>
 </Pane>
