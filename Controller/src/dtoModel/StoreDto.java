@@ -4,16 +4,28 @@ import models.Store;
 import myLocation.Location;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class StoreDto {
     private final Store m_Store;
     private final Collection<OrderDto> m_OrdersDto;
     private final Double m_DeliveriesIncome;
+    private final Collection<StoreDiscountDto> m_Discounts;
     public StoreDto(Store i_Store) {
         m_Store = i_Store;
-        m_OrdersDto=m_Store.getOrders().stream().map(OrderDto::new).collect(Collectors.toList());
-        m_DeliveriesIncome = !m_OrdersDto.isEmpty()?  m_OrdersDto.stream().mapToDouble(OrderDto::getDeliveryPrice).sum():null;
+        m_OrdersDto = m_Store.getOrders().stream().map(OrderDto::new).collect(Collectors.toList());
+        m_DeliveriesIncome = !m_OrdersDto.isEmpty() ? m_OrdersDto.stream().mapToDouble(OrderDto::getDeliveryPrice).sum() : null;
+        if (i_Store.getDiscounts() != null) {
+            m_Discounts = i_Store.getDiscounts().stream()
+                    .map(StoreDiscountDto::new)
+                    .collect(Collectors.toList());
+        } else {
+            m_Discounts = null;
+        }
+
     }
 
     public Location getLocation() {
@@ -43,5 +55,10 @@ public class StoreDto {
 
     public Collection<OrderDto> getAllOrders() {
         return m_OrdersDto;
+    }
+
+    public Collection<StoreDiscountDto> getAllDiscounts()
+    {
+        return m_Discounts;
     }
 }

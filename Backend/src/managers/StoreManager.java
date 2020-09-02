@@ -48,7 +48,7 @@ public class StoreManager {
         return m_StoreID2Store.get(i_StoreId).getAllItems();
     }
 
-    public Store getStore(Integer i_StoreId)
+    public final Store getStore(Integer i_StoreId)
     {
         return m_StoreID2Store.get(i_StoreId);
     }
@@ -81,7 +81,7 @@ public class StoreManager {
         return itemTotalPrice/storeCounter;
     }
 
-    public Store getCheapestStoreForItem(int i_ItemId)
+    public final Store getCheapestStoreForItem(int i_ItemId)
     {
         return   m_StoreID2Store.values().stream()
                 .filter(store -> store.isItemExists(i_ItemId))
@@ -112,6 +112,11 @@ public class StoreManager {
 
     public void deleteStoreItem(int i_StoreID, int i_ItemID) throws Exception {
         m_StoreID2Store.get(i_StoreID).removeStoreItem(i_ItemID);
+    }
+
+    public void addDiscountForStore(int i_StoreId, StoreDiscount i_Discount)
+    {
+        m_StoreID2Store.get(i_StoreId).addDiscount(i_Discount);
     }
 
 //   //only for debug

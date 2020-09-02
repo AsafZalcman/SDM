@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -11,13 +12,14 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane id="mainPain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="518.0" prefWidth="780.0" styleClass="tab" stylesheets="@SDM.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.SuperDuperController">
+<Pane id="mainPain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="518.0" prefWidth="780.0" styleClass="tab" stylesheets="@SDM.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.components.main.SuperDuperController">
    <children>
       <VBox id="sideBarVbox" prefHeight="518.0" prefWidth="113.0" stylesheets="@SDM.css">
          <children>
@@ -25,12 +27,12 @@
                <font>
                   <Font name="System Bold" size="16.0" />
                </font></Label>
-            <Button id="loadXml" fx:id="loadXmlSideBarButton" mnemonicParsing="false" onAction="#loadXmlBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@../SDM.css" text="Load XML" />
-            <Button fx:id="storesSideBarButton" mnemonicParsing="false" onAction="#storesSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@../SDM.css" text="View Stores" />
-            <Button fx:id="itemsSideBarButton" mnemonicParsing="false" onAction="#itemsSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@../SDM.css" text="View Items" />
-            <Button fx:id="ordersHistorySideBarButton" mnemonicParsing="false" onAction="#ordersHistorySideBarButtonOnClick" prefHeight="45.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@../SDM.css" text="View Orders" />
-            <Button fx:id="viewMapSideBarButton" mnemonicParsing="false" onAction="#viewMapSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@../SDM.css" text="View Map" />
-            <Button fx:id="makeAnOrderSideBarButton" mnemonicParsing="false" onAction="#makeAnOrderSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@../SDM.css" text="Make An Order" />
+            <Button id="loadXml" fx:id="loadXmlSideBarButton" mnemonicParsing="false" onAction="#loadXmlBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@SDM.css" text="Load XML" />
+            <Button fx:id="storesSideBarButton" mnemonicParsing="false" onAction="#storesSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@SDM.css" text="View Stores" />
+            <Button fx:id="itemsSideBarButton" mnemonicParsing="false" onAction="#itemsSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@SDM.css" text="View Items" />
+            <Button fx:id="ordersHistorySideBarButton" mnemonicParsing="false" onAction="#ordersHistorySideBarButtonOnClick" prefHeight="45.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@SDM.css" text="View Orders" />
+            <Button fx:id="viewMapSideBarButton" mnemonicParsing="false" onAction="#viewMapSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@SDM.css" text="View Map" />
+            <Button fx:id="makeAnOrderSideBarButton" mnemonicParsing="false" onAction="#makeAnOrderSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@SDM.css" text="Make An Order" />
          </children>
       </VBox>
       <TabPane fx:id="mainTabPain" layoutX="113.0" layoutY="-31.0" prefHeight="557.0" prefWidth="674.0" tabClosingPolicy="UNAVAILABLE">
@@ -190,6 +192,11 @@
                                                 <Font size="48.0" />
                                              </font>
                                           </Label>
+                                          <ScrollPane fx:id="storeDiscountScrollPane" layoutX="24.0" layoutY="8.0" prefHeight="200.0" prefWidth="200.0">
+                                             <content>
+                                                <FlowPane fx:id="storeDiscountFlowPane" prefHeight="200.0" prefWidth="200.0" />
+                                             </content>
+                                          </ScrollPane>
                                        </children>
                                     </AnchorPane>
                                  </content>
@@ -235,25 +242,40 @@
                   </GridPane>
                </content>
             </Tab>
-            <Tab id="viewItemsTransparentTab" fx:id="viewItemsTransparentTab" styleClass="transparentTab">
-               <content>
-                  <TableView id="itemsTableViewInViewItemsTab" fx:id="itemsTableViewInViewItemsTab" prefHeight="542.0" prefWidth="695.0">
+           <Tab id="viewItemsTransparentTab" fx:id="viewItemsTransparentTab" styleClass="transparentTab">
+              <content>
+                 <TableView id="itemsTableViewInViewItemsTab" fx:id="itemsTableViewInViewItemsTab" prefHeight="542.0" prefWidth="695.0">
                     <columns>
-                      <TableColumn fx:id="itemIdTableColumnInViewItems" prefWidth="75.0" text="Id" />
-                      <TableColumn fx:id="itemNameTableColumnInViewItems" prefWidth="98.0" text="Name" />
-                        <TableColumn fx:id="itemPurchaseFormTableColumnInViewItems" prefWidth="104.0" text="Purchase Form" />
-                        <TableColumn fx:id="itemHowManyStoresSellTableColumnInViewItems" prefWidth="146.0" text="How many stores sell it" />
-                        <TableColumn fx:id="itemAveragePriceTableColumnInViewItems" prefWidth="146.0" text="Average price" />
-                        <TableColumn fx:id="itemTotalSoldSoFarTableColumnInViewItems" prefWidth="146.0" text="Total sold so far" />
+                       <TableColumn fx:id="itemIdTableColumnInViewItems" prefWidth="75.0" text="Id" />
+                       <TableColumn fx:id="itemNameTableColumnInViewItems" prefWidth="98.0" text="Name" />
+                       <TableColumn fx:id="itemPurchaseFormTableColumnInViewItems" prefWidth="104.0" text="Purchase Form" />
+                       <TableColumn fx:id="itemHowManyStoresSellTableColumnInViewItems" prefWidth="146.0" text="How many stores sell it" />
+                       <TableColumn fx:id="itemAveragePriceTableColumnInViewItems" prefWidth="146.0" text="Average price" />
+                       <TableColumn fx:id="itemTotalSoldSoFarTableColumnInViewItems" prefWidth="146.0" text="Total sold so far" />
                     </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                  </TableView>
-               </content>
-            </Tab>
+                    <columnResizePolicy>
+                       <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                 </TableView>
+              </content>
+           </Tab>
         </tabs>
       </TabPane>
       <Label id="xmlFilePathLabel" fx:id="loadXmlMessageLabel" layoutX="1.0" layoutY="1.0" prefHeight="17.0" prefWidth="397.0" />
+      <VBox id="sideBarVbox" layoutX="3.0" layoutY="10.0" prefHeight="518.0" prefWidth="107.0" stylesheets="@SDM.css">
+         <children>
+            <Label id="titleSideBarLabel" alignment="CENTER" prefHeight="40.0" prefWidth="113.0" styleClass="sideBarLabels" stylesheets="@SDM.css" text="Title" textFill="#f2eeee">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Button id="loadXml" fx:id="loadXmlSideBarButton1" mnemonicParsing="false" onAction="#loadXmlBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@SDM.css" text="Load XML" />
+            <Button fx:id="storesSideBarButton1" mnemonicParsing="false" onAction="#storesSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@SDM.css" text="View Stores" />
+            <Button fx:id="itemsSideBarButton1" mnemonicParsing="false" onAction="#itemsSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@SDM.css" text="View Items" />
+            <Button fx:id="ordersHistorySideBarButton1" mnemonicParsing="false" onAction="#ordersHistorySideBarButtonOnClick" prefHeight="45.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@SDM.css" text="View Orders" />
+            <Button fx:id="viewMapSideBarButton1" mnemonicParsing="false" onAction="#viewMapSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@SDM.css" text="View Map" />
+            <Button fx:id="makeAnOrderSideBarButton1" mnemonicParsing="false" onAction="#makeAnOrderSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@SDM.css" text="Make An Order" />
+         </children>
+      </VBox>
    </children>
 </Pane>

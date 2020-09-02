@@ -18,12 +18,17 @@ public class ItemViewModel {
 
     public Collection<ItemDto> getAllItems()
     {
-        return SuperDuperManager.getInstance().getItemManager().getAllItems().stream().map(ItemDto::new).collect(Collectors.toList());
+        return m_SuperDuperManager.getItemManager().getAllItems().stream().map(ItemDto::new).collect(Collectors.toList());
+    }
+
+    public ItemDto getItemDtoById(int i_Id)
+    {
+       return new ItemDto(m_SuperDuperManager.getItem(i_Id));
     }
 
     public Collection<ItemDto> getAllItemsOfStore(int i_StoreId)
     {
-       Store store= SuperDuperManager.getInstance().getStoreManager().getStore(i_StoreId);
+       Store store= m_SuperDuperManager.getStoreManager().getStore(i_StoreId);
         Collection<ItemDto> res = new ArrayList<>();
         for (StoreItem storeItem:store.getAllItems()
              ) {
@@ -33,7 +38,7 @@ public class ItemViewModel {
     }
 
     public Collection<StorageItemDto> getAllStorageItems(){
-        return SuperDuperManager.getInstance().getAllStorageItems().stream().map(StorageItemDto::new).collect(Collectors.toList());
+        return m_SuperDuperManager.getAllStorageItems().stream().map(StorageItemDto::new).collect(Collectors.toList());
     }
 
     public void addNewItemToStore(int i_StoreID, int i_NewItemID, double i_NewItemPrice) throws Exception{

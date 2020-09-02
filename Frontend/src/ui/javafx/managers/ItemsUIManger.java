@@ -21,6 +21,10 @@ public class ItemsUIManger {
         return m_ItemViewModel.getAllStorageItems();
     }
 
+    public ItemDto getItemDtoById(int i_Id)
+    {
+        return m_ItemViewModel.getItemDtoById(i_Id);
+    }
 
   //  public String getAllItemsWithStorePrice(int i_StoreId) {
   //      Map<Integer, ItemDto> idToStoreItemsMap = m_ItemViewModel.getAllItemsOfStore(i_StoreId).stream().collect(Collectors.toMap(ItemDto::getId, itemDto -> itemDto));

@@ -46,7 +46,7 @@ public class SuperDuperManager {
     }
 
     public void loadSuperDuperDataFromXml(String i_PathToFile) throws Exception {
-        Map<Location, ILocationable> currentLocations = LocationManager.getLocations();
+        Map<Location, ILocationable> currentLocations = new HashMap<>(LocationManager.getLocations());
         LocationManager.initLocations();
         try {
             JaxbConverter jaxbConverter = JaxbConverterFactory.create(JaxbConverterFactory.JaxbConverterType.XML);
