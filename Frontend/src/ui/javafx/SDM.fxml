@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -13,11 +14,10 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<Pane id="mainPain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="tab" stylesheets="@SDM.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.SuperDuperController">
+<Pane id="mainPain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="518.0" prefWidth="780.0" styleClass="tab" stylesheets="@SDM.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.SuperDuperController">
    <children>
-      <VBox id="sideBarVbox" prefHeight="400.0" prefWidth="113.0" stylesheets="@SDM.css">
+      <VBox id="sideBarVbox" prefHeight="518.0" prefWidth="113.0" stylesheets="@SDM.css">
          <children>
             <Label id="titleSideBarLabel" alignment="CENTER" prefHeight="40.0" prefWidth="113.0" styleClass="sideBarLabels" stylesheets="@SDM.css" text="Title" textFill="#f2eeee">
                <font>
@@ -31,13 +31,175 @@
             <Button fx:id="makeAnOrderSideBarButton" mnemonicParsing="false" onAction="#makeAnOrderSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@../SDM.css" text="Make An Order" />
          </children>
       </VBox>
-      <TabPane fx:id="mainTabPain" layoutX="113.0" layoutY="-31.0" prefHeight="431.0" prefWidth="487.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="mainTabPain" layoutX="113.0" layoutY="-31.0" prefHeight="557.0" prefWidth="674.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
             <Tab id="StoresTransparentTab" fx:id="storesTransparentTab" styleClass="transparentTab">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="393.0" prefWidth="487.0" stylesheets="@SDM.css">
                      <children>
-                        <Text layoutX="43.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="text 2 - for debug" wrappingWidth="198.544921875" />
+                        <TabPane layoutX="113.0" prefHeight="518.0" prefWidth="559.0" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                            <Tab text="About">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Label layoutX="29.0" layoutY="104.0" text="Store ID:">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="29.0" layoutY="214.0" text="Store name:">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="30.0" layoutY="315.0" text="PPK:">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="29.0" layoutY="399.0" text="Incomes from deliveries:">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="280.0" layoutY="33.0" text="Basic Details">
+                                             <font>
+                                                <Font name="System Bold" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <Label id="storeBasicDetailsNameLabel" fx:id="storeBasicDetailsNameLabel" layoutX="213.0" layoutY="33.0">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <Label id="storeIDLabel" fx:id="storeIDLabel" layoutX="246.0" layoutY="104.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label id="storeNameLabel" fx:id="storeNameLabel" layoutX="245.0" layoutY="214.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label id="storePPKLabel" fx:id="storePPKLabel" layoutX="245.0" layoutY="315.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label id="storeIncomesDeliveriesLabel" fx:id="storeIncomesDeliveriesLabel" layoutX="245.0" layoutY="399.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                            <Tab text="Items">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Label alignment="CENTER" layoutX="8.0" layoutY="2.0" prefHeight="48.0" prefWidth="105.0" style="-fx-background-color: #333645;" text="Items" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold Italic" size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <ListView id="storeItemCollectionListView" fx:id="storeItemCollectionListView" layoutX="8.0" layoutY="50.0" prefHeight="423.0" prefWidth="105.0" />
+                                          <Label layoutX="280.0" layoutY="26.0" text="Details:">
+                                             <font>
+                                                <Font name="System Bold" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="138.0" layoutY="74.0" text="Item ID:">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="138.0" layoutY="144.0" text="Item name:">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="138.0" layoutY="213.0" text="Item Purchase Form:">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="138.0" layoutY="281.0" text="Item Price:">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="138.0" layoutY="339.0" text="Item sold so far:">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label id="storeItemPurchaseFormLabel" fx:id="storeItemPurchaseFormLabel" layoutX="347.0" layoutY="216.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label id="storeItemNameLabel" fx:id="storeItemNameLabel" layoutX="347.0" layoutY="147.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label id="storeItemIDLabel" fx:id="storeItemIDLabel" layoutX="347.0" layoutY="77.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label id="storeItemPriceLabel" fx:id="storeItemPriceLabel" layoutX="347.0" layoutY="284.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label id="storeItemSoldSoFarLabel" fx:id="storeItemSoldSoFarLabel" layoutX="347.0" layoutY="342.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                              <Tab text="Orders">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Label id="storeOrdersAvailableLabel" fx:id="storeOrdersAvailableLabel" alignment="CENTER" layoutX="7.0" layoutY="-6.0" prefHeight="479.0" prefWidth="549.0" text="No orders available">
+                                             <font>
+                                                <Font size="48.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
+                              <Tab text="Sales">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Label id="storeOrdersAvailableLabel" fx:id="storeOrdersAvailableLabel1" alignment="CENTER" layoutX="7.0" layoutY="-6.0" prefHeight="479.0" prefWidth="549.0" text="No sales available">
+                                             <font>
+                                                <Font size="48.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
+                          </tabs>
+                        </TabPane>
+                        <Label alignment="CENTER" layoutX="-6.0" layoutY="-9.0" prefHeight="48.0" prefWidth="120.0" style="-fx-background-color: #333645;" text="Stores" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold Italic" size="18.0" />
+                           </font>
+                        </Label>
+                        <ListView id="storesCollectionListView" fx:id="storesCollectionListView" editable="true" layoutY="39.0" prefHeight="472.0" prefWidth="122.0" />
                      </children>
                   </AnchorPane>
                </content>
@@ -73,6 +235,6 @@
             </Tab>
         </tabs>
       </TabPane>
-      <Label id="xmlFilePathLabel" fx:id="loadXmlMessageLabel" prefHeight="17.0" prefWidth="398.0" />
+      <Label id="xmlFilePathLabel" fx:id="loadXmlMessageLabel" layoutX="1.0" layoutY="1.0" prefHeight="17.0" prefWidth="397.0" />
    </children>
 </Pane>

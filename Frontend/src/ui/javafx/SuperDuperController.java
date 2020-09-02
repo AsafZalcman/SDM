@@ -1,5 +1,7 @@
 package ui.javafx;
 
+import dtoModel.ItemDto;
+import dtoModel.StoreDto;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -8,9 +10,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ui.javafx.managers.StoreUIManager;
 import ui.javafx.tasks.LoadXmlTask;
 
 import java.io.File;
+import java.util.Collection;
 
 public class SuperDuperController {
     @FXML
@@ -55,6 +59,44 @@ public class SuperDuperController {
     @FXML
     private Label loadXmlPercentLabel;
 
+    @FXML
+    private Label storeBasicDetailsNameLabel;
+
+    @FXML
+    private Label storeIDLabel;
+
+    @FXML
+    private Label storeNameLabel;
+
+    @FXML
+    private Label storePPKLabel;
+
+    @FXML
+    private Label storeIncomesDeliveriesLabel;
+
+    @FXML
+    private ListView<StoreDto> storesCollectionListView;
+
+    @FXML
+    private ListView<ItemDto> storeItemCollectionListView;
+
+    //StoreItem Labels:
+    @FXML
+    private Label storeItemPurchaseFormLabel;
+
+    @FXML
+    private Label storeItemNameLabel;
+
+    @FXML
+    private Label storeItemIDLabel;
+
+    @FXML
+    private Label storeItemPriceLabel;
+
+    @FXML
+    private Label storeItemSoldSoFarLabel;
+
+
 
     //   private SimpleLongProperty totalWords;
 //   private SimpleLongProperty totalLines;
@@ -68,6 +110,8 @@ public class SuperDuperController {
 
     private Stage primaryStage;
 
+    private StoreUIManager m_storeUIManager;
+
 
     public SuperDuperController() {
         //    totalWords = new SimpleLongProperty(0);
@@ -79,6 +123,7 @@ public class SuperDuperController {
 
         isFileSelected = new SimpleBooleanProperty(false);
         isDataLoaded = new SimpleBooleanProperty(false);
+        m_storeUIManager = new StoreUIManager();
 
         //    wordToTileController = new HashMap<>();
     }
@@ -94,6 +139,30 @@ public class SuperDuperController {
         xmlFilePathLabel.textProperty().bind(selectedFileProperty);
         xmlLoadMessageTextArea.textProperty().bind(loadMessageFileProperty);
         mainTabPain.getSelectionModel().select(loadXmlTransparentTab);
+        storesCollectionListView.setCellFactory(param -> new ListCell<StoreDto>(){
+            @Override
+            protected void updateItem(StoreDto storeDto, boolean empty){
+                super.updateItem(storeDto, empty);
+
+                if(empty || storeDto == null){
+                    setText(null);
+                }else{
+                    setText(storeDto.getName());
+                }
+            }
+        });
+        storeItemCollectionListView.setCellFactory(param -> new ListCell<ItemDto>(){
+            @Override
+            protected void updateItem(ItemDto itemDto, boolean empty){
+                super.updateItem(itemDto, empty);
+
+                if(empty || itemDto == null){
+                    setText(null);
+                }else{
+                    setText(itemDto.getItemName());
+                }
+            }
+        });
 
 
     }
@@ -171,6 +240,9 @@ public class SuperDuperController {
 
     @FXML
     void storesSideBarButtonOnClick(ActionEvent event) {
+        storesCollectionListView.getItems().clear();
+        storesCollectionListView.getItems().addAll(m_storeUIManager.getAllStores());
         mainTabPain.getSelectionModel().select(storesTransparentTab);
     }
+
 }
