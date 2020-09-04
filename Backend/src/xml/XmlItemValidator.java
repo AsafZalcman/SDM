@@ -1,6 +1,6 @@
 package xml;
 
-import xml.jaxb.schema.generated.*;
+import xml.jaxb.schema.generatedV2.*;
 
 import java.util.Collection;
 import java.util.List;

@@ -1,15 +1,14 @@
 package xml.jaxb;
 
+import models.Customer;
 import models.Item;
 import models.Store;
 import models.StoreItem;
 import myLocation.Location;
 import myLocation.LocationManager;
 import enums.PurchaseForm;
-import xml.jaxb.schema.generated.SDMItem;
-import xml.jaxb.schema.generated.SDMSell;
-import xml.jaxb.schema.generated.SDMStore;
-import xml.jaxb.schema.generated.SuperDuperMarketDescriptor;
+import xml.jaxb.schema.generatedV2.*;
+
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,6 +18,7 @@ public class JaxbConverter {
     SuperDuperMarketDescriptor m_SuperDuperMarketDescriptor;
     Map<Integer,Item> m_Items;
     Collection<Store> m_Stores;
+    Collection<Customer> m_Customers;
 
     public JaxbConverter(IJaxbDataLoader i_IJaxbLoader)
     {
@@ -65,8 +65,15 @@ public class JaxbConverter {
         ) {
             storeItems.add(convertToStoreItem(sdmSell));
         }
-        LocationManager.addLocation(i_JaxbStore.getLocation().getX(),i_JaxbStore.getLocation().getY(),i_JaxbStore.getId());
-        return new Store(i_JaxbStore.getId(), i_JaxbStore.getName(), new Location(i_JaxbStore.getLocation().getX(),i_JaxbStore.getLocation().getY()),i_JaxbStore.getDeliveryPpk(),storeItems);
+        Store newStore = new Store(i_JaxbStore.getId(), i_JaxbStore.getName(), new Location(i_JaxbStore.getLocation().getX(),i_JaxbStore.getLocation().getY()),i_JaxbStore.getDeliveryPpk(),storeItems);
+        LocationManager.addLocation(i_JaxbStore.getLocation().getX(),i_JaxbStore.getLocation().getY(),newStore);
+        return newStore;
+    }
+
+    private Customer convertToCustomer(SDMCustomer i_JaxbCustomer){
+        Customer newCustomer = new Customer(i_JaxbCustomer.getId(), i_JaxbCustomer.getName(), new Location(i_JaxbCustomer.getLocation().getX(),i_JaxbCustomer.getLocation().getY()));
+        LocationManager.addLocation(i_JaxbCustomer.getLocation().getX(),i_JaxbCustomer.getLocation().getY(),newCustomer);
+        return newCustomer;
     }
 
     private StoreItem convertToStoreItem(SDMSell i_JaxbStoreItem) {
@@ -76,5 +83,18 @@ public class JaxbConverter {
     private Item convertToItem(SDMItem i_JaxbItem)
     {
         return new Item(i_JaxbItem.getId(),i_JaxbItem.getName(), PurchaseForm.valueOf(i_JaxbItem.getPurchaseCategory().toUpperCase()));
+    }
+
+    public Collection<Customer> getCustomers() {
+        if(m_SuperDuperMarketDescriptor==null)
+        {
+            return null;
+        }
+
+        if(m_Customers==null)
+        {
+            m_Customers = m_SuperDuperMarketDescriptor.getSDMCustomers().getSDMCustomer().stream().map(this::convertToCustomer).collect(Collectors.toList());
+        }
+        return m_Customers;
     }
 }

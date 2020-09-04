@@ -1,7 +1,7 @@
 package xml;
 
 import xml.jaxb.IJaxbDataLoader;
-import xml.jaxb.schema.generated.SuperDuperMarketDescriptor;
+import xml.jaxb.schema.generatedV2.SuperDuperMarketDescriptor;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class XmlManager implements IJaxbDataLoader {
 
-    private final static String JAXB_XML_GAME_PACKAGE_NAME = "xml.jaxb.schema.generated";
+    private final static String JAXB_XML_GAME_PACKAGE_NAME = "xml.jaxb.schema.generatedV2";
     private final static String XML_SUFFIX = ".xml";
     private final Collection<XmlValidator> m_Validators;
 
@@ -29,7 +29,9 @@ public class XmlManager implements IJaxbDataLoader {
         m_Validators.add(new XmlItemsValidator());
         m_Validators.add(new XmlItemValidator());
         m_Validators.add(new XmlStoresValidator());
-        m_Validators.add(new XmlStoreValidator());;
+        m_Validators.add(new XmlStoreValidator());
+        m_Validators.add(new XmlCustomersValidator());
+        m_Validators.add(new XmlDiscountValidator());
     }
 
     @Override

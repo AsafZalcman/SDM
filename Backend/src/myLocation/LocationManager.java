@@ -1,5 +1,7 @@
 package myLocation;
 
+import interfaces.ILocationable;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +11,7 @@ public class LocationManager {
     public static final int Y_UPPER_LIMIT = 50;
     public static final int Y_LOWER_LIMIT = 1;
     //maybe should be Interface which implement getId and getLocation instead of Integer
-    private static Map<Location, Integer> m_LocationToId = new HashMap<>();
+    private static Map<Location, ILocationable> m_LocationToILocationable = new HashMap<>();
 
     public static boolean isValidLocation(int x, int y) throws LocationException {
         boolean res = x <= X_UPPER_LIMIT && x >= X_LOWER_LIMIT && y <= Y_UPPER_LIMIT && y >= Y_LOWER_LIMIT;
@@ -22,36 +24,37 @@ public class LocationManager {
 
     public static boolean isLocationAvailable(int x, int y) throws LocationException {
         isValidLocation(x, y);
-        if (m_LocationToId.get(new Location(x - 1, y - 1)) != null) {
-            throw new LocationException("The location: (" + x + "," + y + ") is already occupied");
+        ILocationable locationable = m_LocationToILocationable.get(new Location(x - 1, y - 1));
+        if (locationable != null) {
+            throw new LocationException("The location: (" + x + "," + y + ") is already occupied By " + locationable.getClass().getSimpleName() + " with the ID: " + locationable.getId());
         }
 
         return true;
     }
 
-    public static boolean addLocation(int x, int y, int i_Id) throws IllegalArgumentException {
+    public static boolean addLocation(int x, int y, ILocationable i_Locationable) throws IllegalArgumentException {
         boolean success = false;
         try {
             if (isLocationAvailable(x, y)) {
-                m_LocationToId.put(new Location(x - 1, y - 1), i_Id);
+                m_LocationToILocationable.put(new Location(x - 1, y - 1), i_Locationable);
                 success = true;
             }
         } catch (LocationException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("Set Location to " + i_Locationable.getClass().getSimpleName() + " with the ID: " + i_Locationable.getId() + " Failed because " + e.getMessage());
         }
 
         return success;
     }
 
-    public static void setLocations(Map<Location, Integer> i_LocationToId) {
-        m_LocationToId = i_LocationToId;
+    public static void setLocations(Map<Location, ILocationable> i_LocationToId) {
+        m_LocationToILocationable = i_LocationToId;
     }
 
-    public static Map<Location, Integer> getLocations() {
-        return m_LocationToId;
+    public static Map<Location, ILocationable> getLocations() {
+        return m_LocationToILocationable ;
     }
 
     public static void initLocations() {
-        m_LocationToId.clear();
+        m_LocationToILocationable.clear();
     }
 }

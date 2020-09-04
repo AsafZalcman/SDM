@@ -1,6 +1,7 @@
 package xml;
 
-import xml.jaxb.schema.generated.SuperDuperMarketDescriptor;
+
+import xml.jaxb.schema.generatedV2.SuperDuperMarketDescriptor;
 
 public interface XmlValidator {
 

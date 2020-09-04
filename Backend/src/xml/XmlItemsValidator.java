@@ -1,7 +1,8 @@
 package xml;
 
-import xml.jaxb.schema.generated.SDMItem;
-import xml.jaxb.schema.generated.SuperDuperMarketDescriptor;
+
+import xml.jaxb.schema.generatedV2.SDMItem;
+import xml.jaxb.schema.generatedV2.SuperDuperMarketDescriptor;
 
 import java.util.Collection;
 import java.util.HashMap;

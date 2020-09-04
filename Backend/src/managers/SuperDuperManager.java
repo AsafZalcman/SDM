@@ -1,12 +1,9 @@
 package managers;
 
-import models.Item;
-import models.Store;
-import models.StoreItem;
+import interfaces.ILocationable;
+import models.*;
 import myLocation.Location;
 import myLocation.LocationException;
-import models.StorageItem;
-import models.StorageOrder;
 import myLocation.LocationManager;
 import xml.jaxb.JaxbConverter;
 import xml.jaxb.JaxbConverterFactory;
@@ -18,6 +15,7 @@ public class SuperDuperManager {
     private OrderManager m_OrderManager;
     private StoreManager m_StoreManager;
     private ItemManager m_ItemManager;
+    private CustomersManager m_CustomersManager;
 
 
     private SuperDuperManager() {
@@ -48,7 +46,7 @@ public class SuperDuperManager {
     }
 
     public void loadSuperDuperDataFromXml(String i_PathToFile) throws Exception {
-       Map<Location,Integer> currentLocations = LocationManager.getLocations();
+        Map<Location, ILocationable> currentLocations = LocationManager.getLocations();
         LocationManager.initLocations();
         try {
             JaxbConverter jaxbConverter = JaxbConverterFactory.create(JaxbConverterFactory.JaxbConverterType.XML);
@@ -56,6 +54,7 @@ public class SuperDuperManager {
             m_ItemManager = new ItemManager(jaxbConverter.getItems());
             m_StoreManager = new StoreManager(jaxbConverter.getStores());
             m_OrderManager = new OrderManager();
+            m_CustomersManager = new CustomersManager(jaxbConverter.getCustomers());
             initializeStorageItems();
         }catch (Exception e)
         {
@@ -124,7 +123,7 @@ public class SuperDuperManager {
         return m_ItemManager.getAllStorageItems();
     }
 
-//only for debug
+    //only for debug
     @Override
     public String toString() {
         StringBuilder items = new StringBuilder("items:");
@@ -151,10 +150,10 @@ public class SuperDuperManager {
     }
 
     public void insertNewItemToStore(int i_StoreID, StoreItem i_NewStoreItem) throws Exception {
-            this.m_StoreManager.insertNewItemToStore(i_StoreID, i_NewStoreItem);
-            this.m_ItemManager.addStorageItemSellItValue(i_NewStoreItem.getItem().getId(), 1);
-            int storeItemID = i_NewStoreItem.getItem().getId();
-            this.m_ItemManager.setNewAvgPriceForStorageItem(storeItemID, m_StoreManager.getItemAvgPrice(storeItemID));
+        this.m_StoreManager.insertNewItemToStore(i_StoreID, i_NewStoreItem);
+        this.m_ItemManager.addStorageItemSellItValue(i_NewStoreItem.getItem().getId(), 1);
+        int storeItemID = i_NewStoreItem.getItem().getId();
+        this.m_ItemManager.setNewAvgPriceForStorageItem(storeItemID, m_StoreManager.getItemAvgPrice(storeItemID));
     }
 
     public boolean isItemExist(int i_ItemID){
@@ -182,5 +181,9 @@ public class SuperDuperManager {
 
     public void abortOrder() {
         m_OrderManager.cleanup();
+    }
+
+    public Collection<Customer> getAllCustomers() {
+        return m_CustomersManager.getAllCustomers();
     }
 }

@@ -1,12 +1,13 @@
 package models;
 
 import interfaces.IDelivery;
+import interfaces.ILocationable;
 import interfaces.IUniquely;
 import myLocation.Location;
 
 import java.util.*;
 
-public class Store implements IDelivery, IUniquely {
+public class Store implements IDelivery, IUniquely, ILocationable {
     private final Integer m_StoreID;
     private final String m_StoreName;
     private double m_PPK;
@@ -110,7 +111,7 @@ public class Store implements IDelivery, IUniquely {
             m_IdToStoreItem.get(item.getItem().getId()).addAmountOfSells(item.getAmountOfSells());
         }
     }
-
+    @Override
     public Location getLocation()
     {
         return m_Location;
