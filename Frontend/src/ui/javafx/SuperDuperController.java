@@ -1,17 +1,23 @@
 package ui.javafx;
 
 import dtoModel.ItemDto;
+import dtoModel.StorageItemDto;
 import dtoModel.StoreDto;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ui.javafx.managers.ItemsUIManger;
 import ui.javafx.managers.StoreUIManager;
 import ui.javafx.tasks.LoadXmlTask;
+import ui.javafx.utils.FormatUtils;
 
 import java.io.File;
 import java.util.Collection;
@@ -96,6 +102,32 @@ public class SuperDuperController {
     @FXML
     private Label storeItemSoldSoFarLabel;
 
+    /** ====================================ViewItemsTAB**/
+
+    @FXML
+    private Tab viewItemsTransparentTab;
+
+    @FXML
+    private TableView<StorageItemDto> itemsTableViewInViewItemsTab;
+
+    @FXML
+    private TableColumn<StorageItemDto, Integer> itemIdTableColumnInViewItems;
+
+    @FXML
+    private TableColumn<StorageItemDto, String> itemNameTableColumnInViewItems;
+
+    @FXML
+    private TableColumn<StorageItemDto, String> itemPurchaseFormTableColumnInViewItems;
+
+    @FXML
+    private TableColumn<StorageItemDto, Long> itemHowManyStoresSellTableColumnInViewItems;
+
+    @FXML
+    private TableColumn<StorageItemDto, String> itemAveragePriceTableColumnInViewItems;
+
+    @FXML
+    private TableColumn<StorageItemDto, String> itemTotalSoldSoFarTableColumnInViewItems;
+
 
 
     //   private SimpleLongProperty totalWords;
@@ -111,6 +143,7 @@ public class SuperDuperController {
     private Stage primaryStage;
 
     private StoreUIManager m_storeUIManager;
+    private ItemsUIManger m_ItemsUIManger;
 
 
     public SuperDuperController() {
@@ -124,7 +157,7 @@ public class SuperDuperController {
         isFileSelected = new SimpleBooleanProperty(false);
         isDataLoaded = new SimpleBooleanProperty(false);
         m_storeUIManager = new StoreUIManager();
-
+        m_ItemsUIManger = new ItemsUIManger();
         //    wordToTileController = new HashMap<>();
     }
 
@@ -164,12 +197,23 @@ public class SuperDuperController {
             }
         });
 
+        initViewItemsTabComponents();
+    }
 
+    private void initViewItemsTabComponents() {
+        itemIdTableColumnInViewItems.setCellValueFactory(cellData-> new SimpleIntegerProperty(cellData.getValue().getItemDto().getId()).asObject());
+        itemNameTableColumnInViewItems.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getItemDto().getItemName()));
+        itemPurchaseFormTableColumnInViewItems.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getItemDto().getPurchaseForm().getValue()));
+        itemHowManyStoresSellTableColumnInViewItems.setCellValueFactory(new PropertyValueFactory<>("storesSellIt"));
+        itemAveragePriceTableColumnInViewItems.setCellValueFactory(cellData-> new SimpleStringProperty(FormatUtils.DecimalFormat.format(cellData.getValue().getAvgPrice())));
+        itemTotalSoldSoFarTableColumnInViewItems.setCellValueFactory(cellData-> new SimpleStringProperty(FormatUtils.DecimalFormat.format(cellData.getValue().getSales())));
     }
 
     @FXML
     void itemsSideBarButtonOnClick(ActionEvent event) {
-
+        itemsTableViewInViewItemsTab.getItems().clear();
+        itemsTableViewInViewItemsTab.getItems().addAll((m_ItemsUIManger.getAllStorageItems()));
+        mainTabPain.getSelectionModel().select(viewItemsTransparentTab);
     }
 
     @FXML

@@ -6,6 +6,8 @@
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -15,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane id="mainPain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="518.0" prefWidth="780.0" styleClass="tab" stylesheets="@SDM.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.SuperDuperController">
+<Pane id="mainPain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="518.0" prefWidth="780.0" styleClass="tab" stylesheets="@SDM.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.SuperDuperController">
    <children>
       <VBox id="sideBarVbox" prefHeight="518.0" prefWidth="113.0" stylesheets="@SDM.css">
          <children>
@@ -231,6 +233,20 @@
                         <RowConstraints maxHeight="339.0" minHeight="10.0" prefHeight="183.0" />
                      </rowConstraints>
                   </GridPane>
+               </content>
+            </Tab>
+            <Tab id="viewItemsTransparentTab" fx:id="viewItemsTransparentTab" styleClass="transparentTab">
+               <content>
+                  <TableView id="itemsTableViewInViewItemsTab" fx:id="itemsTableViewInViewItemsTab" prefHeight="542.0" prefWidth="695.0">
+                    <columns>
+                      <TableColumn fx:id="itemIdTableColumnInViewItems" prefWidth="75.0" text="Id" />
+                      <TableColumn fx:id="itemNameTableColumnInViewItems" prefWidth="98.0" text="Name" />
+                        <TableColumn fx:id="itemPurchaseFormTableColumnInViewItems" prefWidth="104.0" text="Purchase Form" />
+                        <TableColumn fx:id="itemHowManyStoresSellTableColumnInViewItems" prefWidth="146.0" text="How many stores sell it" />
+                        <TableColumn fx:id="itemAveragePriceTableColumnInViewItems" prefWidth="146.0" text="Average price" />
+                        <TableColumn fx:id="itemTotalSoldSoFarTableColumnInViewItems" prefWidth="146.0" text="Total sold so far" />
+                    </columns>
+                  </TableView>
                </content>
             </Tab>
         </tabs>
