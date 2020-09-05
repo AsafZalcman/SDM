@@ -161,7 +161,7 @@ public class OrderConsoleManager {
                     .append("\n")
                     .append(UniquelyUtil.getNameString(entry.getKey().getName()))
                     .append("\n")
-                    .append(StoreDtoUtil.getLocationString(entry.getKey().getLocation()))
+              //      .append(StoreDtoUtil.getLocationString(entry.getKey().getLocation()))
                     .append("\n")
                     .append(OrderDtoUtil.getDistanceFromSourceString(entry.getKey().getLocation().distance(entry.getValue().getDestLocation())))
                     .append("\n")

@@ -1,9 +1,6 @@
 package ui.javafx.components.main;
 
-import dtoModel.ItemDto;
-import dtoModel.StorageItemDto;
-import dtoModel.StoreDiscountDto;
-import dtoModel.StoreDto;
+import dtoModel.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -13,17 +10,22 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ui.javafx.components.storeDiscount.DiscountController;
+import ui.javafx.managers.CustomersUIManager;
 import ui.javafx.managers.ItemsUIManger;
 import ui.javafx.managers.StoreUIManager;
 import ui.javafx.tasks.LoadXmlTask;
 import ui.javafx.utils.FormatUtils;
 import ui.javafx.utils.SDMResourcesConstants;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -112,6 +114,7 @@ public class SuperDuperController {
     @FXML
     private Label storeDiscountsAvailableLabel;
     /** ====================================ViewItemsTAB**/
+    /** ====================================ViewItemsTAB start**/
 
     @FXML
     private Tab viewItemsTransparentTab;
@@ -139,6 +142,54 @@ public class SuperDuperController {
 
     @FXML
     private Label storeOrdersAvailableLabel;
+    /** ====================================ViewItemsTAB end**/
+
+    /** ====================================ViewCustomersTAB start**/
+
+    @FXML
+    private Tab viewCustomersTransparentTab;
+
+    @FXML
+    private TableView<CustomerDto> customersTableViewInViewCustomersTab;
+
+    @FXML
+    private TableColumn<CustomerDto, Integer> customerIdTableColumnInViewCustomers;
+
+    @FXML
+    private TableColumn<CustomerDto, String> customerNameTableColumnInViewCustomers;
+
+    @FXML
+    private TableColumn<CustomerDto, String> LocationTableColumnInViewCustomers;
+
+    @FXML
+    private TableColumn<CustomerDto, Integer> customerHowManyOrdersTableColumnInViewCustomers;
+
+    @FXML
+    private TableColumn<CustomerDto, String> customerAveragePriceExcludeDeliveryTableColumnInViewCustomers;
+
+    @FXML
+    private TableColumn<CustomerDto, String> customerAverageDeliveryPaymentTableColumnInViewCustomer;
+
+    @FXML
+    private Button viewCustomersSideBarButton;
+
+    @FXML
+    void viewCustomersSideBarButtonOnClick(ActionEvent event) {
+        customersTableViewInViewCustomersTab.getItems().clear();
+        customersTableViewInViewCustomersTab.getItems().addAll((m_CustomersUIManager.getAllCustomers()));
+        mainTabPain.getSelectionModel().select(viewCustomersTransparentTab);
+    }
+
+    private void initViewCustomersTabComponents() {
+        customerIdTableColumnInViewCustomers.setCellValueFactory(new PropertyValueFactory<>("id"));
+        customerNameTableColumnInViewCustomers.setCellValueFactory(new PropertyValueFactory<>("name"));
+        LocationTableColumnInViewCustomers.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getLocation().x +"," + cellData.getValue().getLocation().y));
+        customerHowManyOrdersTableColumnInViewCustomers.setCellValueFactory(new PropertyValueFactory<>("ordersCount"));
+        customerAveragePriceExcludeDeliveryTableColumnInViewCustomers.setCellValueFactory(cellData-> new SimpleStringProperty(FormatUtils.DecimalFormat.format(cellData.getValue().getAverageOrdersPriceExcludeDelivery())));
+        customerAverageDeliveryPaymentTableColumnInViewCustomer.setCellValueFactory(cellData-> new SimpleStringProperty(FormatUtils.DecimalFormat.format(cellData.getValue().getAverageDeliveryPayment())));
+    }
+
+    /** ====================================ViewCustomersTAB end**/
 
 
     //   private SimpleLongProperty totalWords;
@@ -155,7 +206,7 @@ public class SuperDuperController {
 
     private StoreUIManager m_storeUIManager;
     private ItemsUIManger m_ItemsUIManger;
-
+private CustomersUIManager m_CustomersUIManager;
 
     public SuperDuperController() {
         //    totalWords = new SimpleLongProperty(0);
@@ -169,6 +220,7 @@ public class SuperDuperController {
         isDataLoaded = new SimpleBooleanProperty(false);
         m_storeUIManager = new StoreUIManager();
         m_ItemsUIManger = new ItemsUIManger();
+        m_CustomersUIManager=new CustomersUIManager();
         //    wordToTileController = new HashMap<>();
     }
 
@@ -179,6 +231,7 @@ public class SuperDuperController {
         viewMapSideBarButton.disableProperty().bind(isDataLoaded.not());
         makeAnOrderSideBarButton.disableProperty().bind(isDataLoaded.not());
         ordersHistorySideBarButton.disableProperty().bind(isDataLoaded.not());
+        viewCustomersSideBarButton.disableProperty().bind(isDataLoaded.not());
         storesSideBarButton.disableProperty().bind(isDataLoaded.not());
         xmlFilePathLabel.textProperty().bind(selectedFileProperty);
         xmlLoadMessageTextArea.textProperty().bind(loadMessageFileProperty);
@@ -216,6 +269,7 @@ public class SuperDuperController {
         });
 
         initViewItemsTabComponents();
+        initViewCustomersTabComponents();
     }
 
     private void initViewItemsTabComponents() {

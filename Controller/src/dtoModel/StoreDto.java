@@ -3,6 +3,8 @@ package dtoModel;
 import models.Store;
 import myLocation.Location;
 
+import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +30,7 @@ public class StoreDto {
 
     }
 
-    public Location getLocation() {
+    public Point getLocation() {
         return m_Store.getLocation();
     }
 
