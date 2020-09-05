@@ -23,7 +23,6 @@ public enum StoreDiscountOperator {
     StoreDiscountOperator(String i_Value) {
         m_Value = i_Value;
     }
-
     public String getValue() {
         return m_Value;
     }

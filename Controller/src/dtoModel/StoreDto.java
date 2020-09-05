@@ -23,7 +23,7 @@ public class StoreDto {
                     .map(StoreDiscountDto::new)
                     .collect(Collectors.toList());
         } else {
-            m_Discounts = null;
+            m_Discounts = Collections.emptyList();
         }
 
     }

@@ -6,7 +6,6 @@ import dtoModel.StoreDiscountDto;
 import dtoModel.StoreDto;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -27,7 +26,6 @@ import ui.javafx.utils.SDMResourcesConstants;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 
 public class SuperDuperController {
     @FXML
@@ -111,6 +109,8 @@ public class SuperDuperController {
 
     @FXML
     private FlowPane storeDiscountFlowPane;
+    @FXML
+    private Label storeDiscountsAvailableLabel;
     /** ====================================ViewItemsTAB**/
 
     @FXML
@@ -137,6 +137,8 @@ public class SuperDuperController {
     @FXML
     private TableColumn<StorageItemDto, String> itemTotalSoldSoFarTableColumnInViewItems;
 
+    @FXML
+    private Label storeOrdersAvailableLabel;
 
 
     //   private SimpleLongProperty totalWords;
@@ -193,6 +195,13 @@ public class SuperDuperController {
                 }
             }
         });
+
+        storesCollectionListView.getSelectionModel().selectedItemProperty().addListener((observable, prevStoreDto, currentStoreDto) ->{
+            createStoreDiscounts(currentStoreDto);
+        });
+
+
+
         storeItemCollectionListView.setCellFactory(param -> new ListCell<ItemDto>(){
             @Override
             protected void updateItem(ItemDto itemDto, boolean empty){
@@ -295,12 +304,13 @@ public class SuperDuperController {
     void storesSideBarButtonOnClick(ActionEvent event) {
         storesCollectionListView.getItems().clear();
         storesCollectionListView.getItems().addAll(m_storeUIManager.getAllStores());
-        createStoreDiscounts(storesCollectionListView.getItems().get(0));
         mainTabPain.getSelectionModel().select(storesTransparentTab);
     }
 
     private void createStoreDiscounts(StoreDto i_StoreDto)
     {
+        storeDiscountFlowPane.getChildren().clear();
+        storeDiscountsAvailableLabel.setVisible(i_StoreDto.getAllDiscounts().isEmpty());
         for (StoreDiscountDto storeDiscountDto : i_StoreDto.getAllDiscounts()
                 ) {
             createStoreDiscount(storeDiscountDto);
