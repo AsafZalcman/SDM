@@ -1,7 +1,8 @@
-package ui.javafx;
+package ui.javafx.components.main;
 
 import dtoModel.ItemDto;
 import dtoModel.StorageItemDto;
+import dtoModel.StoreDiscountDto;
 import dtoModel.StoreDto;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -10,16 +11,22 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ui.javafx.components.storeDiscount.DiscountController;
 import ui.javafx.managers.ItemsUIManger;
 import ui.javafx.managers.StoreUIManager;
 import ui.javafx.tasks.LoadXmlTask;
 import ui.javafx.utils.FormatUtils;
+import ui.javafx.utils.SDMResourcesConstants;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 
 public class SuperDuperController {
@@ -102,6 +109,8 @@ public class SuperDuperController {
     @FXML
     private Label storeItemSoldSoFarLabel;
 
+    @FXML
+    private FlowPane storeDiscountFlowPane;
     /** ====================================ViewItemsTAB**/
 
     @FXML
@@ -286,7 +295,31 @@ public class SuperDuperController {
     void storesSideBarButtonOnClick(ActionEvent event) {
         storesCollectionListView.getItems().clear();
         storesCollectionListView.getItems().addAll(m_storeUIManager.getAllStores());
+        createStoreDiscounts(storesCollectionListView.getItems().get(0));
         mainTabPain.getSelectionModel().select(storesTransparentTab);
+    }
+
+    private void createStoreDiscounts(StoreDto i_StoreDto)
+    {
+        for (StoreDiscountDto storeDiscountDto : i_StoreDto.getAllDiscounts()
+                ) {
+            createStoreDiscount(storeDiscountDto);
+        }
+    }
+    private void createStoreDiscount(StoreDiscountDto i_DiscountDto)
+    {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(SDMResourcesConstants.STORE_DISCOUNT_FXML_RESOURCE);
+            Node singleDiscount = loader.load();
+
+            DiscountController discountController = loader.getController();
+            discountController.setStoreDiscountDto(i_DiscountDto);
+            storeDiscountFlowPane.getChildren().add(singleDiscount);
+           // wordToTileController.put(word, singleWordController);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

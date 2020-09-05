@@ -1,9 +1,7 @@
 package xml.jaxb;
 
-import models.Customer;
-import models.Item;
-import models.Store;
-import models.StoreItem;
+import enums.StoreDiscountOperator;
+import models.*;
 import myLocation.Location;
 import myLocation.LocationManager;
 import enums.PurchaseForm;
@@ -33,7 +31,9 @@ public class JaxbConverter {
 
         if(m_Stores==null)
         {
-            m_Stores = m_SuperDuperMarketDescriptor.getSDMStores().getSDMStore().stream().map(this::convertToStore).collect(Collectors.toList());
+            m_Stores = m_SuperDuperMarketDescriptor.getSDMStores().getSDMStore().stream()
+                    .map(this::convertToStore)
+                    .collect(Collectors.toList());
         }
         return m_Stores;
     }
@@ -65,8 +65,15 @@ public class JaxbConverter {
         ) {
             storeItems.add(convertToStoreItem(sdmSell));
         }
-        Store newStore = new Store(i_JaxbStore.getId(), i_JaxbStore.getName(), new Location(i_JaxbStore.getLocation().getX(),i_JaxbStore.getLocation().getY()),i_JaxbStore.getDeliveryPpk(),storeItems);
-        LocationManager.addLocation(i_JaxbStore.getLocation().getX(),i_JaxbStore.getLocation().getY(),newStore);
+        Store newStore = new Store(i_JaxbStore.getId(), i_JaxbStore.getName(), new Location(i_JaxbStore.getLocation().getX(), i_JaxbStore.getLocation().getY()), i_JaxbStore.getDeliveryPpk(), storeItems);
+
+        if (i_JaxbStore.getSDMDiscounts() != null) {
+            for (SDMDiscount sdmDiscount : i_JaxbStore.getSDMDiscounts().getSDMDiscount()
+            ) {
+                newStore.addDiscount(convertToStoreDiscount(sdmDiscount));
+            }
+        }
+        LocationManager.addLocation(i_JaxbStore.getLocation().getX(), i_JaxbStore.getLocation().getY(), newStore);
         return newStore;
     }
 
@@ -83,6 +90,15 @@ public class JaxbConverter {
     private Item convertToItem(SDMItem i_JaxbItem)
     {
         return new Item(i_JaxbItem.getId(),i_JaxbItem.getName(), PurchaseForm.valueOf(i_JaxbItem.getPurchaseCategory().toUpperCase()));
+    }
+
+    private StoreDiscount convertToStoreDiscount(SDMDiscount i_Discount)
+    {
+        StoreDiscountCondition discountCondition = new StoreDiscountCondition(i_Discount.getIfYouBuy().getItemId(),i_Discount.getIfYouBuy().getQuantity());
+        StoreDiscountOperator discountOperator = StoreDiscountOperator.valueOf(i_Discount.getThenYouGet().getOperator().replaceAll("-","_"));
+        Collection<StoreOffer> storeOffers = i_Discount.getThenYouGet().getSDMOffer().stream()
+                .map(sdmOffer -> new StoreOffer(sdmOffer.getItemId(),sdmOffer.getQuantity(),sdmOffer.getForAdditional())).collect(Collectors.toList());
+        return new StoreDiscount(discountCondition,discountOperator,storeOffers,i_Discount.getName());
     }
 
     public Collection<Customer> getCustomers() {

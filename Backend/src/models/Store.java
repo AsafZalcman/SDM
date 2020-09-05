@@ -14,6 +14,7 @@ public class Store implements IDelivery, IUniquely, ILocationable {
     private final Location m_Location;
     private Map<Integer, StoreItem> m_IdToStoreItem;
     private List<Order> m_Orders;
+    private List<StoreDiscount> m_StoreDiscounts;
     private double m_TotalCostOfDelivery = 0;
 
     public Store(int i_StoreID, String i_StoreName, Location i_Location, double i_PPK) {
@@ -148,7 +149,22 @@ public class Store implements IDelivery, IUniquely, ILocationable {
         if(m_IdToStoreItem.size() == 1){
             throw new Exception("Operation failed: This is the only item that the store selling, so it can not be remove");
         }
+        //remove all discounts related to this item
+        m_StoreDiscounts.removeIf(storeDiscount -> storeDiscount.getDiscountCondition().getItemId() == i_StoreItemID || storeDiscount.getItemIdToStoreOfferMap().containsKey(i_StoreItemID));
         this.m_IdToStoreItem.remove(i_StoreItemID);
     }
 
+    public Collection<StoreDiscount> getDiscounts()
+    {
+        return m_StoreDiscounts;
+    }
+
+    public void addDiscount(StoreDiscount i_StoreDiscount)
+    {
+        if(m_StoreDiscounts ==null)
+        {
+            m_StoreDiscounts = new ArrayList<>();
+        }
+        m_StoreDiscounts.add(i_StoreDiscount);
+    }
 }
