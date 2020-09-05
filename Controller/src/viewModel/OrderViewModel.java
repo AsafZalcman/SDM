@@ -7,6 +7,8 @@ import models.*;
 import myLocation.LocationException;
 import models.StorageOrder;
 import managers.SuperDuperManager;
+import viewModel.utils.StorageOrderUtil;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
@@ -22,7 +24,7 @@ public class OrderViewModel {
     public final StorageOrderDto getCurrentOrder() {
         StorageOrder order = m_SuperDuperManager.getCurrentOrder();
 
-        return new StorageOrderDto(order,convertStorageOrderStores(order.getStoresIdToOrder()));
+        return new StorageOrderDto(order, StorageOrderUtil.convertStorageOrderStores(order.getStoresIdToOrder()));
     }
 
     public void setStoreForOrder(int i_StoreId) throws Exception {
@@ -59,13 +61,7 @@ public class OrderViewModel {
     public Collection<StorageOrderDto> getAllOrders()
     {
         return SuperDuperManager.getInstance().getOrderManager().getStorageOrders().stream()
-             .collect(Collectors.toMap(storageOrder -> storageOrder,storageOrder -> convertStorageOrderStores(storageOrder.getStoresIdToOrder()))).entrySet().stream().map(entry -> new StorageOrderDto(entry.getKey(),entry.getValue())).collect(Collectors.toList());
-    }
-
-    private Map<StoreDto,OrderDto> convertStorageOrderStores(Map<Integer,Order>i_StoreIdToOrder) {
-        return i_StoreIdToOrder.entrySet().stream()
-                .collect(Collectors.toMap(entry -> new StoreDto(m_SuperDuperManager.getStore(entry.getKey())),
-                entry -> new OrderDto(entry.getValue())));
+             .collect(Collectors.toMap(storageOrder -> storageOrder,storageOrder -> StorageOrderUtil.convertStorageOrderStores(storageOrder.getStoresIdToOrder()))).entrySet().stream().map(entry -> new StorageOrderDto(entry.getKey(),entry.getValue())).collect(Collectors.toList());
     }
 
     public void abortOrder() {
