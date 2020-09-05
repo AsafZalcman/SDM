@@ -95,7 +95,8 @@ public class JaxbConverter {
     private StoreDiscount convertToStoreDiscount(SDMDiscount i_Discount)
     {
         StoreDiscountCondition discountCondition = new StoreDiscountCondition(i_Discount.getIfYouBuy().getItemId(),i_Discount.getIfYouBuy().getQuantity());
-        StoreDiscountOperator discountOperator = StoreDiscountOperator.valueOf(i_Discount.getThenYouGet().getOperator().replaceAll("-","_"));
+       String discountOperatorStr =i_Discount.getThenYouGet().getOperator();
+        StoreDiscountOperator discountOperator = discountOperatorStr ==null? StoreDiscountOperator.IRRELEVANT: StoreDiscountOperator.valueOf(discountOperatorStr.replaceAll("-","_"));
         Collection<StoreOffer> storeOffers = i_Discount.getThenYouGet().getSDMOffer().stream()
                 .map(sdmOffer -> new StoreOffer(sdmOffer.getItemId(),sdmOffer.getQuantity(),sdmOffer.getForAdditional())).collect(Collectors.toList());
         return new StoreDiscount(discountCondition,discountOperator,storeOffers,i_Discount.getName());
