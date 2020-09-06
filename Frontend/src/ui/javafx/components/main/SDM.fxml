@@ -19,7 +19,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <Pane id="mainPain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="518.0" prefWidth="780.0" styleClass="tab" stylesheets="@SDM.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.components.main.SuperDuperController">
    <children>
       <TabPane fx:id="mainTabPain" layoutX="113.0" layoutY="-31.0" prefHeight="557.0" prefWidth="805.0" tabClosingPolicy="UNAVAILABLE">
@@ -28,11 +27,11 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="393.0" prefWidth="487.0" stylesheets="@SDM.css">
                      <children>
-                        <TabPane layoutX="113.0" prefHeight="511.0" prefWidth="559.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane layoutX="113.0" prefHeight="511.0" prefWidth="697.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab text="About">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="504.0" prefWidth="697.0">
                                        <children>
                                           <Label layoutX="29.0" layoutY="104.0" text="Store ID:">
                                              <font>
@@ -54,14 +53,9 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label layoutX="280.0" layoutY="33.0" text="Basic Details">
+                                          <Label layoutX="227.0" layoutY="33.0" prefHeight="35.0" prefWidth="194.0" text="Basic Details">
                                              <font>
                                                 <Font name="System Bold" size="24.0" />
-                                             </font>
-                                          </Label>
-                                          <Label id="storeBasicDetailsNameLabel" fx:id="storeBasicDetailsNameLabel" layoutX="213.0" layoutY="33.0">
-                                             <font>
-                                                <Font size="24.0" />
                                              </font>
                                           </Label>
                                           <Label id="storeIDLabel" fx:id="storeIDLabel" layoutX="246.0" layoutY="104.0">
@@ -92,13 +86,13 @@
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <TableView fx:id="storeItemTableViewInViewStoresTab" prefHeight="482.0" prefWidth="560.0">
+                                          <TableView fx:id="storeItemTableViewInViewStoresTab" layoutX="11.0" prefHeight="482.0" prefWidth="682.0">
                                             <columns>
-                                              <TableColumn fx:id="storeItemIDTableColumn" prefWidth="75.0" text="Id" />
-                                              <TableColumn fx:id="storeItemNameTableColumn" prefWidth="130.0" text="Name" />
-                                                <TableColumn fx:id="storeItemPurchaseFormTableColumn" prefWidth="124.0" text="Purchase Form" />
-                                                <TableColumn fx:id="storeItemPriceTableColumn" prefWidth="91.0" text="Price" />
-                                                <TableColumn fx:id="storeItemSoldSoFarTableColumn" prefWidth="139.0" text="Sold so far" />
+                                              <TableColumn fx:id="storeItemIDTableColumn" text="Id" />
+                                              <TableColumn fx:id="storeItemNameTableColumn" prefWidth="192.0" text="Name" />
+                                                <TableColumn fx:id="storeItemPurchaseFormTableColumn" prefWidth="150.0" text="Purchase Form" />
+                                                <TableColumn fx:id="storeItemPriceTableColumn" prefWidth="109.0" text="Price" />
+                                                <TableColumn fx:id="storeItemSoldSoFarTableColumn" prefWidth="150.0" text="Sold so far" />
                                             </columns>
                                           </TableView>
                                        </children>
@@ -109,11 +103,20 @@
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Label id="storeOrdersAvailableLabel" fx:id="storeOrdersAvailableLabel" alignment="CENTER" layoutX="7.0" layoutY="-6.0" prefHeight="479.0" prefWidth="549.0" text="No orders available">
+                                          <Label id="storeOrdersAvailableLabel" fx:id="storeOrdersAvailableLabel" alignment="CENTER" layoutX="7.0" layoutY="-6.0" prefHeight="479.0" prefWidth="687.0" text="No orders available">
                                              <font>
                                                 <Font size="48.0" />
                                              </font>
                                           </Label>
+                                          <TableView id="ordersTableViewInViewStoresTab" fx:id="ordersTableViewInViewStoresTab" layoutX="7.0" prefHeight="474.0" prefWidth="690.0">
+                                            <columns>
+                                              <TableColumn id="orderDateTableColumnInViewStores" fx:id="orderDateTableColumnInViewStores" prefWidth="166.0" text="Date" />
+                                              <TableColumn id="orderTotalItemsTableColumnInViewStores" fx:id="orderTotalItemsTableColumnInViewStores" prefWidth="123.0" text="Total Items" />
+                                                <TableColumn id="orderItemsCostTableColumnInViewStores" fx:id="orderItemsCostTableColumnInViewStores" prefWidth="152.0" text="Total Items Cost " />
+                                                <TableColumn id="orderDeliveryCostTableColumnInViewStores" fx:id="orderDeliveryCostTableColumnInViewStores" prefWidth="109.0" text="Delivery Cost" />
+                                                <TableColumn id="orderTotalCostTableColumnInViewStores" fx:id="orderTotalCostTableColumnInViewStores" prefWidth="134.0" text="Total Order Cost" />
+                                            </columns>
+                                          </TableView>
                                        </children>
                                     </AnchorPane>
                                  </content>
@@ -122,7 +125,7 @@
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="489.0" prefWidth="534.0">
                                        <children>
-                                          <ScrollPane fx:id="storeDiscountScrollPane" layoutX="2.0" layoutY="-3.0" prefHeight="345.0" prefWidth="556.0">
+                                          <ScrollPane fx:id="storeDiscountScrollPane" layoutX="2.0" layoutY="-3.0" prefHeight="485.0" prefWidth="694.0">
                                              <content>
                                                 <FlowPane fx:id="storeDiscountFlowPane" prefHeight="159.0" prefWidth="541.0" />
                                              </content>
@@ -138,7 +141,7 @@
                               </Tab>
                           </tabs>
                         </TabPane>
-                        <Label alignment="CENTER" layoutX="-6.0" layoutY="-9.0" prefHeight="48.0" prefWidth="120.0" style="-fx-background-color: #333645;" text="Stores" textFill="WHITE">
+                        <Label alignment="CENTER" layoutX="-6.0" layoutY="-9.0" prefHeight="48.0" prefWidth="129.0" style="-fx-background-color: #333645;" text="Stores" textFill="WHITE">
                            <font>
                               <Font name="System Bold Italic" size="18.0" />
                            </font>

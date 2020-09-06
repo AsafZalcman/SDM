@@ -34,7 +34,7 @@ public class StoreDto {
         return m_Store.getLocation();
     }
 
-    public int getId() {
+    public Integer getId() {
         return m_Store.getId();
     }
 

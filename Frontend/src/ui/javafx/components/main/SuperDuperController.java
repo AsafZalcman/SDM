@@ -9,10 +9,7 @@ import dtoModel.StoreDiscountDto;
 import dtoModel.StoreDto;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,6 +32,8 @@ import ui.javafx.utils.SDMResourcesConstants;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class SuperDuperController {
     @FXML
@@ -80,9 +79,6 @@ public class SuperDuperController {
     private Label loadXmlPercentLabel;
 
     @FXML
-    private Label storeBasicDetailsNameLabel;
-
-    @FXML
     private Label storeIDLabel;
 
     @FXML
@@ -116,6 +112,28 @@ public class SuperDuperController {
     @FXML
     private TableColumn<ItemDto, Double> storeItemSoldSoFarTableColumn;
 
+    /** Orders Table for View Store Tab **/
+    @FXML
+    private Label storeOrdersAvailableLabel;
+
+    @FXML
+    private TableView<OrderDto> ordersTableViewInViewStoresTab;
+
+    @FXML
+    private TableColumn<OrderDto, Date> orderDateTableColumnInViewStores;
+
+    @FXML
+    private TableColumn<OrderDto, Integer> orderTotalItemsTableColumnInViewStores;
+
+    @FXML
+    private TableColumn<OrderDto, Double> orderItemsCostTableColumnInViewStores;
+
+    @FXML
+    private TableColumn<OrderDto, Double> orderDeliveryCostTableColumnInViewStores;
+
+    @FXML
+    private TableColumn<OrderDto, Double> orderTotalCostTableColumnInViewStores;
+
     @FXML
     private FlowPane storeDiscountFlowPane;
     @FXML
@@ -147,11 +165,9 @@ public class SuperDuperController {
     @FXML
     private TableColumn<StorageItemDto, String> itemTotalSoldSoFarTableColumnInViewItems;
 
-    @FXML
-    private Label storeOrdersAvailableLabel;
-    /** ====================================ViewItemsTAB end**/
+    /**ViewItemsTAB end**/
 
-    /** ====================================ViewCustomersTAB start**/
+    /**ViewCustomersTAB start**/
 
     @FXML
     private Tab viewCustomersTransparentTab;
@@ -258,8 +274,9 @@ private CustomersUIManager m_CustomersUIManager;
 
         storesCollectionListView.getSelectionModel().selectedItemProperty().addListener((observable, PrevStoreDto, currentStoreDto) ->{
             createStoreDiscounts(currentStoreDto);
-            storeItemTableViewInViewStoresTab.getItems().clear();
-            storeItemTableViewInViewStoresTab.getItems().addAll(m_storeUIManager.getAllItemsOfStore(currentStoreDto.getId()));
+            setStoreItemsForTheSelectedStoreInViewStoreTab(currentStoreDto);
+            setBasicDetailsForTheSelectedStoreInViewStoreTab(currentStoreDto);
+            setStoreOrdersForTheSelectedStoreInViewStoreTab(currentStoreDto);
         });
 
 
@@ -268,6 +285,41 @@ private CustomersUIManager m_CustomersUIManager;
         initViewCustomersTabComponents();
 
         initViewStoreItemsTabComponents();
+
+        initViewStoreOrdersTabComponents();
+    }
+
+    private void setStoreOrdersForTheSelectedStoreInViewStoreTab(StoreDto i_CurrentStoreDto) {
+        if(i_CurrentStoreDto.getAllOrders().size() < 1){
+            storeOrdersAvailableLabel.setVisible(true);
+            ordersTableViewInViewStoresTab.setVisible(false);
+        }
+        else{
+            storeOrdersAvailableLabel.setVisible(false);
+            ordersTableViewInViewStoresTab.setVisible(true);
+            ordersTableViewInViewStoresTab.getItems().clear();
+            ordersTableViewInViewStoresTab.getItems().addAll(i_CurrentStoreDto.getAllOrders());
+        }
+    }
+
+    private void initViewStoreOrdersTabComponents(){
+        orderDateTableColumnInViewStores.setCellValueFactory(cellData-> new SimpleObjectProperty<Date>(cellData.getValue().getDate()));
+        orderTotalItemsTableColumnInViewStores.setCellValueFactory(cellData-> new SimpleIntegerProperty(cellData.getValue().getTotalItemsCount()).asObject());
+        orderItemsCostTableColumnInViewStores.setCellValueFactory(cellData-> new SimpleDoubleProperty(cellData.getValue().getTotalItemsPrice()).asObject());
+        orderDeliveryCostTableColumnInViewStores.setCellValueFactory(cellData-> new SimpleDoubleProperty(cellData.getValue().getDeliveryPrice()).asObject());
+        orderTotalCostTableColumnInViewStores.setCellValueFactory(cellData-> new SimpleDoubleProperty(cellData.getValue().getTotalOrderPrice()).asObject());
+    }
+
+    private void setBasicDetailsForTheSelectedStoreInViewStoreTab(StoreDto i_CurrentStoreDto) {
+        storeIDLabel.setText(i_CurrentStoreDto.getId().toString());
+        storeNameLabel.setText(i_CurrentStoreDto.getName());
+        storePPKLabel.setText(i_CurrentStoreDto.getPPK().toString());
+        storeIncomesDeliveriesLabel.setText(i_CurrentStoreDto.getDeliveriesIncomes() == null ? "No deliveries income to show":i_CurrentStoreDto.getDeliveriesIncomes().toString());
+    }
+
+    private void setStoreItemsForTheSelectedStoreInViewStoreTab(StoreDto i_CurrentStoreDto){
+        storeItemTableViewInViewStoresTab.getItems().clear();
+        storeItemTableViewInViewStoresTab.getItems().addAll(m_storeUIManager.getAllItemsOfStore(i_CurrentStoreDto.getId()));
     }
 
     private void initViewStoreItemsTabComponents(){
