@@ -1,8 +1,16 @@
 package ui.javafx.components.main;
 
+
 import dtoModel.*;
+
+import dtoModel.ItemDto;
+import dtoModel.StorageItemDto;
+import dtoModel.StoreDiscountDto;
+import dtoModel.StoreDto;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -25,7 +33,6 @@ import ui.javafx.tasks.LoadXmlTask;
 import ui.javafx.utils.FormatUtils;
 import ui.javafx.utils.SDMResourcesConstants;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -90,24 +97,24 @@ public class SuperDuperController {
     @FXML
     private ListView<StoreDto> storesCollectionListView;
 
-    @FXML
-    private ListView<ItemDto> storeItemCollectionListView;
+   /** Store Items Table **/
+   @FXML
+   private TableView<ItemDto> storeItemTableViewInViewStoresTab;
 
-    //StoreItem Labels:
-    @FXML
-    private Label storeItemPurchaseFormLabel;
-
-    @FXML
-    private Label storeItemNameLabel;
+   @FXML
+   private TableColumn<ItemDto, Integer> storeItemIDTableColumn;
 
     @FXML
-    private Label storeItemIDLabel;
+    private TableColumn<ItemDto, String> storeItemNameTableColumn;
 
     @FXML
-    private Label storeItemPriceLabel;
+    private TableColumn<ItemDto, String> storeItemPurchaseFormTableColumn;
 
     @FXML
-    private Label storeItemSoldSoFarLabel;
+    private TableColumn<ItemDto, Double> storeItemPriceTableColumn;
+
+    @FXML
+    private TableColumn<ItemDto, Double> storeItemSoldSoFarTableColumn;
 
     @FXML
     private FlowPane storeDiscountFlowPane;
@@ -249,27 +256,26 @@ private CustomersUIManager m_CustomersUIManager;
             }
         });
 
-        storesCollectionListView.getSelectionModel().selectedItemProperty().addListener((observable, prevStoreDto, currentStoreDto) ->{
+        storesCollectionListView.getSelectionModel().selectedItemProperty().addListener((observable, PrevStoreDto, currentStoreDto) ->{
             createStoreDiscounts(currentStoreDto);
+            storeItemTableViewInViewStoresTab.getItems().clear();
+            storeItemTableViewInViewStoresTab.getItems().addAll(m_storeUIManager.getAllItemsOfStore(currentStoreDto.getId()));
         });
 
-
-
-        storeItemCollectionListView.setCellFactory(param -> new ListCell<ItemDto>(){
-            @Override
-            protected void updateItem(ItemDto itemDto, boolean empty){
-                super.updateItem(itemDto, empty);
-
-                if(empty || itemDto == null){
-                    setText(null);
-                }else{
-                    setText(itemDto.getItemName());
-                }
-            }
-        });
 
         initViewItemsTabComponents();
+
         initViewCustomersTabComponents();
+
+        initViewStoreItemsTabComponents();
+    }
+
+    private void initViewStoreItemsTabComponents(){
+        storeItemIDTableColumn.setCellValueFactory(cellData-> new SimpleIntegerProperty(cellData.getValue().getId()).asObject());
+        storeItemNameTableColumn.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getItemName()));
+        storeItemPurchaseFormTableColumn.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getPurchaseForm().getValue()));
+        storeItemPriceTableColumn.setCellValueFactory(cellData-> new SimpleDoubleProperty(cellData.getValue().getPrice()).asObject());
+        storeItemSoldSoFarTableColumn.setCellValueFactory(cellData-> new SimpleDoubleProperty(cellData.getValue().getAmountOfSell()).asObject());
     }
 
     private void initViewItemsTabComponents() {
