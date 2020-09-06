@@ -4,6 +4,7 @@ import dtoModel.ItemDto;
 import dtoModel.StorageItemDto;
 import dtoModel.StoreDiscountDto;
 import dtoModel.StoreDto;
+import enums.PurchaseForm;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -90,24 +91,24 @@ public class SuperDuperController {
     @FXML
     private ListView<StoreDto> storesCollectionListView;
 
-    @FXML
-    private ListView<ItemDto> storeItemCollectionListView;
+   /** Store Items Table **/
+   @FXML
+   private TableView<ItemDto> storeItemTableViewInViewStoresTab;
 
-    //StoreItem Labels:
-    @FXML
-    private Label storeItemPurchaseFormLabel;
-
-    @FXML
-    private Label storeItemNameLabel;
+   @FXML
+   private TableColumn<ItemDto, Integer> storeItemIDTableColumn;
 
     @FXML
-    private Label storeItemIDLabel;
+    private TableColumn<ItemDto, String> storeItemNameTableColumn;
 
     @FXML
-    private Label storeItemPriceLabel;
+    private TableColumn<ItemDto, String> storeItemPurchaseFormTableColumn;
 
     @FXML
-    private Label storeItemSoldSoFarLabel;
+    private TableColumn<ItemDto, Double> storeItemPriceTableColumn;
+
+    @FXML
+    private TableColumn<ItemDto, Double> storeItemSoldSoFarTableColumn;
 
     @FXML
     private FlowPane storeDiscountFlowPane;
@@ -193,20 +194,23 @@ public class SuperDuperController {
                 }
             }
         });
-        storeItemCollectionListView.setCellFactory(param -> new ListCell<ItemDto>(){
-            @Override
-            protected void updateItem(ItemDto itemDto, boolean empty){
-                super.updateItem(itemDto, empty);
 
-                if(empty || itemDto == null){
-                    setText(null);
-                }else{
-                    setText(itemDto.getItemName());
-                }
-            }
+        storesCollectionListView.getSelectionModel().selectedItemProperty().addListener((observable, PrevStoreDto, currentStoreDto) ->{
+            storeItemTableViewInViewStoresTab.getItems().clear();
+            storeItemTableViewInViewStoresTab.getItems().addAll(m_storeUIManager.getAllItemsOfStore(currentStoreDto.getId()));
         });
 
+
         initViewItemsTabComponents();
+        initViewStoreItemsTabComponents();
+    }
+
+    private void initViewStoreItemsTabComponents(){
+        storeItemIDTableColumn.setCellValueFactory(cellData-> new SimpleIntegerProperty(cellData.getValue().getId()).asObject());
+        storeItemNameTableColumn.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getItemName()));
+        storeItemPurchaseFormTableColumn.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getPurchaseForm().getValue()));
+        storeItemPriceTableColumn.setCellValueFactory(cellData-> new SimpleDoubleProperty(cellData.getValue().getPrice()).asObject());
+        storeItemSoldSoFarTableColumn.setCellValueFactory(cellData-> new SimpleDoubleProperty(cellData.getValue().getAmountOfSell()).asObject());
     }
 
     private void initViewItemsTabComponents() {
