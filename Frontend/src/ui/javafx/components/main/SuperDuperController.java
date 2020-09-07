@@ -94,6 +94,9 @@ public class SuperDuperController {
     @FXML Button updateStoresSideBarButton;
 
     @FXML
+    private Tab viewOrdersTransparentTab;
+
+    @FXML
     void viewCustomersSideBarButtonOnClick(ActionEvent event) {
         viewCustomersComponentController.fetchCustomers();
         mainTabPain.getSelectionModel().select(viewCustomersTransparentTab);
@@ -213,6 +216,8 @@ public class SuperDuperController {
 
     @FXML
     void ordersHistorySideBarButtonOnClick(ActionEvent event) {
+
+        mainTabPain.getSelectionModel().select(viewOrdersTransparentTab);
 
     }
 
