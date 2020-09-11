@@ -63,4 +63,8 @@ public class StoreDto {
     {
         return m_Discounts;
     }
+    public double getDeliveryPrice(Point i_DestPoint)
+    {
+        return m_Store.getLocation().distance(i_DestPoint) * getPPK();
+    }
 }

@@ -6,9 +6,9 @@ public class StoreOfferDto {
 
     private final int m_ItemId;
     private final double m_Quantity;
-    private final int m_ForAdditional;
+    private final double m_ForAdditional;
 
-    public StoreOfferDto(int i_itemId, double i_quantity, int i_forAdditional) {
+    public StoreOfferDto(int i_itemId, double i_quantity, double i_forAdditional) {
         m_ItemId = i_itemId;
         m_Quantity = i_quantity;
         m_ForAdditional = i_forAdditional;
@@ -26,7 +26,7 @@ public class StoreOfferDto {
         return m_Quantity;
     }
 
-    public int getForAdditional() {
+    public double getForAdditional() {
         return m_ForAdditional;
     }
 }

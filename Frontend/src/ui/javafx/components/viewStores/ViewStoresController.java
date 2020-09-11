@@ -2,6 +2,7 @@ package ui.javafx.components.viewStores;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.ResourceBundle;
 
@@ -68,7 +69,7 @@ public class ViewStoresController {
     private TableView<OrderDto> ordersTableViewInViewStoresTab;
 
     @FXML
-    private TableColumn<OrderDto, Date> orderDateTableColumnInViewStores;
+    private TableColumn<OrderDto, LocalDate> orderDateTableColumnInViewStores;
 
     @FXML
     private TableColumn<OrderDto, Integer> orderTotalItemsTableColumnInViewStores;
@@ -149,7 +150,7 @@ public class ViewStoresController {
     }
 
     private void initViewStoreOrdersTabComponents(){
-        orderDateTableColumnInViewStores.setCellValueFactory(cellData-> new SimpleObjectProperty<Date>(cellData.getValue().getDate()));
+        orderDateTableColumnInViewStores.setCellValueFactory(cellData-> new SimpleObjectProperty<LocalDate>(cellData.getValue().getDate()));
         orderTotalItemsTableColumnInViewStores.setCellValueFactory(cellData-> new SimpleIntegerProperty(cellData.getValue().getTotalItemsCount()).asObject());
         orderItemsCostTableColumnInViewStores.setCellValueFactory(cellData-> new SimpleDoubleProperty(cellData.getValue().getTotalItemsPrice()).asObject());
         orderDeliveryCostTableColumnInViewStores.setCellValueFactory(cellData-> new SimpleDoubleProperty(cellData.getValue().getDeliveryPrice()).asObject());

@@ -3,11 +3,11 @@ package managers;
 import interfaces.ILocationable;
 import models.*;
 import myLocation.Location;
-import myLocation.LocationException;
 import myLocation.LocationManager;
 import xml.jaxb.JaxbConverter;
 import xml.jaxb.JaxbConverterFactory;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class SuperDuperManager {
@@ -74,44 +74,36 @@ public class SuperDuperManager {
         return m_StoreManager.getStore(i_StoreID);
     }
 
-    public void setStoreToOrder(Store i_Store) {
-        m_OrderManager.setStore(i_Store);
-    }
-
-    public void setDateToOrder(Date i_OrderDate) {
-        m_OrderManager.setOrderDate(i_OrderDate);
-    }
-
-    public void setCustomerLocationToOrder(int i_X, int i_Y) throws LocationException {
-        m_OrderManager.setCustomerLocation(i_X, i_Y);
-    }
-
     public Item getItem(Integer i_ItemID) {
         return m_ItemManager.getItem(i_ItemID);
     }
 
-    public void addItemToOrder(Item i_Item, Double i_AmountOfSells) throws Exception {
-        if(m_OrderManager.getStore()==null) {
-            m_OrderManager.setStore(getCheapestStoreForItem(i_Item.getId()));
-            m_OrderManager.addItem(i_Item, i_AmountOfSells);
-            m_OrderManager.setStore(null);
+    public void addItemToOrder(Store store,Item i_Item, Double i_AmountOfSells) {
+        if (store == null) {
+            store = getCheapestStoreForItem(i_Item.getId());
         }
-        else {
-            m_OrderManager.addItem(i_Item, i_AmountOfSells);
-        }
+
+        m_OrderManager.addItemFromCurrentStore(store, i_Item, i_AmountOfSells);
     }
 
-    public void createNewOrder() {
-        m_OrderManager.create();
+    public void addItemInDiscountToOrder(int i_StoreId,int i_ItemId,double i_Price , double i_Amount)
+    {
+        Store store = getStore(i_StoreId);
+        m_OrderManager.addItemFromCurrentStore(store,new OrderItem(new StoreItem(getItem(i_ItemId),i_Price,i_Amount),true));
+    }
+
+    public void createNewOrder(Customer customer, LocalDate date) {
+        m_OrderManager.create(customer,date);
     }
 
     public void executeNewOrder() {
         m_OrderManager.executeOrder();
-
-        for (StoreItem storeItem : m_OrderManager.getCurrentOrder().getOrder().getStoreItems()) {
-            m_ItemManager.addStorageItemSales(storeItem.getItem().getId(), storeItem.getAmountOfSells());
+        StorageOrder currentStorageOrder = m_OrderManager.getCurrentOrder();
+        for (OrderItem orderItem : currentStorageOrder.getOrder().getAllItems()) {
+            m_ItemManager.addStorageItemSales(orderItem.getStoreItem().getItem().getId(), orderItem.getStoreItem().getAmountOfSells());
         }
 
+        m_CustomersManager.getCustomer(currentStorageOrder.getCustomerId()).addOrder(currentStorageOrder);
         m_OrderManager.cleanup();
     }
 
@@ -185,5 +177,14 @@ public class SuperDuperManager {
 
     public Collection<Customer> getAllCustomers() {
         return m_CustomersManager.getAllCustomers();
+    }
+    public Customer getCustomer (int i_CustomerId)
+    {
+       return  m_CustomersManager.getCustomer(i_CustomerId);
+    }
+
+    public Map<Store,List<StoreDiscount>> getAvailableDiscountsForCurrentOrder()
+    {
+        return m_OrderManager.getAvailableDiscounts();
     }
 }

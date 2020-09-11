@@ -5,6 +5,7 @@ import interfaces.ILocationable;
 import interfaces.IUniquely;
 import myLocation.Location;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class Store implements IDelivery, IUniquely, ILocationable {
@@ -93,23 +94,29 @@ public class Store implements IDelivery, IUniquely, ILocationable {
         return m_TotalCostOfDelivery;
     }
 
-    public Order createOrder(Date i_orderDate, Location i_customerLocation, Map<Integer, Double> i_itemIdToAmountOfSellMap) {
-        Map<Integer, StoreItem> itemIdToStoreItemsMap = new HashMap<>();
+    public Order createOrder(LocalDate i_orderDate, Location i_customerLocation, Map<Integer, Double> i_itemIdToAmountOfSellMap) {
+      return createOrder(i_orderDate,i_customerLocation,i_itemIdToAmountOfSellMap,Collections.emptyList());
+    }
+    public Order createOrder(LocalDate i_orderDate, Location i_customerLocation, Map<Integer, Double> i_itemIdToAmountOfSellMap, Collection<OrderItem> i_ItemsInDiscount) {
+        Map<Integer, OrderItem> itemIdToStoreItemsMap = new HashMap<>();
         i_itemIdToAmountOfSellMap.keySet().forEach(itemId -> {
             StoreItem storeItem = new StoreItem(m_IdToStoreItem.get(itemId));
             storeItem.setAmountOfSell(i_itemIdToAmountOfSellMap.get(storeItem.getItem().getId()));
-            itemIdToStoreItemsMap.put(storeItem.getItem().getId(),storeItem);
+            itemIdToStoreItemsMap.put(storeItem.getItem().getId(),new OrderItem(storeItem,false));
         });
-        return new Order(i_orderDate, i_customerLocation, getDeliveryPrice(i_customerLocation), itemIdToStoreItemsMap);
+
+        Collection<OrderItem> allItems = itemIdToStoreItemsMap.values();
+        allItems.addAll(i_ItemsInDiscount);
+        return new Order(i_orderDate, i_customerLocation, getDeliveryPrice(i_customerLocation), allItems);
     }
 
     public void addOrder(Order i_Order)
     {
         m_Orders.add(i_Order);
         m_TotalCostOfDelivery += i_Order.getDeliveryPrice();
-        for (StoreItem item : i_Order.getStoreItems()
+        for (OrderItem orderItem : i_Order.getAllItems()
         ) {
-            m_IdToStoreItem.get(item.getItem().getId()).addAmountOfSells(item.getAmountOfSells());
+            m_IdToStoreItem.get(orderItem.getStoreItem().getItem().getId()).addAmountOfSells(orderItem.getStoreItem().getAmountOfSells());
         }
     }
     @Override
@@ -167,4 +174,5 @@ public class Store implements IDelivery, IUniquely, ILocationable {
         }
         m_StoreDiscounts.add(i_StoreDiscount);
     }
+
 }

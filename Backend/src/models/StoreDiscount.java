@@ -54,4 +54,11 @@ public class StoreDiscount {
     public int hashCode() {
         return Objects.hash(m_Name);
     }
+
+    public boolean isAvailable(Map<Integer,Double> i_ItemIdToAmountMap)
+    {
+        int conditionItemId = m_DiscountCondition.getItemId();
+        Double conditionItemAmount = m_DiscountCondition.getAmount();
+        return i_ItemIdToAmountMap.containsKey(conditionItemId) && i_ItemIdToAmountMap.get(conditionItemId) >= conditionItemAmount;
+    }
 }

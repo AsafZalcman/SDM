@@ -73,31 +73,37 @@ public class DiscountController {
                 double totalPrice = m_StoreDiscountDto.getStoreOfferDtos().stream().mapToDouble(StoreOfferDto::getForAdditional).sum();
                 totalPriceLabel.textProperty().set(FormatUtils.DecimalFormat.format(totalPrice));
             }
+            setCellFactoryOfListView();
 
-            discountOfferListView.setCellFactory(param -> new ListCell<StoreOfferDto>() {
-                @Override
-                protected void updateItem(StoreOfferDto storeOfferDto, boolean empty) {
-                    super.updateItem(storeOfferDto, empty);
+        });
+    }
 
-                    if (empty || storeOfferDto == null) {
-                        setText(null);
-                        setGraphic(null);
-                    } else {
-                        StringBuilder storeOfferText = new StringBuilder(storeOfferDto.getQuantity() + " " + m_ItemsUIManger.getItemDtoById(storeOfferDto.getItemId()).getItemName());
-                        if (m_StoreDiscountDto.isOneOfDiscount()) {
-                            storeOfferText.append(" For additional of ")
-                                    .append(storeOfferDto.getForAdditional());
-                            if (m_WithButtons) {
-                                RadioButton radioButton = new RadioButton(null);
-                                radioButton.setToggleGroup(m_ToggleGroup);
-                                // Add Listeners if any
-                                setGraphic(radioButton);
-                            }
+    protected void setCellFactoryOfListView()
+    {
+        discountOfferListView.setCellFactory(param -> new ListCell<StoreOfferDto>() {
+            @Override
+            protected void updateItem(StoreOfferDto storeOfferDto, boolean empty) {
+                super.updateItem(storeOfferDto, empty);
+
+                if (empty || storeOfferDto == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    StringBuilder storeOfferText = new StringBuilder(storeOfferDto.getQuantity() + " " + m_ItemsUIManger.getItemDtoById(storeOfferDto.getItemId()).getItemName());
+                    if (m_StoreDiscountDto.isOneOfDiscount()) {
+                        storeOfferText.append(" For additional of ")
+                                .append(storeOfferDto.getForAdditional());
+                        if (m_WithButtons) {
+                            RadioButton radioButton = new RadioButton(null);
+                            radioButton.setToggleGroup(m_ToggleGroup);
+                            // Add Listeners if any
+                            setGraphic(radioButton);
                         }
-                        setText(storeOfferText.toString());
                     }
+
+                    setText(storeOfferText.toString());
                 }
-            });
+            }
         });
     }
 

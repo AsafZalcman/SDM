@@ -12,11 +12,14 @@ import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -25,15 +28,18 @@ import ui.javafx.components.order.OrdersHistoryController;
 import ui.javafx.components.updateStores.UpdateStoresController;
 import ui.javafx.components.viewCustomer.ViewCustomerController;
 import ui.javafx.components.viewItems.ViewItemsController;
+import ui.javafx.components.order.createOrder.CreateOrderController;
 import ui.javafx.components.viewStores.ViewStoresController;
 import ui.javafx.managers.CustomersUIManager;
 import ui.javafx.managers.ItemsUIManger;
 import ui.javafx.managers.StoreUIManager;
 import ui.javafx.tasks.LoadXmlTask;
 
+import ui.javafx.utils.SDMResourcesConstants;
 
 
 import java.io.File;
+import java.io.IOException;
 
 
 public class SuperDuperController {
@@ -97,6 +103,12 @@ public class SuperDuperController {
     private Tab viewOrdersTransparentTab;
 
     @FXML
+    private Tab makeAnOrderTransparentTab;
+
+    @FXML
+    private FlowPane testFlowPane;
+
+    @FXML
     void viewCustomersSideBarButtonOnClick(ActionEvent event) {
         viewCustomersComponentController.fetchCustomers();
         mainTabPain.getSelectionModel().select(viewCustomersTransparentTab);
@@ -153,6 +165,7 @@ public class SuperDuperController {
         ordersHistorySideBarButton.disableProperty().bind(isDataLoaded.not());
         viewCustomersSideBarButton.disableProperty().bind(isDataLoaded.not());
         storesSideBarButton.disableProperty().bind(isDataLoaded.not());
+        updateStoresSideBarButton.disableProperty().bind(isDataLoaded.not());
         xmlFilePathLabel.textProperty().bind(selectedFileProperty);
         xmlLoadMessageTextArea.textProperty().bind(loadMessageFileProperty);
         mainTabPain.getSelectionModel().select(loadXmlTransparentTab);
@@ -172,7 +185,21 @@ public class SuperDuperController {
 
     @FXML
     void makeAnOrderSideBarButtonOnClick(ActionEvent event) {
+        mainTabPain.getSelectionModel().select(makeAnOrderTransparentTab);
+
+
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(SDMResourcesConstants.CREATE_ORDER_FXML_RESOURCE);
+            Node singleDiscount = loader.load();
+
+            CreateOrderController createOrderController = loader.getController();
+            testFlowPane.getChildren().add(singleDiscount);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
