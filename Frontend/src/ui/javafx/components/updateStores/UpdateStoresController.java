@@ -165,8 +165,7 @@ public class UpdateStoresController {
         });
 
         chooseStoreComboBox.getSelectionModel().selectedItemProperty().addListener((observable, PrevStoreDto, currentStoreDto) -> {
-            storeItemsListView.getItems().clear();
-            storeItemsListView.getItems().addAll(currentStoreDto.getItemsDto());
+            storeItemsListView.getItems().setAll(currentStoreDto.getItemsDto());
         });
 
 
@@ -177,13 +176,11 @@ public class UpdateStoresController {
     }
 
     private void cleanStoreItemInListView(StoreDto i_StoreDto) {
-        storeItemsListView.getItems().clear();
-        storeItemsListView.getItems().addAll(i_StoreDto.getItemsDto());
+        storeItemsListView.getItems().setAll(i_StoreDto.getItemsDto());
     }
 
     private void cleanStorageItemsListView() {
-        storageItemsListView.getItems().clear();
-        storageItemsListView.getItems().addAll(m_ItemUIManager.getAllItems());
+        storageItemsListView.getItems().setAll(m_ItemUIManager.getAllItems());
     }
 
     private void addNewItemToStore(int i_StoreID, int i_StoreItemID, String i_Price) throws Exception {
@@ -207,9 +204,7 @@ public class UpdateStoresController {
     }
 
     public void fetchData(){
-        chooseStoreComboBox.getItems().clear();
-        chooseStoreComboBox.getItems().addAll(m_StoreUIManager.getAllStores());
-        storageItemsListView.getItems().clear();
-        storageItemsListView.getItems().addAll(m_ItemUIManager.getAllItems());
+        chooseStoreComboBox.getItems().setAll(m_StoreUIManager.getAllStores());
+        storageItemsListView.getItems().setAll(m_ItemUIManager.getAllItems());
     }
 }

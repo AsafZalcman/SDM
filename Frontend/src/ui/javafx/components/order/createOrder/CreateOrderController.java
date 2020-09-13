@@ -9,7 +9,6 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import ui.javafx.components.order.createOrder.steps.StepController;
-import ui.javafx.components.order.createOrder.steps.buyItems.BuyItemsController;
 import ui.javafx.managers.OrdersUIManager;
 import ui.javafx.utils.SDMResourcesConstants;
 
@@ -96,7 +95,6 @@ public class CreateOrderController {
 
     private void loadCurrentStepController(URL i_PathToControllerResource) {
         try {
-            currentStepFlowPane.getChildren().clear();
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(i_PathToControllerResource);
             Node currentStep = loader.load();
@@ -104,7 +102,7 @@ public class CreateOrderController {
             BooleanProperty enableProperty = new SimpleBooleanProperty();
             m_CurrentStepController.addBind(enableProperty);
             endOfStepButton.disableProperty().bind(enableProperty.not());
-            currentStepFlowPane.getChildren().add(currentStep);
+            currentStepFlowPane.getChildren().setAll(currentStep);
         } catch (IOException e) {
             e.printStackTrace();
         }

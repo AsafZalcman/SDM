@@ -189,14 +189,13 @@ public class SuperDuperController {
     void makeAnOrderSideBarButtonOnClick(ActionEvent event) {
         mainTabPain.getSelectionModel().select(makeAnOrderTransparentTab);
 
-
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(SDMResourcesConstants.CREATE_ORDER_FXML_RESOURCE);
             Node singleDiscount = loader.load();
 
             CreateOrderController createOrderController = loader.getController();
-            testFlowPane.getChildren().add(singleDiscount);
+            testFlowPane.getChildren().setAll(singleDiscount);
         } catch (IOException e) {
             e.printStackTrace();
         }

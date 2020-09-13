@@ -69,7 +69,6 @@ public class ViewItemsController {
     }
 
     public void fetchStorageItems(){
-        itemsTableViewInViewItemsTab.getItems().clear();
-        itemsTableViewInViewItemsTab.getItems().addAll((m_ItemsUIManger.getAllStorageItems()));
+        itemsTableViewInViewItemsTab.getItems().setAll(m_ItemsUIManger.getAllStorageItems());
     }
 }

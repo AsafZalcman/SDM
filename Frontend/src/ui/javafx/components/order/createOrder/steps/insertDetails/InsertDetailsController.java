@@ -61,7 +61,6 @@ public class InsertDetailsController extends StepController {
 
     @FXML
     void dynamicOrderRadioButtonOnAction(ActionEvent event) {
-        storesComboBox.getItems().clear();
         deliveryPriceValueLabel.setText(null);
         storeChosen.set(true);
     }
@@ -72,7 +71,7 @@ public class InsertDetailsController extends StepController {
 
     @FXML
     void staticOrderRadioButtonOnAction(ActionEvent event) {
-        storesComboBox.getItems().addAll(m_StoreUIManager.getAllStores());
+        storesComboBox.getItems().setAll(m_StoreUIManager.getAllStores());
         storeChosen.set(false);
     }
 

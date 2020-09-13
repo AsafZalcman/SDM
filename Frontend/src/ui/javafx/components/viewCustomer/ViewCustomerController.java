@@ -68,7 +68,6 @@ public class ViewCustomerController {
     }
 
     public void fetchCustomers(){
-        customersTableViewInViewCustomersTab.getItems().clear();
-        customersTableViewInViewCustomersTab.getItems().addAll((m_CustomersUIManager.getAllCustomers()));
+        customersTableViewInViewCustomersTab.getItems().setAll((m_CustomersUIManager.getAllCustomers()));
     }
 }
