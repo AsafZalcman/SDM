@@ -10,13 +10,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.util.StringConverter;
-import ui.console.utils.FormatUtils;
 import ui.javafx.components.main.SuperDuperController;
 import ui.javafx.managers.ItemsUIManger;
 import ui.javafx.managers.StoreUIManager;
-
-import static ui.console.utils.FormatUtils.DecimalFormat;
-
 
 public class UpdateStoresController {
 

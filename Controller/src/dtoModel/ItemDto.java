@@ -1,6 +1,7 @@
 package dtoModel;
 
 import models.Item;
+import models.OrderItem;
 import models.StoreItem;
 import enums.PurchaseForm;
 
@@ -12,22 +13,30 @@ public class ItemDto {
     private  PurchaseForm m_PurchaseForm;
     private  Double m_Price;
     private  Double m_AmountOfSell;
+    private final boolean m_FromDiscount;
 
-    public ItemDto(int i_ItemId, String i_ItemName, PurchaseForm i_PurchaseForm, Double i_Price, Double i_AmountOfSell) {
+    public ItemDto(int i_ItemId, String i_ItemName, PurchaseForm i_PurchaseForm, Double i_Price, Double i_AmountOfSell , boolean i_FromDiscount) {
         this.m_ItemId = i_ItemId;
         this.m_ItemName = i_ItemName;
         this.m_PurchaseForm = i_PurchaseForm;
         m_Price = i_Price;
         m_AmountOfSell = i_AmountOfSell;
+        m_FromDiscount=i_FromDiscount;
     }
 
     public ItemDto(Item i_Item) {
-     this(i_Item.getId(),i_Item.getItemName(),i_Item.getPurchaseForm(),null,null);
+     this(i_Item.getId(),i_Item.getItemName(),i_Item.getPurchaseForm(),null,null,false);
     }
 
     public ItemDto(StoreItem i_StoreItem)
     {
-        this(i_StoreItem.getItem().getId(),i_StoreItem.getItem().getItemName(),i_StoreItem.getItem().getPurchaseForm(),i_StoreItem.getPrice(),i_StoreItem.getAmountOfSells());
+        this(i_StoreItem.getItem().getId(),i_StoreItem.getItem().getItemName(),i_StoreItem.getItem().getPurchaseForm(),i_StoreItem.getPrice(),i_StoreItem.getAmountOfSells(),false);
+    }
+
+    public ItemDto (OrderItem i_OrderItem)
+    {
+        this(i_OrderItem.getStoreItem().getItem().getId(),i_OrderItem.getStoreItem().getItem().getItemName(),i_OrderItem.getStoreItem().getItem().getPurchaseForm(),i_OrderItem.getStoreItem().getPrice(),i_OrderItem.getStoreItem().getAmountOfSells(),i_OrderItem.isFromDiscount());
+
     }
 
     public Integer getId() {
@@ -70,42 +79,42 @@ public class ItemDto {
         return m_AmountOfSell*m_Price;
     }
 
-    public class ItemDtoBuilder
-    {
-        private  Integer m_Id;
-        private  String m_ItemName;
-        private  PurchaseForm m_PurchaseForm;
-        private  Double m_Price;
-        private  Double m_AmountOfSell;
+//   public class ItemDtoBuilder
+//   {
+//       private  Integer m_Id;
+//       private  String m_ItemName;
+//       private  PurchaseForm m_PurchaseForm;
+//       private  Double m_Price;
+//       private  Double m_AmountOfSell;
 
-        public ItemDtoBuilder(int i_Id)
-        {
-            m_Id=i_Id;
-        }
+//       public ItemDtoBuilder(int i_Id)
+//       {
+//           m_Id=i_Id;
+//       }
 
-        public ItemDtoBuilder setName(String i_Name) {
-            this.m_ItemName = i_Name;
-            return this;
-        }
+//       public ItemDtoBuilder setName(String i_Name) {
+//           this.m_ItemName = i_Name;
+//           return this;
+//       }
 
-        public ItemDtoBuilder setPurchaseForm(PurchaseForm i_PurchaseForm) {
-            this.m_PurchaseForm = i_PurchaseForm;
-            return this;
-        }
+//       public ItemDtoBuilder setPurchaseForm(PurchaseForm i_PurchaseForm) {
+//           this.m_PurchaseForm = i_PurchaseForm;
+//           return this;
+//       }
 
-        public ItemDtoBuilder setPrice(Double i_Price) {
-            this.m_Price = i_Price;
-            return this;
-        }
+//       public ItemDtoBuilder setPrice(Double i_Price) {
+//           this.m_Price = i_Price;
+//           return this;
+//       }
 
-        public ItemDtoBuilder setAmountOfSell(Double i_AmountOfSell) {
-            this.m_AmountOfSell = i_AmountOfSell;
-            return this;
-        }
+//       public ItemDtoBuilder setAmountOfSell(Double i_AmountOfSell) {
+//           this.m_AmountOfSell = i_AmountOfSell;
+//           return this;
+//       }
 
-        public ItemDto build()
-        {
-            return new ItemDto(m_ItemId,m_ItemName,m_PurchaseForm,m_Price,m_AmountOfSell);
-        }
-    }
+//       public ItemDto build()
+//       {
+//           return new ItemDto(m_ItemId,m_ItemName,m_PurchaseForm,m_Price,m_AmountOfSell);
+//       }
+//   }
 }

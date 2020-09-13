@@ -4,6 +4,7 @@ import interfaces.ILocationable;
 import interfaces.IUniquely;
 import myLocation.Location;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,12 +36,14 @@ public class Customer implements IUniquely, ILocationable {
         return m_Location;
     }
 
-    public List<StorageOrder> getOrders()
-    {
-        return m_StorageOrders!=null? m_StorageOrders: Collections.emptyList();
+    public List<StorageOrder> getOrders() {
+        return m_StorageOrders != null ? m_StorageOrders : Collections.emptyList();
     }
-    public void createOrder()
-    {
 
+    public void addOrder(StorageOrder i_StorageOrder) {
+        if (m_StorageOrders == null) {
+            m_StorageOrders = new ArrayList<>();
+        }
+        m_StorageOrders.add(i_StorageOrder);
     }
 }

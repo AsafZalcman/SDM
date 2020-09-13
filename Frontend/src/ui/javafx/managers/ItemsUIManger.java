@@ -2,12 +2,9 @@ package ui.javafx.managers;
 
 import dtoModel.ItemDto;
 import dtoModel.StorageItemDto;
-import ui.console.utils.ItemDtoUtils;
 import viewModel.ItemViewModel;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ItemsUIManger {
 

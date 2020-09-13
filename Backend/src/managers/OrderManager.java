@@ -1,101 +1,65 @@
 package managers;
 
-import enums.PurchaseForm;
-import models.Item;
-import models.Order;
-import models.Store;
-import models.StoreItem;
-import myLocation.Location;
-import myLocation.LocationException;
-import myLocation.LocationManager;
-import models.StorageOrder;
+import models.*;
+
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class OrderManager {
     private int counter = 0;
-    private Store m_CurrentStore;
-    private Date m_CurrentOrderDate;
-    private Location m_CurrentCustomerLocation;
-    private Map<Integer, Double> m_CurrentIdToStoreItem;
     private Map<Store,Order> m_StoreToOrderMap = new HashMap<>();
     private StorageOrder m_CurrentOrder;
     private List<StorageOrder> m_StorageOrders = new ArrayList<>();
     private boolean b_IsCreated = false;
-    //badName
     private Map<Store,Map<Integer,Double>> m_StoresToItemsMap;
+    private Map<Store,List<OrderItem>> m_StoresToItemsInDiscounts = new HashMap<>();
 
-    public void setStore(Store i_Store)
+    public void addItemFromCurrentStore(Store i_Store ,Item i_Item, double i_AmountOfSells)
     {
-        m_CurrentStore =i_Store;
-    }
-
-    public void setOrderDate(Date i_OrderDate) {
-        this.m_CurrentOrderDate = i_OrderDate;
-    }
-
-    public void setCustomerLocation(int x, int y) throws LocationException {
-        LocationManager.isLocationAvailable(x,y);
-        LocationManager.isValidLocation(x,y);
-        this.m_CurrentCustomerLocation = new Location(x,y);
-    }
-
-    public void addItem(Item i_Item, double i_AmountOfSells) throws Exception {
-
-        if(i_Item.getPurchaseForm() == PurchaseForm.QUANTITY)
-        {
-            if ((i_AmountOfSells != Math.floor(i_AmountOfSells)) || Double.isInfinite(i_AmountOfSells)) {
-                throw new Exception("The item with ID: " + i_Item.getId() + " is sold only in whole numbers");
-            }
-        }
-
-        addItemFromCurrentStore(i_Item,i_AmountOfSells);
-    }
-
-    private void addItemFromCurrentStore(Item i_Item, double i_AmountOfSells) throws Exception
-    {
-        if(!m_CurrentStore.getAllItemsId().contains(i_Item.getId()))
-        {
-            throw new Exception("The item with ID: " + i_Item.getId() + " is not for sell in the requested store");
-        }
-
         if(m_StoresToItemsMap == null)
         {
             m_StoresToItemsMap = new HashMap<>();
         }
 
-        m_CurrentIdToStoreItem = m_StoresToItemsMap.get(m_CurrentStore);
+        Map<Integer,Double> currentIdToAmountMap  = m_StoresToItemsMap.get(i_Store);
 
-        if(m_CurrentIdToStoreItem == null)
+        if(currentIdToAmountMap == null)
         {
-            m_CurrentIdToStoreItem=new HashMap<>();
+            currentIdToAmountMap=new HashMap<>();
         }
 
-        double currentAmountOfSells =m_CurrentIdToStoreItem.getOrDefault(i_Item.getId(),0.0);
+        double currentAmountOfSells =currentIdToAmountMap.getOrDefault(i_Item.getId(),0.0);
 
-        m_CurrentIdToStoreItem.put(i_Item.getId(),i_AmountOfSells+currentAmountOfSells);
-        m_StoresToItemsMap.put(m_CurrentStore,m_CurrentIdToStoreItem);
+        currentIdToAmountMap.put(i_Item.getId(),i_AmountOfSells+currentAmountOfSells);
+        m_StoresToItemsMap.put(i_Store,currentIdToAmountMap);
     }
 
-    public void create() {
+    public void addItemFromCurrentStore(Store i_Store ,OrderItem i_OrderItem)
+    {
+        List<OrderItem> orderItemsInDiscountOfStore = m_StoresToItemsInDiscounts.getOrDefault(i_Store,Collections.emptyList());
+        orderItemsInDiscountOfStore.add(i_OrderItem);
+      m_StoresToItemsInDiscounts.put(i_Store,orderItemsInDiscountOfStore);
+    }
+
+
+    public void create(Customer i_Customer, LocalDate i_Date) {
         if (m_StoresToItemsMap == null) {
             throw new IllegalStateException("Cannot create an empty order");
         }
-        Map<Integer, StoreItem> allItems = new HashMap<>();
+        List<OrderItem> allOrderItems = new ArrayList<>();
         Order tempOrder;
         int totalDeliveryPrice = 0;
         for (Map.Entry<Store, Map<Integer, Double>> entry : m_StoresToItemsMap.entrySet()) {
-            tempOrder = entry.getKey().createOrder(m_CurrentOrderDate, m_CurrentCustomerLocation, entry.getValue());
+            tempOrder = entry.getKey().createOrder(i_Date, i_Customer.getLocation(), entry.getValue(),m_StoresToItemsInDiscounts.getOrDefault(entry.getKey(),Collections.emptyList()));
             m_StoreToOrderMap.put(entry.getKey(), tempOrder);
             totalDeliveryPrice += tempOrder.getDeliveryPrice();
-            for (StoreItem storeItems : tempOrder.getStoreItems()
-            ) {
-                allItems.put(storeItems.getItem().getId(), storeItems);
-            }
+            allOrderItems.addAll(tempOrder.getAllItems());
         }
-        m_CurrentOrder = new StorageOrder(++counter, new Order(m_CurrentOrderDate, m_CurrentCustomerLocation, totalDeliveryPrice, allItems), m_StoreToOrderMap.entrySet().stream()
+
+        m_CurrentOrder = new StorageOrder(++counter, new Order(i_Date, i_Customer.getLocation(), totalDeliveryPrice, allOrderItems ), m_StoreToOrderMap.entrySet().stream()
                 .collect(Collectors.toMap(entry -> entry.getKey().getId(),
-                        Map.Entry::getValue)));
+                        Map.Entry::getValue)) ,i_Customer.getId());
         b_IsCreated = true;
     }
     public void executeOrder()
@@ -109,18 +73,11 @@ public class OrderManager {
     }
     public void cleanup()
     {
-        m_CurrentStore=null;
-        m_CurrentCustomerLocation=null;
-        m_CurrentIdToStoreItem = null;
-        m_CurrentOrderDate=null;
         m_CurrentOrder=null;
         b_IsCreated=false;
         m_StoreToOrderMap.clear();
         m_StoresToItemsMap = null;
-    }
-
-    public Store getStore() {
-        return m_CurrentStore;
+        m_StoresToItemsInDiscounts.clear();
     }
 
     public StorageOrder getCurrentOrder()
@@ -136,5 +93,17 @@ public class OrderManager {
     public final Collection<StorageOrder> getStorageOrders()
     {
         return m_StorageOrders;
+    }
+
+    public Map<Store,List<StoreDiscount>> getAvailableDiscounts()
+    {
+        Map<Store,List<StoreDiscount>> res = new HashMap<>();
+        for (Map.Entry<Store, Map<Integer, Double>> entry:m_StoresToItemsMap.entrySet()
+        ){
+            res.put(entry.getKey(),entry.getKey().getDiscounts().stream()
+                    .filter(storeDiscount -> storeDiscount.isAvailable(entry.getValue()))
+                    .collect(Collectors.toList()));
+        }
+        return res;
     }
 }

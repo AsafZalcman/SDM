@@ -3,6 +3,7 @@ package dtoModel;
 import models.Order;
 import myLocation.Location;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -14,8 +15,8 @@ public class OrderDto {
 
     public OrderDto(Order i_Order) {
         m_Order = i_Order;
-        m_ItemsDto = m_Order.getStoreItems().stream().map(ItemDto::new).collect(Collectors.toList());
-        m_TotalItemsCount = m_Order.getStoreItems().stream().map(item -> item.getAmountOfSells() == Math.floor(item.getAmountOfSells()) ? (int) item.getAmountOfSells() : 1).reduce(0, Integer::sum);
+        m_ItemsDto = m_Order.getAllItems().stream().map(ItemDto::new).collect(Collectors.toList());
+        m_TotalItemsCount = m_Order.getAllItems().stream().map(orderItem -> orderItem.getStoreItem().getAmountOfSells() == Math.floor(orderItem.getStoreItem().getAmountOfSells()) ? (int) orderItem.getStoreItem().getAmountOfSells() : 1).reduce(0, Integer::sum);
     }
 
     public Collection<ItemDto> getItemsDto() {
@@ -35,7 +36,7 @@ public class OrderDto {
         return m_TotalItemsCount;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return m_Order.getOrderDate();
     }
 
