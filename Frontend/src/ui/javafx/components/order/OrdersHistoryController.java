@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.FlowPane;
 import javafx.util.Pair;
+import ui.javafx.components.main.SuperDuperController;
 import ui.javafx.components.order.storeSummary.OrderStoreSummaryController;
 import ui.javafx.utils.SDMResourcesConstants;
 
@@ -24,6 +25,8 @@ public class OrdersHistoryController {
 
     @FXML
     private ComboBox<StoreDto> storesComboBox;
+
+    private SuperDuperController superDuperController;
 
     @FXML
     void ordersComboBoxOnSelected(ActionEvent event) {
@@ -45,5 +48,9 @@ public class OrdersHistoryController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setMainController(SuperDuperController superDuperController) {
+        this.superDuperController = superDuperController;
     }
 }

@@ -16,12 +16,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import ui.javafx.components.order.OrdersHistoryController;
 import ui.javafx.components.updateStores.UpdateStoresController;
 import ui.javafx.components.viewCustomer.ViewCustomerController;
 import ui.javafx.components.viewItems.ViewItemsController;
@@ -30,7 +30,7 @@ import ui.javafx.managers.CustomersUIManager;
 import ui.javafx.managers.ItemsUIManger;
 import ui.javafx.managers.StoreUIManager;
 import ui.javafx.tasks.LoadXmlTask;
-import ui.javafx.utils.FormatUtils;
+
 
 
 import java.io.File;
@@ -132,16 +132,19 @@ public class SuperDuperController {
     @FXML private ViewCustomerController viewCustomersComponentController;
     @FXML private Pane updateStoresComponent;
     @FXML private UpdateStoresController updateStoresComponentController;
+    @FXML private Pane viewOrdersComponent;
+    @FXML private OrdersHistoryController viewOrdersComponentController;
 
 
     @FXML
     private void initialize() {
 
-        if(viewStoresComponentController != null && viewItemsComponentController != null && viewCustomersComponentController!= null){
+        if(viewStoresComponentController != null && viewItemsComponentController != null && viewCustomersComponentController!= null && viewOrdersComponentController != null){
             viewStoresComponentController.setMainController(this);
             viewItemsComponentController.setMainController(this);
             viewCustomersComponentController.setMainController(this);
             updateStoresComponentController.setMainController(this);
+            viewOrdersComponentController.setMainController(this);
         }
 
         itemsSideBarButton.disableProperty().bind(isDataLoaded.not());
