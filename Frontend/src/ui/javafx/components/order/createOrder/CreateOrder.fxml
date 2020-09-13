@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane prefHeight="578.0" prefWidth="921.0" styleClass="tab" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.components.order.createOrder.CreateOrderController">
                      <top>
@@ -31,6 +32,11 @@
                   <Separator layoutX="590.0" layoutY="58.0" prefHeight="0.0" prefWidth="208.0" />
                   <Label layoutX="566.0" layoutY="75.0" text="Add Discounts" />
             <RadioButton fx:id="orderSummaryRadioButton" disable="true" layoutX="801.0" layoutY="49.0" mnemonicParsing="false" toggleGroup="$orderProgressToggleGroup" />
+            <Label fx:id="endOfOrderLabel" alignment="CENTER" layoutX="145.0" layoutY="140.0" prefHeight="51.0" prefWidth="688.0">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
                            </children>
                         </Pane>
                      </top>

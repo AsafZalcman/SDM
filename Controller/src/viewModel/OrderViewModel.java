@@ -105,14 +105,14 @@ public class OrderViewModel {
         m_UsedDiscounts.clear();
     }
 
-    public void buyDiscount(StoreDto i_StoreDto,StoreDiscountDto i_StoreDiscount , Integer i_SelectedItemIdInOffer) {
+    public void buyDiscount(StoreDiscountDto i_StoreDiscount , Integer i_SelectedItemIdInOffer) {
         int currentUsed = m_UsedDiscounts.getOrDefault(i_StoreDiscount, 0) + 1;
         m_UsedDiscounts.put(i_StoreDiscount, currentUsed);
-        if(i_StoreDiscount.getStoreDiscountOperator().equals(StoreDiscountOperator.ALL_OR_NOTHING.getValue()))
+        if(!i_StoreDiscount.isOneOfDiscount())
         {
             for (StoreOfferDto storeOfferDto:i_StoreDiscount.getStoreOfferDtos()
                  ) {
-                m_SuperDuperManager.addItemInDiscountToOrder(i_StoreDto.getId(),storeOfferDto.getItemId(),storeOfferDto.getForAdditional(),storeOfferDto.getQuantity());
+                m_SuperDuperManager.addItemInDiscountToOrder(i_StoreDiscount.getName(),storeOfferDto.getItemId(),storeOfferDto.getForAdditional(),storeOfferDto.getQuantity());
             }
         }
         else
@@ -120,7 +120,7 @@ public class OrderViewModel {
             StoreOfferDto selectedStoreOfferDto =  i_StoreDiscount.getStoreOfferDtos().stream()
                     .filter(storeOfferDto -> storeOfferDto.getItemId() == i_SelectedItemIdInOffer)
                     .collect(Collectors.toList()).get(0);
-            m_SuperDuperManager.addItemInDiscountToOrder(i_StoreDto.getId(),selectedStoreOfferDto.getItemId(),selectedStoreOfferDto.getForAdditional(),selectedStoreOfferDto.getQuantity());
+            m_SuperDuperManager.addItemInDiscountToOrder(i_StoreDiscount.getName(),selectedStoreOfferDto.getItemId(),selectedStoreOfferDto.getForAdditional(),selectedStoreOfferDto.getQuantity());
         }
     }
 

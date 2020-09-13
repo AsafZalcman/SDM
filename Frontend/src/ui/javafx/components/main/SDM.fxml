@@ -92,7 +92,7 @@
                      </content>
                   </ScrollPane>
                </content></Tab>
-            <Tab fx:id="makeAnOrderTransparentTab" styleClass="transparentTab">
+            <Tab fx:id="makeAnOrderTransparentTab" onClosed="#makeAnOrderTransparentTabOnClosed" styleClass="transparentTab">
                <content>
                   <FlowPane fx:id="testFlowPane" prefHeight="200.0" prefWidth="200.0" />
                </content></Tab>

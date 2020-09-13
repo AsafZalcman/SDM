@@ -7,6 +7,8 @@ import myLocation.Location;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Store implements IDelivery, IUniquely, ILocationable {
     private final Integer m_StoreID;
@@ -105,8 +107,10 @@ public class Store implements IDelivery, IUniquely, ILocationable {
             itemIdToStoreItemsMap.put(storeItem.getItem().getId(),new OrderItem(storeItem,false));
         });
 
-        Collection<OrderItem> allItems = itemIdToStoreItemsMap.values();
-        allItems.addAll(i_ItemsInDiscount);
+        List<OrderItem> allItems = Stream.concat(
+                itemIdToStoreItemsMap.values().stream(),
+                i_ItemsInDiscount.stream())
+                .collect(Collectors.toList());
         return new Order(i_orderDate, i_customerLocation, getDeliveryPrice(i_customerLocation), allItems);
     }
 
@@ -164,6 +168,12 @@ public class Store implements IDelivery, IUniquely, ILocationable {
     public Collection<StoreDiscount> getDiscounts()
     {
         return m_StoreDiscounts;
+    }
+
+    public boolean isDiscountExists(String i_DiscountName)
+    {
+        return m_StoreDiscounts.stream().
+                filter(storeDiscount -> storeDiscount.getName().equals(i_DiscountName)).count() == 1;
     }
 
     public void addDiscount(StoreDiscount i_StoreDiscount)

@@ -10,6 +10,7 @@ import dtoModel.StorageItemDto;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
@@ -32,6 +33,7 @@ import ui.javafx.components.order.createOrder.CreateOrderController;
 import ui.javafx.components.viewStores.ViewStoresController;
 import ui.javafx.managers.CustomersUIManager;
 import ui.javafx.managers.ItemsUIManger;
+import ui.javafx.managers.OrdersUIManager;
 import ui.javafx.managers.StoreUIManager;
 import ui.javafx.tasks.LoadXmlTask;
 
@@ -246,7 +248,7 @@ public class SuperDuperController {
 
     @FXML
     void ordersHistorySideBarButtonOnClick(ActionEvent event) {
-
+        viewOrdersComponentController.fetchOrders();
         mainTabPain.getSelectionModel().select(viewOrdersTransparentTab);
 
     }
@@ -268,4 +270,9 @@ public class SuperDuperController {
         mainTabPain.getSelectionModel().select(updateStoresTransparentTab);
     }
 
+
+    public void makeAnOrderTransparentTabOnClosed(Event event) {
+        OrdersUIManager.getInstance().abortOrder();
+        //אם זה יוצר בעיות (כי זה קורה גם אחרי הזמנה מוצלחת, אז צריך לבדוק אם ההזמנה הצליחה או לא
+    }
 }

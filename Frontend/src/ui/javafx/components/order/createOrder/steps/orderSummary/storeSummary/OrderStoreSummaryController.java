@@ -1,4 +1,4 @@
-package ui.javafx.components.order.storeSummary;
+package ui.javafx.components.order.createOrder.steps.orderSummary.storeSummary;
 
 import dtoModel.ItemDto;
 import dtoModel.OrderDto;
@@ -65,7 +65,6 @@ public class OrderStoreSummaryController {
     public OrderStoreSummaryController()
     {
         isOrderStoreAvailable = new SimpleBooleanProperty(false);
-        initTableView();
     }
 
     private void initTableView() {
@@ -75,19 +74,20 @@ public class OrderStoreSummaryController {
         itemAmountColumn.setCellValueFactory(cellData-> new SimpleDoubleProperty(Double.parseDouble(FormatUtils.DecimalFormat.format(cellData.getValue().getAmountOfSell()))).asObject());
         itemPriceColumn.setCellValueFactory(cellData-> new SimpleDoubleProperty(Double.parseDouble(FormatUtils.DecimalFormat.format(cellData.getValue().getPrice()))).asObject());
         itemTotalPriceColumn.setCellValueFactory(cellData-> new SimpleDoubleProperty(Double.parseDouble(FormatUtils.DecimalFormat.format(cellData.getValue().getTotalPrice()))).asObject());
-        itemFromDiscountColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice")); // change after
+        itemFromDiscountColumn.setCellValueFactory(new PropertyValueFactory<>("fromDiscount"));
     }
 
     @FXML
     private void initialize() {
+        initTableView();
         isOrderStoreAvailable.addListener((observable, oldValue, newValue) -> {
             StoreDto storeDto = m_StoreAndOrderPair.getKey();
             OrderDto orderDto = m_StoreAndOrderPair.getValue();
             storeIdLabel.setText(storeDto.getId().toString());
             storeNameLabel.setText(storeDto.getName());
-            deliveryPriceLabel.setText(String.valueOf(orderDto.getDeliveryPrice()));
-            ppkLabel.setText(storeDto.getPPK().toString());
-            distanceFromCustomerLabel.setText(String.valueOf(storeDto.getLocation().distance(orderDto.getDestLocation())));
+            deliveryPriceLabel.setText(FormatUtils.DecimalFormat.format(orderDto.getDeliveryPrice()));
+            ppkLabel.setText(FormatUtils.DecimalFormat.format(storeDto.getPPK()));
+            distanceFromCustomerLabel.setText(FormatUtils.DecimalFormat.format(storeDto.getLocation().distance(orderDto.getDestLocation())));
             itemsTableView.getItems().addAll(orderDto.getItemsDto());
         });
     }

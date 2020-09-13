@@ -4,12 +4,9 @@ import dtoModel.ItemDto;
 import dtoModel.StoreDto;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import ui.javafx.components.order.createOrder.steps.StepController;
 import ui.javafx.managers.ItemsUIManger;
@@ -17,7 +14,6 @@ import ui.javafx.managers.OrdersUIManager;
 import ui.javafx.managers.StoreUIManager;
 import ui.javafx.utils.FormatUtils;
 
-import javax.swing.*;
 import java.util.Collection;
 
 public class BuyItemsController extends StepController {

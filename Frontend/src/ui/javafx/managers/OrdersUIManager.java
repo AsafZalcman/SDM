@@ -83,15 +83,32 @@ public class OrdersUIManager {
         return m_OrderViewModel.getAvailableDiscountsForCurrentOrder().entrySet().stream()
         .filter(storeDtoListEntry -> storeDtoListEntry.getKey().getId().equals(i_Store.getId()))
                 .map(Map.Entry::getValue)
-                .collect(Collectors.toList()).get(0);
+                .findFirst().orElse(Collections.emptyList());
     }
 
     public Collection<StoreDto> getAllStoresWithAvailableDiscount()
     {
-        return m_OrderViewModel.getAvailableDiscountsForCurrentOrder().keySet();
+        return m_OrderViewModel.getAvailableDiscountsForCurrentOrder().entrySet().stream()
+                .filter(storeDtoListEntry -> !storeDtoListEntry.getValue().isEmpty())
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
     }
 
     public StoreDto getStore() {
       return  m_OrderViewModel.getStore();
+    }
+
+    public void addDiscountToOrder(StoreDiscountDto storeDiscountDto)
+    {
+        m_OrderViewModel.buyDiscount(storeDiscountDto,null);
+    }
+
+    public void addOneOfDiscountToOrder(StoreDiscountDto storeDiscountDto, Integer i_SelectedItemIdInOffer)
+    {
+        m_OrderViewModel.buyDiscount(storeDiscountDto,i_SelectedItemIdInOffer);
+    }
+
+    public Collection<StorageOrderDto> getAllOrders() {
+        return m_OrderViewModel.getAllOrders();
     }
 }
