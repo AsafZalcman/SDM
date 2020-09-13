@@ -18,7 +18,7 @@
                   <Font size="36.0" />
                </font>
             </Label>
-            <ComboBox fx:id="chooseStoreComboBox" layoutX="416.0" layoutY="81.0" prefHeight="31.0" prefWidth="163.0" promptText="Choose Store" />
+            <ComboBox fx:id="chooseStoreComboBox" layoutX="416.0" layoutY="81.0" prefHeight="31.0" prefWidth="213.0" promptText="Choose Store" />
             <Separator layoutY="119.0" prefHeight="0.0" prefWidth="998.0" />
          </children>
       </AnchorPane>

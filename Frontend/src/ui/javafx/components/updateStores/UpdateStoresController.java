@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.util.StringConverter;
 import ui.console.utils.FormatUtils;
 import ui.javafx.components.main.SuperDuperController;
 import ui.javafx.managers.ItemsUIManger;
@@ -154,16 +155,16 @@ public class UpdateStoresController {
            }
        });
 
-        chooseStoreComboBox.setCellFactory(param -> new ListCell<StoreDto>(){
-            @Override
-            protected void updateItem(StoreDto storeDto, boolean empty){
-                super.updateItem(storeDto, empty);
 
-                if(empty || storeDto == null){
-                    setText(null);
-                }else{
-                    setText(storeDto.getName());
-                }
+        chooseStoreComboBox.setConverter(new StringConverter<StoreDto>() {
+            @Override
+            public String toString(StoreDto storeDto) {
+                return storeDto.getName() + "(ID: " + storeDto.getId() + ")";
+            }
+
+            @Override
+            public StoreDto fromString(String storeDtoString) {
+                return null;
             }
         });
 
