@@ -194,6 +194,7 @@ public class ViewStoresController {
             Node singleDiscount = loader.load();
 
             DiscountController discountController = loader.getController();
+            discountController.setWithButtons(true);
             discountController.setStoreDiscountDto(i_DiscountDto);
             storeDiscountFlowPane.getChildren().add(singleDiscount);
             // wordToTileController.put(word, singleWordController);

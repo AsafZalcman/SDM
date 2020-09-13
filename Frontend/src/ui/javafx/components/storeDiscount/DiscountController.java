@@ -39,6 +39,7 @@ public class DiscountController {
     private boolean m_WithButtons = false;
 
     private ItemsUIManger m_ItemsUIManger;
+
     public void setStoreDiscountDto(StoreDiscountDto i_StoreDiscountDto) {
         m_StoreDiscountDto = i_StoreDiscountDto;
         isStoreDiscountAvailable.set(true);

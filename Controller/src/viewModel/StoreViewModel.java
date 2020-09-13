@@ -24,7 +24,7 @@ public class StoreViewModel {
        return SuperDuperManager.getInstance().getStoreManager().getAllStores().stream().map(StoreDto::new).collect(Collectors.toList());
     }
 
-    public void updateStoreItemPrice(int i_StoreID, int i_StoreItemID, double i_NewPrice){
+    public void updateStoreItemPrice(int i_StoreID, int i_StoreItemID, double i_NewPrice) throws Exception{
         SuperDuperManager.getInstance().updateStoreItemPrice(i_StoreID, i_StoreItemID, i_NewPrice);
     }
 

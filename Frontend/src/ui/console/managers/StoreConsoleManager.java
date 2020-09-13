@@ -153,7 +153,13 @@ public class StoreConsoleManager {
         UpdateStoreMenu i_UpdateStoreMenu = new UpdateStoreMenu(
                 new MenuItem("Delete item", () -> deleteItemFromStore(storeID)),
                 new MenuItem("Insert new item", () -> insertNewItemToStore(storeID)),
-                new MenuItem("Change item price", () -> changeStoreItemPrice(storeID)),
+                new MenuItem("Change item price", () -> {
+                    try {
+                        changeStoreItemPrice(storeID);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }),
                 new MenuItem("Back to Main Menu", () -> System.out.println("All updates were saved!\n")));
         i_UpdateStoreMenu.run();
     }
@@ -256,7 +262,7 @@ public class StoreConsoleManager {
         }
     }
 
-    private void changeStoreItemPrice(int i_StoreID) {
+    private void changeStoreItemPrice(int i_StoreID) throws Exception {
         int storeItemID = getStoreItemIDFromUser(i_StoreID);
         double newPrice = getNewPriceFromUser();
         m_StoreViewModel.updateStoreItemPrice(i_StoreID, storeItemID, newPrice);

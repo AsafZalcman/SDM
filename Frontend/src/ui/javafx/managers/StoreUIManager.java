@@ -23,4 +23,16 @@ public class StoreUIManager {
     public Collection<ItemDto> getAllItemsOfStore(int i_StoreID){
         return m_ItemViewModel.getAllItemsOfStore(i_StoreID);
     }
+
+    public void updateStoreItemPrice(int i_StoreID, int i_StoreItemID, double i_NewPrice) throws Exception{
+        m_StoreViewModel.updateStoreItemPrice(i_StoreID,i_StoreItemID,i_NewPrice);
+    }
+
+    public void addNewItemToStore(int i_StoreID, int i_StoreItemID, double i_Price) throws Exception{
+        m_ItemViewModel.addNewItemToStore(i_StoreID,i_StoreItemID,i_Price);
+    }
+
+    public void deleteItemFromStore(int i_StoreID, int i_StoreItemID) throws Exception {
+        m_ItemViewModel.deleteItemFromStore(i_StoreID,i_StoreItemID);
+    }
 }
