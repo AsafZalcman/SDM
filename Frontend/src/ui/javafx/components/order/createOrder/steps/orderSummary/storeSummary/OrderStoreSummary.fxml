@@ -12,38 +12,40 @@
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.components.order.createOrder.steps.orderSummary.storeSummary.OrderStoreSummaryController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="115.0" minWidth="10.0" prefWidth="58.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="115.0" minWidth="10.0" prefWidth="38.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="189.0" minWidth="10.0" prefWidth="78.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="189.0" minWidth="10.0" prefWidth="121.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="115.0" minWidth="10.0" prefWidth="30.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="189.0" minWidth="10.0" prefWidth="79.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="189.0" minWidth="10.0" prefWidth="90.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="42.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="50.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="217.0" minWidth="10.0" prefWidth="97.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="51.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="217.0" minWidth="10.0" prefWidth="79.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="217.0" minWidth="10.0" prefWidth="56.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="94.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="44.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="60.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="66.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="66.0" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints maxHeight="128.0" minHeight="0.0" prefHeight="57.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="128.0" minHeight="0.0" prefHeight="57.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="128.0" minHeight="10.0" prefHeight="57.0" vgrow="SOMETIMES" />
     <RowConstraints maxHeight="128.0" minHeight="10.0" prefHeight="57.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="346.0" minHeight="10.0" prefHeight="338.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="346.0" minHeight="10.0" prefHeight="216.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="346.0" minHeight="10.0" prefHeight="96.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
       <Label text="Store id:" />
       <Label prefHeight="17.0" prefWidth="72.0" text="Store name:" GridPane.columnIndex="2" />
       <Label text="PPK:" GridPane.rowIndex="1" />
-      <Label text="Distance from customer:" GridPane.columnIndex="5" GridPane.columnSpan="3" />
-      <Label text="Delivery price:" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="1" />
-      <TableView fx:id="itemsTableView" prefHeight="340.0" prefWidth="75.0" GridPane.columnSpan="10" GridPane.rowIndex="4">
+      <Label text="Distance from customer:" GridPane.columnIndex="4" GridPane.columnSpan="3" />
+      <Label text="Delivery price:" GridPane.columnIndex="4" GridPane.columnSpan="3" GridPane.rowIndex="1" />
+      <TableView fx:id="itemsTableView" prefHeight="241.0" prefWidth="600.0" GridPane.columnSpan="11" GridPane.rowIndex="4">
         <columns>
           <TableColumn fx:id="itemIdColumn" prefWidth="63.0" text="Id" />
           <TableColumn fx:id="itemNameColumn" prefWidth="87.0" text="Name" />
             <TableColumn fx:id="itemPurchaseFormColumn" prefWidth="88.0" text="Purchase Form" />
             <TableColumn fx:id="itemAmountColumn" prefWidth="62.0" text="Amount" />
             <TableColumn fx:id="itemPriceColumn" prefWidth="75.0" text="Price" />
-            <TableColumn fx:id="itemTotalPriceColumn" prefWidth="75.0" text="Total Price" />
-            <TableColumn fx:id="itemFromDiscountColumn" prefWidth="149.0" text="From Discount" />
+            <TableColumn fx:id="itemTotalPriceColumn" prefWidth="116.0" text="Total Price" />
+            <TableColumn fx:id="itemFromDiscountColumn" prefWidth="108.0" text="From Discount" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -54,11 +56,33 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Separator prefHeight="0.0" prefWidth="349.0" GridPane.columnSpan="10" GridPane.rowIndex="2" />
+      <Separator prefHeight="0.0" prefWidth="349.0" GridPane.columnSpan="11" GridPane.rowIndex="2" />
       <Label fx:id="storeIdLabel" prefHeight="17.0" prefWidth="20.0" GridPane.columnIndex="1" />
       <Label fx:id="storeNameLabel" prefHeight="17.0" prefWidth="111.0" GridPane.columnIndex="3" />
       <Label fx:id="ppkLabel" prefHeight="17.0" prefWidth="93.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-      <Label fx:id="distanceFromCustomerLabel" prefHeight="17.0" prefWidth="134.0" GridPane.columnIndex="7" GridPane.columnSpan="2" />
-      <Label fx:id="deliveryPriceLabel" prefHeight="17.0" prefWidth="135.0" GridPane.columnIndex="7" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+      <Label fx:id="distanceFromCustomerLabel" prefHeight="17.0" prefWidth="76.0" GridPane.columnIndex="7" GridPane.columnSpan="2" />
+      <Label fx:id="deliveryPriceLabel" prefHeight="17.0" prefWidth="112.0" GridPane.columnIndex="6" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+      <Label text="Location:" GridPane.columnIndex="9" />
+      <Label fx:id="locationLabel" prefHeight="17.0" prefWidth="50.0" GridPane.columnIndex="10" GridPane.columnSpan="2" />
+      <Label text="Total Items Price:" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="5">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="totalItemsPriceLabel" prefHeight="17.0" prefWidth="90.0" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label prefHeight="17.0" prefWidth="175.0" text="Number of different items:" GridPane.columnIndex="6" GridPane.columnSpan="3" GridPane.rowIndex="5">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="numberOfDifferentItemsLabel" GridPane.columnIndex="9" GridPane.rowIndex="5">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
    </children>
 </GridPane>

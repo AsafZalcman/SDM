@@ -22,6 +22,7 @@ import javafx.scene.layout.FlowPane;
 import ui.javafx.components.main.SuperDuperController;
 import ui.javafx.components.storeDiscount.DiscountController;
 import ui.javafx.managers.StoreUIManager;
+import ui.javafx.utils.FormatUtils;
 import ui.javafx.utils.SDMResourcesConstants;
 
 public class ViewStoresController {
@@ -153,28 +154,27 @@ public class ViewStoresController {
         orderDateTableColumnInViewStores.setCellValueFactory(cellData-> new SimpleObjectProperty<LocalDate>(cellData.getValue().getDate()));
         orderTotalItemsTableColumnInViewStores.setCellValueFactory(cellData-> new SimpleIntegerProperty(cellData.getValue().getTotalItemsCount()).asObject());
         orderItemsCostTableColumnInViewStores.setCellValueFactory(cellData-> new SimpleDoubleProperty(cellData.getValue().getTotalItemsPrice()).asObject());
-        orderDeliveryCostTableColumnInViewStores.setCellValueFactory(cellData-> new SimpleDoubleProperty(cellData.getValue().getDeliveryPrice()).asObject());
-        orderTotalCostTableColumnInViewStores.setCellValueFactory(cellData-> new SimpleDoubleProperty(cellData.getValue().getTotalOrderPrice()).asObject());
+        orderDeliveryCostTableColumnInViewStores.setCellValueFactory(cellData-> new SimpleDoubleProperty(Double.parseDouble(FormatUtils.DecimalFormat.format(cellData.getValue().getDeliveryPrice()))).asObject());
+        orderTotalCostTableColumnInViewStores.setCellValueFactory(cellData-> new SimpleDoubleProperty(Double.parseDouble(FormatUtils.DecimalFormat.format(cellData.getValue().getTotalOrderPrice()))).asObject());
     }
 
     private void setBasicDetailsForTheSelectedStoreInViewStoreTab(StoreDto i_CurrentStoreDto) {
         storeIDLabel.setText(i_CurrentStoreDto.getId().toString());
         storeNameLabel.setText(i_CurrentStoreDto.getName());
-        storePPKLabel.setText(i_CurrentStoreDto.getPPK().toString());
-        storeIncomesDeliveriesLabel.setText(i_CurrentStoreDto.getDeliveriesIncomes() == null ? "No deliveries income to show":i_CurrentStoreDto.getDeliveriesIncomes().toString());
+        storePPKLabel.setText(FormatUtils.DecimalFormat.format(i_CurrentStoreDto.getPPK()));
+        storeIncomesDeliveriesLabel.setText(i_CurrentStoreDto.getDeliveriesIncomes() == null ? "No deliveries income to show":FormatUtils.DecimalFormat.format(i_CurrentStoreDto.getDeliveriesIncomes()));
     }
 
     private void setStoreItemsForTheSelectedStoreInViewStoreTab(StoreDto i_CurrentStoreDto){
-        storeItemTableViewInViewStoresTab.getItems().clear();
-        storeItemTableViewInViewStoresTab.getItems().addAll(m_StoreUIManager.getAllItemsOfStore(i_CurrentStoreDto.getId()));
+        storeItemTableViewInViewStoresTab.getItems().setAll(m_StoreUIManager.getAllItemsOfStore(i_CurrentStoreDto.getId()));
     }
 
     private void initViewStoreItemsTabComponents(){
         storeItemIDTableColumn.setCellValueFactory(cellData-> new SimpleIntegerProperty(cellData.getValue().getId()).asObject());
         storeItemNameTableColumn.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getItemName()));
         storeItemPurchaseFormTableColumn.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getPurchaseForm().getValue()));
-        storeItemPriceTableColumn.setCellValueFactory(cellData-> new SimpleDoubleProperty(cellData.getValue().getPrice()).asObject());
-        storeItemSoldSoFarTableColumn.setCellValueFactory(cellData-> new SimpleDoubleProperty(cellData.getValue().getAmountOfSell()).asObject());
+        storeItemPriceTableColumn.setCellValueFactory(cellData-> new SimpleDoubleProperty(Double.parseDouble(FormatUtils.DecimalFormat.format(cellData.getValue().getPrice()))).asObject());
+        storeItemSoldSoFarTableColumn.setCellValueFactory(cellData-> new SimpleDoubleProperty(Double.parseDouble(FormatUtils.DecimalFormat.format(cellData.getValue().getAmountOfSell()))).asObject());
     }
 
     private void createStoreDiscounts(StoreDto i_StoreDto)
