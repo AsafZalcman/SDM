@@ -79,6 +79,11 @@ public class ItemDto {
         return m_AmountOfSell*m_Price;
     }
 
+    public boolean isFromDiscount()
+    {
+        return m_FromDiscount;
+    }
+
 //   public class ItemDtoBuilder
 //   {
 //       private  Integer m_Id;

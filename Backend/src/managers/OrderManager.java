@@ -37,7 +37,7 @@ public class OrderManager {
 
     public void addItemFromCurrentStore(Store i_Store ,OrderItem i_OrderItem)
     {
-        List<OrderItem> orderItemsInDiscountOfStore = m_StoresToItemsInDiscounts.getOrDefault(i_Store,Collections.emptyList());
+        List<OrderItem> orderItemsInDiscountOfStore = m_StoresToItemsInDiscounts.getOrDefault(i_Store,new ArrayList<>());
         orderItemsInDiscountOfStore.add(i_OrderItem);
       m_StoresToItemsInDiscounts.put(i_Store,orderItemsInDiscountOfStore);
     }

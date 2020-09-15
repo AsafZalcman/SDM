@@ -5,6 +5,7 @@ import javafx.util.Pair;
 import models.StoreDiscount;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class StoreDiscountDto {
@@ -47,5 +48,22 @@ public class StoreDiscountDto {
 
     public boolean isOneOfDiscount() {
         return StoreDiscountOperator.ONE_OF.getValue().equals(m_StoreDiscountOperator);
+    }
+
+    public boolean isAllOrNothingDiscount() {
+        return StoreDiscountOperator.ALL_OR_NOTHING.getValue().equals(m_StoreDiscountOperator);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StoreDiscountDto that = (StoreDiscountDto) o;
+        return Objects.equals(m_Name, that.m_Name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(m_Name);
     }
 }

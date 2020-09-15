@@ -86,9 +86,13 @@ public class SuperDuperManager {
         m_OrderManager.addItemFromCurrentStore(store, i_Item, i_AmountOfSells);
     }
 
-    public void addItemInDiscountToOrder(int i_StoreId,int i_ItemId,double i_Price , double i_Amount)
+    public void addItemInDiscountToOrder(String i_DiscountName,int i_ItemId,double i_Price , double i_Amount)
     {
-        Store store = getStore(i_StoreId);
+        Store store = m_StoreManager.getStoreFromDiscountName(i_DiscountName);
+        if(store ==null)
+        {
+            throw new IllegalArgumentException("The discount named :\"" + i_DiscountName +"\" is not exists");
+        }
         m_OrderManager.addItemFromCurrentStore(store,new OrderItem(new StoreItem(getItem(i_ItemId),i_Price,i_Amount),true));
     }
 

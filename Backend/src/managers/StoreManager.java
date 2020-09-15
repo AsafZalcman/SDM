@@ -119,6 +119,12 @@ public class StoreManager {
         m_StoreID2Store.get(i_StoreId).addDiscount(i_Discount);
     }
 
+    public Store getStoreFromDiscountName(String i_DiscountName) {
+        return m_StoreID2Store.values().stream()
+                .filter(store -> store.isDiscountExists(i_DiscountName))
+                .findFirst().orElse(null);
+    }
+
 //   //only for debug
 //   @Override
 //   public String toString() {

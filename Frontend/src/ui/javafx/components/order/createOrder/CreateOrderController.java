@@ -47,14 +47,19 @@ public class CreateOrderController {
     private StepController m_CurrentStepController;
 
     @FXML
+    private Label endOfOrderLabel;
+
+    @FXML
     private void initialize() {
+        m_CurrentButtonIndex = 0;
         loadCurrentStepController(SDMResourcesConstants.ORDER_STEPS_INSERT_DETAILS_FXML_RESOURCE);
         m_StepsButtons = new ArrayList<>(
-                Arrays.asList(insertDetailsRadioButton, buyItemsRadioButton,addDiscountsRadioButton, orderSummaryRadioButton));
+                Arrays.asList(insertDetailsRadioButton, buyItemsRadioButton, addDiscountsRadioButton, orderSummaryRadioButton));
         m_OrdersUIManager = OrdersUIManager.getInstance();
         insertDetailsRadioButton.setUserData(SDMResourcesConstants.ORDER_STEPS_INSERT_DETAILS_FXML_RESOURCE);
         buyItemsRadioButton.setUserData(SDMResourcesConstants.ORDER_STEPS_BUY_ITEMS_FXML_RESOURCE);
         addDiscountsRadioButton.setUserData(SDMResourcesConstants.ORDER_STEPS_ADD_DISCOUNTS_FXML_RESOURCE);
+        orderSummaryRadioButton.setUserData(SDMResourcesConstants.ORDER_SUMMARY_FXML_RESOURCE);
         orderProgressToggleGroup.selectedToggleProperty().addListener((observable, prevButton, currentButton) ->
                 loadCurrentStepController((URL) currentButton.getUserData()));
     }
@@ -73,18 +78,20 @@ public class CreateOrderController {
                 endOfStepButton.setText("Finish");
             }
         }
+        else
+        {
+            currentStepFlowPane.getChildren().clear();
+            endOfOrderLabel.setText("Your order was executed");
+            endOfStepButton.disableProperty().unbind();
+            endOfStepButton.setDisable(true);
+        }
     }
 
     private List<RadioButton> m_StepsButtons;
     private int m_CurrentButtonIndex;
 
-    public CreateOrderController() {
-
-        m_CurrentButtonIndex = 0;
-    }
-
     private boolean isLastStep() {
-        return m_CurrentButtonIndex == m_StepsButtons.size();
+        return m_CurrentButtonIndex == m_StepsButtons.size() -1;
     }
 
     private void loadCurrentStepController(URL i_PathToControllerResource) {
