@@ -63,18 +63,7 @@ public class OrderSummaryController extends StepController {
 
         @FXML
     void storesComboBoxOnAction(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(SDMResourcesConstants.ORDER_STORE_SUMMARY_FXML_RESOURCE);
-            Node singleStoreOrderSummary = loader.load();
-
-            OrderStoreSummaryController orderStoreSummaryController = loader.getController();
-            StoreDto storeDto = storesComboBox.getValue();
-            orderStoreSummaryController.setOrderOfStore(new Pair<>(storeDto, m_StorageOrderDto.getStoresToOrders().get(storeDto)));
-            storeOrderSummaryFlowPane.getChildren().add(singleStoreOrderSummary);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+       loadOrderStoreSummary();
     }
 
     private void displayStoresIfNeeded()
@@ -82,6 +71,21 @@ public class OrderSummaryController extends StepController {
         if(m_StorageOrderDto!=null)
         {
             storesComboBox.getItems().addAll(m_StorageOrderDto.getStoresToOrders().keySet());
+        }
+    }
+
+    private void loadOrderStoreSummary()
+    {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(SDMResourcesConstants.ORDER_STORE_SUMMARY_FXML_RESOURCE);
+            Node singleStoreOrderSummary = loader.load();
+            OrderStoreSummaryController orderStoreSummaryController = loader.getController();
+            StoreDto storeDto = storesComboBox.getValue();
+            orderStoreSummaryController.setOrderOfStore(new Pair<>(storeDto, m_StorageOrderDto.getStoresToOrders().get(storeDto)));
+            storeOrderSummaryFlowPane.getChildren().setAll(singleStoreOrderSummary);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

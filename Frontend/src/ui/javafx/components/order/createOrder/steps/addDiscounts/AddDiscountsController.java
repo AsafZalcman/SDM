@@ -49,7 +49,6 @@ public class AddDiscountsController extends StepController {
     }
 
     private void fetchAllAvailableDiscountsOfSelectedStore() {
-        discountsFlowPane.getChildren().clear();
         m_OrdersUIManager.getAllAvailableDiscountsOfStore(storesComboBox.getValue()).forEach(this::createDiscountController);
         if (discountsFlowPane.getChildren().isEmpty()) {
             fetchAllStoresWithAvailableDiscounts();
@@ -57,12 +56,11 @@ public class AddDiscountsController extends StepController {
     }
 
     private void fetchAllStoresWithAvailableDiscounts() {
-        storesComboBox.getItems().clear();
         Collection<StoreDto> stores = m_OrdersUIManager.getAllStoresWithAvailableDiscount();
         if (stores.isEmpty()) {
             setNoDiscountsAvailable();
         } else {
-            storesComboBox.getItems().addAll(stores);
+            storesComboBox.getItems().setAll(stores);
         }
 
     }
@@ -107,7 +105,7 @@ public class AddDiscountsController extends StepController {
                 buyDiscountLabel.setText("The Discount named \"" + i_StoreDiscountDto.getName() + "\" was added to the current order");
                 fetchAllAvailableDiscountsOfSelectedStore();
             });
-            discountsFlowPane.getChildren().add(singleDiscount);
+            discountsFlowPane.getChildren().setAll(singleDiscount);
         } catch (IOException e) {
             e.printStackTrace();
         }

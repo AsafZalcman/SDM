@@ -100,9 +100,11 @@ public class OrderManager {
         Map<Store,List<StoreDiscount>> res = new HashMap<>();
         for (Map.Entry<Store, Map<Integer, Double>> entry:m_StoresToItemsMap.entrySet()
         ){
-            res.put(entry.getKey(),entry.getKey().getDiscounts().stream()
-                    .filter(storeDiscount -> storeDiscount.isAvailable(entry.getValue()))
-                    .collect(Collectors.toList()));
+            if(entry.getKey().haveDiscounts()) {
+                res.put(entry.getKey(), entry.getKey().getDiscounts().stream()
+                        .filter(storeDiscount -> storeDiscount.isAvailable(entry.getValue()))
+                        .collect(Collectors.toList()));
+            }
         }
         return res;
     }

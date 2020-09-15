@@ -80,7 +80,7 @@ public class OrdersHistoryController {
             ordersLabel.setVisible(false);
             noOrdersToShowLabel.setVisible(true);
         } else {
-            ordersComboBox.getItems().addAll(storageOrderDtos);
+            ordersComboBox.getItems().setAll(storageOrderDtos);
         }
     }
 }

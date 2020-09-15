@@ -172,7 +172,8 @@ public class Store implements IDelivery, IUniquely, ILocationable {
 
     public boolean isDiscountExists(String i_DiscountName)
     {
-        return m_StoreDiscounts.stream().
+
+        return this.haveDiscounts() && m_StoreDiscounts.stream().
                 filter(storeDiscount -> storeDiscount.getName().equals(i_DiscountName)).count() == 1;
     }
 
@@ -183,6 +184,11 @@ public class Store implements IDelivery, IUniquely, ILocationable {
             m_StoreDiscounts = new ArrayList<>();
         }
         m_StoreDiscounts.add(i_StoreDiscount);
+    }
+
+    public boolean haveDiscounts()
+    {
+        return m_StoreDiscounts!=null && !m_StoreDiscounts.isEmpty();
     }
 
 }
