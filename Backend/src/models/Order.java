@@ -46,7 +46,7 @@ public class Order {
 
     public int getTotalItemsKinds()
     {
-        return  m_OrderItems.size();
+        return (int)m_OrderItems.stream().distinct().count();
     }
 
     public Collection<OrderItem> getAllItems()

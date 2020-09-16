@@ -52,6 +52,15 @@ public class OrderStoreSummaryController {
     @FXML
     private Label deliveryPriceLabel;
 
+    @FXML
+    private Label totalItemsPriceLabel;
+
+    @FXML
+    private Label numberOfDifferentItemsLabel;
+
+    @FXML
+    private Label locationLabel;
+
     private Pair<StoreDto, OrderDto> m_StoreAndOrderPair;
 
     private SimpleBooleanProperty isOrderStoreAvailable;
@@ -88,6 +97,9 @@ public class OrderStoreSummaryController {
             deliveryPriceLabel.setText(FormatUtils.DecimalFormat.format(orderDto.getDeliveryPrice()));
             ppkLabel.setText(FormatUtils.DecimalFormat.format(storeDto.getPPK()));
             distanceFromCustomerLabel.setText(FormatUtils.DecimalFormat.format(storeDto.getLocation().distance(orderDto.getDestLocation())));
+            totalItemsPriceLabel.setText(FormatUtils.DecimalFormat.format(orderDto.getTotalItemsPrice()));
+            numberOfDifferentItemsLabel.setText(FormatUtils.DecimalFormat.format(orderDto.getTotalItemsKind()));
+            locationLabel.setText("(" + storeDto.getLocation().x +"," + storeDto.getLocation().y +")");
             itemsTableView.getItems().addAll(orderDto.getItemsDto());
         });
     }

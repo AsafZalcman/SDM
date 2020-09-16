@@ -51,4 +51,6 @@ public class StoreItem {//extends Item {
                 ",AmountOfSells=" + m_AmountOfSells +
                 '}';
     }
+
+
 }
