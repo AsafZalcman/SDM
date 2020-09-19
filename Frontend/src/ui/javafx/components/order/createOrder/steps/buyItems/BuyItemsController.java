@@ -52,14 +52,11 @@ public class BuyItemsController extends StepController {
     private ItemsUIManger m_ItemsUIManger;
     private StoreUIManager m_StoreUIManager;
     private OrdersUIManager m_OrdersUIManager;
-    private SimpleBooleanProperty isMandatoryFieldsAreCompleted;
-
 
     public BuyItemsController() {
         m_ItemsUIManger = new ItemsUIManger();
         m_StoreUIManager = new StoreUIManager();
         m_OrdersUIManager = OrdersUIManager.getInstance();
-        isMandatoryFieldsAreCompleted = new SimpleBooleanProperty(false);
     }
 
     private void showItems() {
@@ -118,7 +115,7 @@ public class BuyItemsController extends StepController {
         try {
             double amountToAdd = Double.parseDouble(itemDtoDoubleCellEditEvent.getNewValue());
             m_OrdersUIManager.addItemToOrder(itemDto.getId(), amountToAdd);
-            itemAddedLabel.setText("The item with the id \"" + itemDto.getId() + "\" was added " + amountToAdd + "times to the order");
+            itemAddedLabel.setText("The item with the id \"" + itemDto.getId() + "\" was added " + amountToAdd + " times to the order");
             itemAddedLabel.setTextFill(Color.GREEN);
             m_StepComplete.set(true);
         } catch (NumberFormatException e) {

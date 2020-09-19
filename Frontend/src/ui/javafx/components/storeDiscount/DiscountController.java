@@ -124,21 +124,18 @@ public class DiscountController {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    StringBuilder storeOfferText = new StringBuilder(storeOfferDto.getQuantity() + " " + m_ItemsUIManger.getItemDtoById(storeOfferDto.getItemId()).getItemName());
-                    if (m_StoreDiscountDto.isOneOfDiscount()) {
-                        storeOfferText.append(" For additional of ")
-                                .append(storeOfferDto.getForAdditional());
-                        if (m_WithButtons) {
-                            RadioButton radioButton = new RadioButton(null);
-                            radioButton.setToggleGroup(m_ToggleGroup);
-                            radioButton.setUserData(storeOfferDto.getItemId());
-                            radioButton.setSelected(true);
-                            // Add Listeners if any
-                            setGraphic(radioButton);
-                        }
+                    if (m_WithButtons && m_StoreDiscountDto.isOneOfDiscount()) {
+                        RadioButton radioButton = new RadioButton(null);
+                        radioButton.setToggleGroup(m_ToggleGroup);
+                        radioButton.setUserData(storeOfferDto.getItemId());
+                        radioButton.setSelected(true);
+                        // Add Listeners if any
+                        setGraphic(radioButton);
                     }
 
-                    setText(storeOfferText.toString());
+                    String storeOfferText = storeOfferDto.getQuantity() + " " + m_ItemsUIManger.getItemDtoById(storeOfferDto.getItemId()).getItemName() + " for additional of " +
+                            storeOfferDto.getForAdditional() + " for unit";
+                    setText(storeOfferText);
                 }
             }
         });
