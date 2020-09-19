@@ -22,6 +22,7 @@
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="60.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="66.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="66.0" />
+      <ColumnConstraints />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints maxHeight="128.0" minHeight="0.0" prefHeight="57.0" vgrow="SOMETIMES" />
@@ -43,8 +44,8 @@
           <TableColumn fx:id="itemNameColumn" prefWidth="87.0" text="Name" />
             <TableColumn fx:id="itemPurchaseFormColumn" prefWidth="88.0" text="Purchase Form" />
             <TableColumn fx:id="itemAmountColumn" prefWidth="62.0" text="Amount" />
-            <TableColumn fx:id="itemPriceColumn" prefWidth="75.0" text="Price" />
-            <TableColumn fx:id="itemTotalPriceColumn" prefWidth="116.0" text="Total Price" />
+            <TableColumn fx:id="itemPriceColumn" prefWidth="94.0" text="Price For Item" />
+            <TableColumn fx:id="itemTotalPriceColumn" prefWidth="97.0" text="Total Price" />
             <TableColumn fx:id="itemFromDiscountColumn" prefWidth="108.0" text="From Discount" />
         </columns>
          <columnResizePolicy>

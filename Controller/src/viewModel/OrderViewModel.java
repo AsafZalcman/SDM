@@ -94,6 +94,7 @@ public class OrderViewModel {
     }
 
     public void abortOrder() {
+        cleanup();
         m_SuperDuperManager.abortOrder();
     }
 

@@ -83,43 +83,4 @@ public class ItemDto {
     {
         return m_FromDiscount;
     }
-
-//   public class ItemDtoBuilder
-//   {
-//       private  Integer m_Id;
-//       private  String m_ItemName;
-//       private  PurchaseForm m_PurchaseForm;
-//       private  Double m_Price;
-//       private  Double m_AmountOfSell;
-
-//       public ItemDtoBuilder(int i_Id)
-//       {
-//           m_Id=i_Id;
-//       }
-
-//       public ItemDtoBuilder setName(String i_Name) {
-//           this.m_ItemName = i_Name;
-//           return this;
-//       }
-
-//       public ItemDtoBuilder setPurchaseForm(PurchaseForm i_PurchaseForm) {
-//           this.m_PurchaseForm = i_PurchaseForm;
-//           return this;
-//       }
-
-//       public ItemDtoBuilder setPrice(Double i_Price) {
-//           this.m_Price = i_Price;
-//           return this;
-//       }
-
-//       public ItemDtoBuilder setAmountOfSell(Double i_AmountOfSell) {
-//           this.m_AmountOfSell = i_AmountOfSell;
-//           return this;
-//       }
-
-//       public ItemDto build()
-//       {
-//           return new ItemDto(m_ItemId,m_ItemName,m_PurchaseForm,m_Price,m_AmountOfSell);
-//       }
-//   }
 }

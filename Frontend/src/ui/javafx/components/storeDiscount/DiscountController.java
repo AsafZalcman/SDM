@@ -99,6 +99,10 @@ public class DiscountController {
                 if (m_StoreDiscountDto.getStoreOfferDtos().size() > 1) {
                     thenYouGetLabel.setText(thenYouGetLabel.getText() + " all of the following:");
                 }
+                else
+                {
+                    thenYouGetLabel.setText(thenYouGetLabel.getText() + ":");
+                }
                 forAdditionalLabel.visibleProperty().setValue(true);
                 totalPriceLabel.visibleProperty().setValue(true);
 

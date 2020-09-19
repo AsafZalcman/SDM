@@ -51,8 +51,6 @@ public class CreateOrderController {
 
     @FXML
     private void initialize() {
-        m_CurrentButtonIndex = 0;
-
         m_StepsButtons = new ArrayList<>(
                 Arrays.asList(insertDetailsRadioButton, buyItemsRadioButton, addDiscountsRadioButton, orderSummaryRadioButton));
         m_OrdersUIManager = OrdersUIManager.getInstance();
@@ -71,15 +69,12 @@ public class CreateOrderController {
             endOfStepButton.setText("Next");
             m_StepsButtons.get(m_CurrentButtonIndex).setDisable(true);
             m_CurrentButtonIndex++;
-            m_StepsButtons.get(m_CurrentButtonIndex).setSelected(true);
-            m_StepsButtons.get(m_CurrentButtonIndex).setDisable(false);
+            selectCurrentButton();
 
             if (isLastStep()) {
                 endOfStepButton.setText("Finish");
             }
-        }
-        else
-        {
+        } else {
             currentStepFlowPane.getChildren().clear();
             endOfOrderLabel.setText("Your order was executed");
             endOfStepButton.disableProperty().unbind();
@@ -115,6 +110,13 @@ public class CreateOrderController {
     }
 
     public void fetchMakeOrderComponent(){
-        loadCurrentStepController(SDMResourcesConstants.ORDER_STEPS_INSERT_DETAILS_FXML_RESOURCE);
+        m_CurrentButtonIndex = 0;
+        selectCurrentButton();
+    }
+
+    private void selectCurrentButton()
+    {
+        m_StepsButtons.get(m_CurrentButtonIndex).setSelected(true);
+        m_StepsButtons.get(m_CurrentButtonIndex).setDisable(false);
     }
 }
