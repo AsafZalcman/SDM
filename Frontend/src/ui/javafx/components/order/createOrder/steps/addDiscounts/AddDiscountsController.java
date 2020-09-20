@@ -39,30 +39,44 @@ public class AddDiscountsController extends StepController {
     @FXML
     private Label buyDiscountLabel;
 
-    private OrdersUIManager m_OrdersUIManager;
+    @FXML
+    private Label storeDiscountLabel;
 
     @FXML
-    void storesComboBoxOnAction(ActionEvent event) {
-        if (!storesComboBox.getItems().isEmpty()) {
-            fetchAllAvailableDiscountsOfSelectedStore();
-        }
-    }
+    private ComboBox<StoreDiscountDto> discountComboBox;
+
+    private OrdersUIManager m_OrdersUIManager;
 
     private void fetchAllAvailableDiscountsOfSelectedStore() {
-        discountsFlowPane.getChildren().clear();
-        m_OrdersUIManager.getAllAvailableDiscountsOfStore(storesComboBox.getValue()).forEach(this::createDiscountController);
-        if (discountsFlowPane.getChildren().isEmpty()) {
+        StoreDiscountDto currentStoreDiscountDto = discountComboBox.getValue();
+        discountComboBox.getItems().setAll(m_OrdersUIManager.getAllAvailableDiscountsOfStore(storesComboBox.getValue()));
+        if (discountComboBox.getItems().isEmpty()) {
+            discountsFlowPane.getChildren().clear();
             fetchAllStoresWithAvailableDiscounts();
+        }
+        else
+        {
+            if(!discountComboBox.getItems().contains(currentStoreDiscountDto)) {
+                discountsFlowPane.getChildren().clear();
+            }
+            storeDiscountLabel.setVisible(true);
+            discountComboBox.setVisible(true);
+            storeDiscountLabel.setText(storesComboBox.getValue().getName() + "'s Discounts:");
+            discountComboBox.getSelectionModel().selectFirst();
+
         }
     }
 
     private void fetchAllStoresWithAvailableDiscounts() {
+        storeDiscountLabel.setVisible(false);
+        discountComboBox.setVisible(false);
         Collection<StoreDto> stores = m_OrdersUIManager.getAllStoresWithAvailableDiscount();
         if (stores.isEmpty()) {
             setNoDiscountsAvailable();
         } else {
-            storesComboBox.getItems().clear(); // setAll will cause a small bug
-            storesComboBox.getItems().addAll(stores);
+            storesComboBox.getItems().setAll(stores);
+            storesComboBox.getSelectionModel().selectFirst();
+         //not working in the first time (dont know why????)
         }
 
     }
@@ -74,7 +88,7 @@ public class AddDiscountsController extends StepController {
         storesComboBox.setConverter(new StringConverter<StoreDto>() {
             @Override
             public String toString(StoreDto storeDto) {
-                return "Name:" + storeDto.getName();
+                return storeDto.getName();
             }
 
             @Override
@@ -82,7 +96,34 @@ public class AddDiscountsController extends StepController {
                 return null;
             }
         });
+
+        storesComboBox.valueProperty().addListener((observable,oldValue,newValue) ->
+        {
+            if (!storesComboBox.getItems().isEmpty()) {
+                fetchAllAvailableDiscountsOfSelectedStore();
+            }
+        });
+
+        discountComboBox.setConverter(new StringConverter<StoreDiscountDto>() {
+            @Override
+            public String toString(StoreDiscountDto storeDiscountDto) {
+                return storeDiscountDto.getName();
+            }
+
+            @Override
+            public StoreDiscountDto fromString(String storeDtoString) {
+                return null;
+            }
+        });
+
+        discountComboBox.valueProperty().addListener((observable,oldValue,newValue) ->
+        {
+            if (!discountComboBox.getItems().isEmpty()) {
+                createDiscountController(discountComboBox.getSelectionModel().getSelectedItem());
+            }
+        });
         fetchAllStoresWithAvailableDiscounts();
+
     }
 
     @Override
@@ -107,7 +148,7 @@ public class AddDiscountsController extends StepController {
                 buyDiscountLabel.setText("The Discount named \"" + i_StoreDiscountDto.getName() + "\" was added to the current order");
                 fetchAllAvailableDiscountsOfSelectedStore();
             });
-            discountsFlowPane.getChildren().add(singleDiscount);
+            discountsFlowPane.getChildren().setAll(singleDiscount);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -120,5 +161,7 @@ public class AddDiscountsController extends StepController {
         storesLabel.setVisible(false);
         discountsScrollPane.setVisible(false);
         buyDiscountLabel.setVisible(false);
+        storeDiscountLabel.setVisible(false);
+        discountComboBox.setVisible(false);
     }
 }

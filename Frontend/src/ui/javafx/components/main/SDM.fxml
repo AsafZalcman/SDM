@@ -133,7 +133,7 @@
                      </content>
                   </ScrollPane>
                </content></Tab>
-            <Tab fx:id="viewMapTransparentTab">
+            <Tab fx:id="viewMapTransparentTab" styleClass="transparentTab">
                <content>
                   <ScrollPane prefHeight="200.0" prefWidth="200.0">
                      <content>
