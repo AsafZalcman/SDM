@@ -108,9 +108,6 @@ public class SuperDuperController {
     private Tab makeAnOrderTransparentTab;
 
     @FXML
-    private FlowPane testFlowPane;
-
-    @FXML
     void viewCustomersSideBarButtonOnClick(ActionEvent event) {
         viewCustomersComponentController.fetchCustomers();
         mainTabPain.getSelectionModel().select(viewCustomersTransparentTab);
@@ -148,17 +145,20 @@ public class SuperDuperController {
     @FXML private UpdateStoresController updateStoresComponentController;
     @FXML private Pane viewOrdersComponent;
     @FXML private OrdersHistoryController viewOrdersComponentController;
+    @FXML private Pane makeOrderComponent;
+    @FXML private CreateOrderController makeOrderComponentController;
 
 
     @FXML
     private void initialize() {
 
-        if(viewStoresComponentController != null && viewItemsComponentController != null && viewCustomersComponentController!= null && viewOrdersComponentController != null){
+        if(viewStoresComponentController != null && viewItemsComponentController != null && viewCustomersComponentController!= null && viewOrdersComponentController != null && makeOrderComponentController != null){
             viewStoresComponentController.setMainController(this);
             viewItemsComponentController.setMainController(this);
             viewCustomersComponentController.setMainController(this);
             updateStoresComponentController.setMainController(this);
             viewOrdersComponentController.setMainController(this);
+            makeOrderComponentController.setMainController(this);
         }
 
         itemsSideBarButton.disableProperty().bind(isDataLoaded.not());
@@ -187,18 +187,8 @@ public class SuperDuperController {
 
     @FXML
     void makeAnOrderSideBarButtonOnClick(ActionEvent event) {
+        makeOrderComponentController.fetchMakeOrderComponent();
         mainTabPain.getSelectionModel().select(makeAnOrderTransparentTab);
-
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(SDMResourcesConstants.CREATE_ORDER_FXML_RESOURCE);
-            Node singleDiscount = loader.load();
-
-            CreateOrderController createOrderController = loader.getController();
-            testFlowPane.getChildren().setAll(singleDiscount);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 

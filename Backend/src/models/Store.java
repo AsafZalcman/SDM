@@ -161,7 +161,9 @@ public class Store implements IDelivery, IUniquely, ILocationable {
             throw new Exception("Operation failed: This is the only item that the store selling, so it can not be remove");
         }
         //remove all discounts related to this item
-        m_StoreDiscounts.removeIf(storeDiscount -> storeDiscount.getDiscountCondition().getItemId() == i_StoreItemID || storeDiscount.getItemIdToStoreOfferMap().containsKey(i_StoreItemID));
+        if(haveDiscounts()) {
+            m_StoreDiscounts.removeIf(storeDiscount -> storeDiscount.getDiscountCondition().getItemId() == i_StoreItemID || storeDiscount.getItemIdToStoreOfferMap().containsKey(i_StoreItemID));
+        }
         this.m_IdToStoreItem.remove(i_StoreItemID);
     }
 

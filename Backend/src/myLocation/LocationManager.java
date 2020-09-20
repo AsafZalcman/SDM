@@ -50,4 +50,17 @@ public class LocationManager {
     public static void initLocations() {
         m_LocationToILocationable.clear();
     }
+
+    public static Location getMaxLocation() {
+        int maxY = 1;
+        int maxX = maxY;
+        for(Location location: m_LocationToILocationable.keySet()){
+            if(location.x > maxX){ maxX = location.x; }
+            if(location.y > maxY){ maxY = location.y; }
+        }
+        maxX++;
+        maxY++;
+        
+        return new Location(maxX,maxY);
+    }
 }

@@ -8,14 +8,13 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane id="mainPain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="528.0" prefWidth="920.0" styleClass="tab" stylesheets="@SDM.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.components.main.SuperDuperController">
+<Pane id="mainPain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="528.0" prefWidth="920.0" styleClass="tab" stylesheets="@SDM.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.components.main.SuperDuperController">
    <children>
       <TabPane fx:id="mainTabPain" layoutX="113.0" layoutY="-31.0" prefHeight="557.0" prefWidth="805.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -94,7 +93,11 @@
                </content></Tab>
             <Tab fx:id="makeAnOrderTransparentTab" onClosed="#makeAnOrderTransparentTabOnClosed" styleClass="transparentTab">
                <content>
-                  <FlowPane fx:id="testFlowPane" prefHeight="200.0" prefWidth="200.0" />
+                  <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                     <content>
+                        <fx:include fx:id="makeOrderComponent" source="../order/createOrder/CreateOrder.fxml" />
+                     </content>
+                  </ScrollPane>
                </content></Tab>
         </tabs>
       </TabPane>
