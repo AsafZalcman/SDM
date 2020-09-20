@@ -8,12 +8,10 @@ public class LoadXmlTask extends Task<Boolean> {
     private final String m_FilePath;
     private final int TIME_TO_SLEEP = 200;
     private final int NUMBER_OF_PROGRESS_PARTS = 11;
-    //private final Runnable m_OnFinish;
     FileLoaderViewModel m_FileLoaderViewModel;
 
     public LoadXmlTask(String i_filePath) {
         m_FilePath = i_filePath;
-        //      m_OnFinish = i_OnFinish;
         m_FileLoaderViewModel = new FileLoaderViewModel();
     }
 
