@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
+import ui.javafx.components.main.SuperDuperController;
 import ui.javafx.components.order.createOrder.steps.StepController;
 import ui.javafx.managers.OrdersUIManager;
 import ui.javafx.utils.SDMResourcesConstants;
@@ -51,7 +52,7 @@ public class CreateOrderController {
     @FXML
     private void initialize() {
         m_CurrentButtonIndex = 0;
-        loadCurrentStepController(SDMResourcesConstants.ORDER_STEPS_INSERT_DETAILS_FXML_RESOURCE);
+
         m_StepsButtons = new ArrayList<>(
                 Arrays.asList(insertDetailsRadioButton, buyItemsRadioButton, addDiscountsRadioButton, orderSummaryRadioButton));
         m_OrdersUIManager = OrdersUIManager.getInstance();
@@ -88,6 +89,7 @@ public class CreateOrderController {
 
     private List<RadioButton> m_StepsButtons;
     private int m_CurrentButtonIndex;
+    private  SuperDuperController superDuperController;
 
     private boolean isLastStep() {
         return m_CurrentButtonIndex == m_StepsButtons.size() -1;
@@ -108,4 +110,11 @@ public class CreateOrderController {
         }
     }
 
+    public void setMainController(SuperDuperController superDuperController) {
+        this.superDuperController = superDuperController;
+    }
+
+    public void fetchMakeOrderComponent(){
+        loadCurrentStepController(SDMResourcesConstants.ORDER_STEPS_INSERT_DETAILS_FXML_RESOURCE);
+    }
 }

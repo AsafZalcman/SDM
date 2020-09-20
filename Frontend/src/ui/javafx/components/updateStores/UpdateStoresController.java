@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -13,8 +14,15 @@ import javafx.util.StringConverter;
 import ui.javafx.components.main.SuperDuperController;
 import ui.javafx.managers.ItemsUIManger;
 import ui.javafx.managers.StoreUIManager;
+import ui.javafx.utils.FormatUtils;
 
 public class UpdateStoresController {
+
+    @FXML
+    private AnchorPane storeItemsAnchorPane;
+
+    @FXML
+    private AnchorPane storageItemsAnchorPane;
 
     @FXML
     private ComboBox<StoreDto> chooseStoreComboBox;
@@ -104,7 +112,7 @@ public class UpdateStoresController {
                    root.setPadding(new Insets(5, 10, 5, 10));
 
                    TextField priceField = new TextField();
-                   priceField.setPromptText(itemDto.getPrice().toString());
+                   priceField.setPromptText(FormatUtils.DecimalFormat.format(itemDto.getPrice()));
                    priceField.setPrefWidth(50);
 
 
@@ -120,7 +128,7 @@ public class UpdateStoresController {
                    deleteBtn.setOnAction(event -> {
                        try {
                            deleteItemFromStore(chooseStoreComboBox.getSelectionModel().selectedItemProperty().getValue().getId(), itemDto.getId());
-                           Alert alert = new Alert((Alert.AlertType.CONFIRMATION),  "Item ID: " + itemDto.getId() + " deleted Successfully and also all discounts associated with it!");
+                           Alert alert = new Alert((Alert.AlertType.INFORMATION),  "Item ID: " + itemDto.getId() + " deleted Successfully and also all discounts associated with it!");
                            alert.show();
                            cleanStoreItemInListView(chooseStoreComboBox.getSelectionModel().selectedItemProperty().getValue());
                        }catch (Exception e){
@@ -134,7 +142,7 @@ public class UpdateStoresController {
                    updatePriceBtn.setOnAction(event -> {
                        try {
                            updateStoreItemPrice(chooseStoreComboBox.getSelectionModel().selectedItemProperty().getValue().getId(), itemDto.getId(), priceField.getText());
-                           Alert alert = new Alert((Alert.AlertType.CONFIRMATION), "The price for item ID: " + itemDto.getId() + " has been successfully updates to " + priceField.getText());
+                           Alert alert = new Alert((Alert.AlertType.INFORMATION), "The price for item ID: " + itemDto.getId() + " has been successfully updates to " + priceField.getText());
                            alert.show();
                            cleanStoreItemInListView(chooseStoreComboBox.getSelectionModel().selectedItemProperty().getValue());
                        }catch (Exception e){
@@ -165,7 +173,11 @@ public class UpdateStoresController {
         });
 
         chooseStoreComboBox.getSelectionModel().selectedItemProperty().addListener((observable, PrevStoreDto, currentStoreDto) -> {
-            storeItemsListView.getItems().setAll(currentStoreDto.getItemsDto());
+            if(currentStoreDto != null) {
+                storeItemsListView.getItems().setAll(currentStoreDto.getItemsDto());
+                storeItemsAnchorPane.setVisible(true);
+                storageItemsAnchorPane.setVisible(true);
+            }
         });
 
 
