@@ -15,7 +15,7 @@
                      <top>
                         <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                            <children>
-                              <RadioButton fx:id="insertDetailsRadioButton" layoutX="114.0" layoutY="49.0" mnemonicParsing="false" selected="true">
+                              <RadioButton fx:id="insertDetailsRadioButton" disable="true" layoutX="114.0" layoutY="49.0" mnemonicParsing="false">
                                  <toggleGroup>
                                     <ToggleGroup fx:id="orderProgressToggleGroup" />
                                  </toggleGroup>

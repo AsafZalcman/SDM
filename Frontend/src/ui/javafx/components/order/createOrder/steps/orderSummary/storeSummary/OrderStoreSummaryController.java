@@ -80,9 +80,9 @@ public class OrderStoreSummaryController {
         itemIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         itemNameColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
         itemPurchaseFormColumn.setCellValueFactory(new PropertyValueFactory<>("purchaseForm"));
-        itemAmountColumn.setCellValueFactory(cellData-> new SimpleDoubleProperty(Double.parseDouble(FormatUtils.DecimalFormat.format(cellData.getValue().getAmountOfSell()))).asObject());
-        itemPriceColumn.setCellValueFactory(cellData-> new SimpleDoubleProperty(Double.parseDouble(FormatUtils.DecimalFormat.format(cellData.getValue().getPrice()))).asObject());
-        itemTotalPriceColumn.setCellValueFactory(cellData-> new SimpleDoubleProperty(Double.parseDouble(FormatUtils.DecimalFormat.format(cellData.getValue().getTotalPrice()))).asObject());
+        itemAmountColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(Double.parseDouble(FormatUtils.DecimalFormat.format(cellData.getValue().getAmountOfSell()))).asObject());
+        itemPriceColumn.setCellValueFactory(cellData ->  new SimpleDoubleProperty(Double.parseDouble(FormatUtils.DecimalFormat.format(cellData.getValue().getPrice()))).asObject());
+        itemTotalPriceColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(Double.parseDouble(FormatUtils.DecimalFormat.format(cellData.getValue().getTotalPrice()))).asObject());
         itemFromDiscountColumn.setCellValueFactory(new PropertyValueFactory<>("fromDiscount"));
     }
 
@@ -92,7 +92,7 @@ public class OrderStoreSummaryController {
         isOrderStoreAvailable.addListener((observable, oldValue, newValue) -> {
             StoreDto storeDto = m_StoreAndOrderPair.getKey();
             OrderDto orderDto = m_StoreAndOrderPair.getValue();
-            storeIdLabel.setText(storeDto.getId().toString());
+            storeIdLabel.setText(String.valueOf(storeDto.getId()));
             storeNameLabel.setText(storeDto.getName());
             deliveryPriceLabel.setText(FormatUtils.DecimalFormat.format(orderDto.getDeliveryPrice()));
             ppkLabel.setText(FormatUtils.DecimalFormat.format(storeDto.getPPK()));

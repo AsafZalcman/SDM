@@ -21,14 +21,19 @@ public class StoreViewModel {
 
     public Collection<StoreDto> getAllStores()
     {
-       return SuperDuperManager.getInstance().getStoreManager().getAllStores().stream().map(StoreDto::new).collect(Collectors.toList());
+       return m_SuperDuperManager.getStoreManager().getAllStores().stream().map(StoreDto::new).collect(Collectors.toList());
     }
 
-    public void updateStoreItemPrice(int i_StoreID, int i_StoreItemID, double i_NewPrice) throws Exception{
+    public void updateStoreItemPrice(int i_StoreID, int i_StoreItemID, double i_NewPrice){
         SuperDuperManager.getInstance().updateStoreItemPrice(i_StoreID, i_StoreItemID, i_NewPrice);
     }
 
-    public boolean isStoreIDExistInTheSystem(int i_StoreID) {
+    public void addNewStore(StoreDto i_StoreDto)
+    {
+return;
+    }
+
+    private boolean isStoreIDExistInTheSystem(int i_StoreID) {
         return m_SuperDuperManager.isStoreIDExist(i_StoreID);
     }
 

@@ -1,12 +1,6 @@
 package ui.javafx.components.main;
 
 
-import dtoModel.*;
-
-
-import dtoModel.StorageItemDto;
-
-
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
@@ -187,10 +181,10 @@ public class SuperDuperController {
 
     @FXML
     void makeAnOrderSideBarButtonOnClick(ActionEvent event) {
+        OrdersUIManager.getInstance().cleanLastOrder();
         makeOrderComponentController.fetchMakeOrderComponent();
         mainTabPain.getSelectionModel().select(makeAnOrderTransparentTab);
     }
-
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -257,11 +251,5 @@ public class SuperDuperController {
     void updateStoresSideBarButtonOnClick(ActionEvent event){
         updateStoresComponentController.fetchData();
         mainTabPain.getSelectionModel().select(updateStoresTransparentTab);
-    }
-
-
-    public void makeAnOrderTransparentTabOnClosed(Event event) {
-        OrdersUIManager.getInstance().abortOrder();
-        //אם זה יוצר בעיות (כי זה קורה גם אחרי הזמנה מוצלחת, אז צריך לבדוק אם ההזמנה הצליחה או לא
     }
 }

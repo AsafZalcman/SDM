@@ -38,7 +38,7 @@ public class OrdersUIManager {
         m_OrderViewModel.executeOrder();
     }
 
-    public void abortOrder()
+    public void cleanLastOrder()
     {
         m_OrderViewModel.abortOrder();
     }
@@ -78,10 +78,9 @@ public class OrdersUIManager {
        return m_OrderViewModel.getCurrentOrder();
     }
 
-    public Collection<StoreDiscountDto> getAllAvailableDiscountsOfStore(StoreDto i_Store)
-    {
+    public Collection<StoreDiscountDto> getAllAvailableDiscountsOfStore(StoreDto i_Store) {
         return m_OrderViewModel.getAvailableDiscountsForCurrentOrder().entrySet().stream()
-        .filter(storeDtoListEntry -> storeDtoListEntry.getKey().getId().equals(i_Store.getId()))
+                .filter(storeDtoListEntry -> storeDtoListEntry.getKey().getId() == i_Store.getId())
                 .map(Map.Entry::getValue)
                 .findFirst().orElse(Collections.emptyList());
     }

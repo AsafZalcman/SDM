@@ -115,10 +115,12 @@ public class ViewStoresController {
         });
 
         storesCollectionListView.getSelectionModel().selectedItemProperty().addListener((observable, PrevStoreDto, currentStoreDto) ->{
-            createStoreDiscounts(currentStoreDto);
-            setStoreItemsForTheSelectedStoreInViewStoreTab(currentStoreDto);
-            setBasicDetailsForTheSelectedStoreInViewStoreTab(currentStoreDto);
-            setStoreOrdersForTheSelectedStoreInViewStoreTab(currentStoreDto);
+            if(currentStoreDto!=null) {
+                createStoreDiscounts(currentStoreDto);
+                setStoreItemsForTheSelectedStoreInViewStoreTab(currentStoreDto);
+                setBasicDetailsForTheSelectedStoreInViewStoreTab(currentStoreDto);
+                setStoreOrdersForTheSelectedStoreInViewStoreTab(currentStoreDto);
+            }
         });
 
         initViewStoreItemsTabComponents();
@@ -159,10 +161,10 @@ public class ViewStoresController {
     }
 
     private void setBasicDetailsForTheSelectedStoreInViewStoreTab(StoreDto i_CurrentStoreDto) {
-        storeIDLabel.setText(i_CurrentStoreDto.getId().toString());
+        storeIDLabel.setText(String.valueOf(i_CurrentStoreDto.getId()));
         storeNameLabel.setText(i_CurrentStoreDto.getName());
         storePPKLabel.setText(FormatUtils.DecimalFormat.format(i_CurrentStoreDto.getPPK()));
-        storeIncomesDeliveriesLabel.setText(i_CurrentStoreDto.getDeliveriesIncomes() == null ? "No deliveries income to show":FormatUtils.DecimalFormat.format(i_CurrentStoreDto.getDeliveriesIncomes()));
+        storeIncomesDeliveriesLabel.setText(FormatUtils.DecimalFormat.format(i_CurrentStoreDto.getDeliveriesIncomes()));
     }
 
     private void setStoreItemsForTheSelectedStoreInViewStoreTab(StoreDto i_CurrentStoreDto){
@@ -195,7 +197,6 @@ public class ViewStoresController {
             Node singleDiscount = loader.load();
 
             DiscountController discountController = loader.getController();
-            discountController.setWithButtons(true);
             discountController.setStoreDiscountDto(i_DiscountDto);
             storeDiscountFlowPane.getChildren().add(singleDiscount);
             // wordToTileController.put(word, singleWordController);

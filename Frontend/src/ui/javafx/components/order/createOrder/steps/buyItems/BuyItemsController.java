@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.paint.Color;
 import ui.javafx.components.order.createOrder.steps.StepController;
 import ui.javafx.managers.ItemsUIManger;
 import ui.javafx.managers.OrdersUIManager;
@@ -65,7 +66,9 @@ public class BuyItemsController extends StepController {
         Collection<ItemDto> allItems = m_ItemsUIManger.getAllItems();
         StoreDto currentStore = m_OrdersUIManager.getStore();
         if (currentStore == null) {
-            itemPriceColumnInItemsToBuyTable.setVisible(false);
+            /**
+             if we want to hide price column in dynamic order, we need to uncomment the following lines:**/
+           // itemPriceColumnInItemsToBuyTable.setVisible(false);
             itemsToBuyTableView.getItems().addAll(allItems);
         } else {
             itemsToBuyTableView.getItems().addAll(m_StoreUIManager.getAllItemsOfStore(currentStore.getId()));
@@ -97,16 +100,16 @@ public class BuyItemsController extends StepController {
         initItemsToBuyTableView();
         showItems();
         itemsToBuyTableView.setEditable(true);
-        itemsToBuyTableView.setRowFactory(tv -> new TableRow<ItemDto>() {
-            @Override
-            protected void updateItem(ItemDto itemDto, boolean empty) {
-                super.updateItem(itemDto, empty);
-                if (!empty && itemDto != null) {
-                    //צריך לראות אם עובד. אולי לא בגלל שזה לוקח את ערך הנראות של העמודה לפני שהיא משתנה
-                    disableProperty().set(itemPriceColumnInItemsToBuyTable.visibleProperty().getValue() && itemDto.getPrice() == null);
-                }
-            }
-        });
+
+  itemsToBuyTableView.setRowFactory(tv -> new TableRow<ItemDto>() {
+      @Override
+      protected void updateItem(ItemDto itemDto, boolean empty) {
+          super.updateItem(itemDto, empty);
+          if (!empty && itemDto != null) {
+              disableProperty().set(m_OrdersUIManager.getStore()!=null && itemDto.getPrice() == null);
+          }
+      }
+  });
     }
 
     public void itemAmountColumnInItemsToBuyTableOnEditCommit(TableColumn.CellEditEvent<ItemDto, String> itemDtoDoubleCellEditEvent) {
@@ -115,13 +118,15 @@ public class BuyItemsController extends StepController {
         try {
             double amountToAdd = Double.parseDouble(itemDtoDoubleCellEditEvent.getNewValue());
             m_OrdersUIManager.addItemToOrder(itemDto.getId(), amountToAdd);
-            itemAddedLabel.setText("The item with the id \"" + itemDto.getId() + "\" was added " + amountToAdd);
+            itemAddedLabel.setText("The item with the id \"" + itemDto.getId() + "\" was added " + amountToAdd + "times to the order");
+            itemAddedLabel.setTextFill(Color.GREEN);
             m_StepComplete.set(true);
-
         } catch (NumberFormatException e) {
             itemAddedLabel.setText("Error:\"" + itemDtoDoubleCellEditEvent.getNewValue() + "\" is not a number");
+            itemAddedLabel.setTextFill(Color.RED);
         } catch (IllegalArgumentException e) {
             itemAddedLabel.setText("Error:" + e.getMessage());
+            itemAddedLabel.setTextFill(Color.RED);
         }
     }
 }

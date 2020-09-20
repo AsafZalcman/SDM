@@ -38,7 +38,15 @@ public class OrderManager {
     public void addItemFromCurrentStore(Store i_Store ,OrderItem i_OrderItem)
     {
         List<OrderItem> orderItemsInDiscountOfStore = m_StoresToItemsInDiscounts.getOrDefault(i_Store,new ArrayList<>());
-        orderItemsInDiscountOfStore.add(i_OrderItem);
+        int existCurrentItemIndex = orderItemsInDiscountOfStore.indexOf(i_OrderItem);
+        if(existCurrentItemIndex!=-1)
+        {
+            i_OrderItem.getStoreItem().setAmountOfSell(i_OrderItem.getStoreItem().getAmountOfSells() + orderItemsInDiscountOfStore.get(existCurrentItemIndex).getStoreItem().getAmountOfSells());
+            orderItemsInDiscountOfStore.set(existCurrentItemIndex,i_OrderItem);
+        }
+        else {
+            orderItemsInDiscountOfStore.add(i_OrderItem);
+        }
       m_StoresToItemsInDiscounts.put(i_Store,orderItemsInDiscountOfStore);
     }
 
