@@ -5,6 +5,7 @@ import dtoModel.StoreOfferDto;
 import enums.StoreDiscountOperator;
 import javafx.util.Pair;
 import managers.SuperDuperManager;
+import models.Store;
 import models.StoreDiscount;
 import models.StoreDiscountCondition;
 import models.StoreOffer;
@@ -37,7 +38,18 @@ return;
         return m_SuperDuperManager.isStoreIDExist(i_StoreID);
     }
 
-  //  public void addDiscount(int i_StoreId,Pair<Integer,Integer> i_DiscountCondition, String discountOperator , Collection<StoreOfferDto> i_StoreOffers , String i_Name) {
+    public String getStoreMapToolTip(int i_StoreID) {
+        Store store = m_SuperDuperManager.getStore(i_StoreID);
+        StringBuilder sb = new StringBuilder();
+        sb.append("Location: ").append(store.getLocation()).append("\n")
+                .append("ID: ").append(store.getId()).append("\n")
+                .append("Name: ").append(store.getStoreName()).append("\n")
+                .append("PPK: ").append(store.getPPK()).append("\n")
+                .append("Total Orders: ").append(store.getTotalAmountOfOrders()).append("\n");
+        return sb.toString();
+    }
+
+    //  public void addDiscount(int i_StoreId,Pair<Integer,Integer> i_DiscountCondition, String discountOperator , Collection<StoreOfferDto> i_StoreOffers , String i_Name) {
   //      m_SuperDuperManager.getStore(i_StoreId).addDiscount(new StoreDiscount
   //              (new StoreDiscountCondition(i_DiscountCondition.getKey(), i_DiscountCondition.getValue()),
   //                      StoreDiscountOperator.valueOf(discountOperator.toUpperCase()),

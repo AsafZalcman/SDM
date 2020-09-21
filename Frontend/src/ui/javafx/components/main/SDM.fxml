@@ -99,6 +99,15 @@
                      </content>
                   </ScrollPane>
                </content></Tab>
+            <Tab fx:id="viewMapTransparentTab">
+               <content>
+                  <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                     <content>
+                        <fx:include fx:id="viewMapComponent" source="../map/map.fxml" />
+                     </content>
+                  </ScrollPane>
+               </content>
+            </Tab>
         </tabs>
       </TabPane>
       <Label id="xmlFilePathLabel" fx:id="loadXmlMessageLabel" layoutX="1.0" layoutY="1.0" lineSpacing="2.0" prefHeight="17.0" prefWidth="397.0" />

@@ -182,6 +182,7 @@ public class SuperDuperManager {
     public Collection<Customer> getAllCustomers() {
         return m_CustomersManager.getAllCustomers();
     }
+
     public Customer getCustomer (int i_CustomerId)
     {
        return  m_CustomersManager.getCustomer(i_CustomerId);

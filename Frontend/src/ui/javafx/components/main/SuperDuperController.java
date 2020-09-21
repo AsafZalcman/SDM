@@ -19,6 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import ui.javafx.components.map.ViewMapController;
 import ui.javafx.components.order.OrdersHistoryController;
 import ui.javafx.components.updateStores.UpdateStoresController;
 import ui.javafx.components.viewCustomer.ViewCustomerController;
@@ -102,6 +103,9 @@ public class SuperDuperController {
     private Tab makeAnOrderTransparentTab;
 
     @FXML
+    private Tab viewMapTransparentTab;
+
+    @FXML
     void viewCustomersSideBarButtonOnClick(ActionEvent event) {
         viewCustomersComponentController.fetchCustomers();
         mainTabPain.getSelectionModel().select(viewCustomersTransparentTab);
@@ -141,18 +145,21 @@ public class SuperDuperController {
     @FXML private OrdersHistoryController viewOrdersComponentController;
     @FXML private Pane makeOrderComponent;
     @FXML private CreateOrderController makeOrderComponentController;
+    @FXML private Pane viewMapComponent;
+    @FXML private ViewMapController viewMapComponentController;
 
 
     @FXML
     private void initialize() {
 
-        if(viewStoresComponentController != null && viewItemsComponentController != null && viewCustomersComponentController!= null && viewOrdersComponentController != null && makeOrderComponentController != null){
+        if(viewStoresComponentController != null && viewItemsComponentController != null && viewCustomersComponentController!= null && viewOrdersComponentController != null && makeOrderComponentController != null && viewMapComponentController != null){
             viewStoresComponentController.setMainController(this);
             viewItemsComponentController.setMainController(this);
             viewCustomersComponentController.setMainController(this);
             updateStoresComponentController.setMainController(this);
             viewOrdersComponentController.setMainController(this);
             makeOrderComponentController.setMainController(this);
+            viewMapComponentController.setMainController(this);
         }
 
         itemsSideBarButton.disableProperty().bind(isDataLoaded.not());
@@ -238,7 +245,8 @@ public class SuperDuperController {
 
     @FXML
     void viewMapSideBarButtonOnClick(ActionEvent event) {
-
+        viewMapComponentController.draw();
+        mainTabPain.getSelectionModel().select(viewMapTransparentTab);
     }
 
    @FXML

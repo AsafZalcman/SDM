@@ -1,0 +1,4 @@
+. mapGridPane{
+    -fx-background-image: url('/ui/javafx/resources/images/mapImg.jpg');
+    -fx-background-size: stretch;
+}

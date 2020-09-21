@@ -2,6 +2,7 @@ package ui.javafx.managers;
 
 import dtoModel.ItemDto;
 import dtoModel.StoreDto;
+import javafx.scene.control.Tooltip;
 import viewModel.ItemViewModel;
 import viewModel.StoreViewModel;
 
@@ -34,5 +35,9 @@ public class StoreUIManager {
 
     public void deleteItemFromStore(int i_StoreID, int i_StoreItemID) throws Exception {
         m_ItemViewModel.deleteItemFromStore(i_StoreID,i_StoreItemID);
+    }
+
+    public Tooltip getStoreMapToolTip(int i_StoreID) {
+        return new Tooltip(m_StoreViewModel.getStoreMapToolTip(i_StoreID));
     }
 }

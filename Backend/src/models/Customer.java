@@ -46,4 +46,11 @@ public class Customer implements IUniquely, ILocationable {
         }
         m_StorageOrders.add(i_StorageOrder);
     }
+
+    public int getAmountOfOrders(){
+        if(m_StorageOrders == null){
+            return 0;
+        }
+        return m_StorageOrders.size();
+    }
 }

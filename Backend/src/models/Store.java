@@ -193,4 +193,8 @@ public class Store implements IDelivery, IUniquely, ILocationable {
         return m_StoreDiscounts!=null && !m_StoreDiscounts.isEmpty();
     }
 
+    public int getTotalAmountOfOrders(){
+        return m_Orders.size();
+    }
+
 }

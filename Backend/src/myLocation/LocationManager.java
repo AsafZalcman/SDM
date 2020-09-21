@@ -32,7 +32,7 @@ public class LocationManager {
     public static void addLocation(int x, int y, ILocationable i_Locationable) throws IllegalArgumentException {
         try {
             isLocationAvailable(x, y);
-            m_LocationToILocationable.put(new Location(x - 1, y - 1), i_Locationable);
+            m_LocationToILocationable.put(new Location(x , y), i_Locationable);
 
         } catch (LocationException e) {
             throw new IllegalArgumentException("Set Location to " + i_Locationable.getClass().getSimpleName() + " with the ID: " + i_Locationable.getId() + " Failed because " + e.getMessage());
@@ -62,5 +62,9 @@ public class LocationManager {
         maxY++;
         
         return new Location(maxX,maxY);
+    }
+
+    public static ILocationable getILocationable(Location i_Location){
+        return m_LocationToILocationable.get(i_Location);
     }
 }

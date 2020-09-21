@@ -196,19 +196,28 @@ public class UpdateStoresController {
     }
 
     private void addNewItemToStore(int i_StoreID, int i_StoreItemID, String i_Price) throws Exception {
-        double newPrice = Double.parseDouble(i_Price);
-        if( newPrice < 0){
+        double newPrice;
+        try {
+            newPrice = Double.parseDouble(i_Price);
+            if( newPrice < 0){
+                throw new Exception();
+            }
+            m_StoreUIManager.addNewItemToStore(i_StoreID,i_StoreItemID,newPrice);
+        }catch (Exception e){
             throw new Exception("Price must be positive number");
         }
-        m_StoreUIManager.addNewItemToStore(i_StoreID,i_StoreItemID,newPrice);
     }
 
     private void updateStoreItemPrice(int i_StoreID,int i_StoreItemID, String i_NewPrice) throws Exception{
+        try {
             double newPrice = Double.parseDouble(i_NewPrice);
-            if(newPrice < 0){
-                throw new Exception("Price must be positive number");
+            if (newPrice < 0) {
+                throw new Exception();
             }
-            m_StoreUIManager.updateStoreItemPrice(i_StoreID,i_StoreItemID,newPrice);
+            m_StoreUIManager.updateStoreItemPrice(i_StoreID, i_StoreItemID, newPrice);
+        }catch (Exception e){
+            throw new Exception("Price must be positive number");
+        }
     }
 
     public void setMainController(SuperDuperController superDuperController) {
