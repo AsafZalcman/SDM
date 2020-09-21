@@ -4,18 +4,14 @@ package ui.javafx.components.main;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -32,11 +28,8 @@ import ui.javafx.managers.OrdersUIManager;
 import ui.javafx.managers.StoreUIManager;
 import ui.javafx.tasks.LoadXmlTask;
 
-import ui.javafx.utils.SDMResourcesConstants;
-
 
 import java.io.File;
-import java.io.IOException;
 
 
 public class SuperDuperController {
@@ -74,7 +67,7 @@ public class SuperDuperController {
     private Label xmlFilePathLabel;
 
     @FXML
-    private TextArea xmlLoadMessageTextArea;
+    private Label xmlLoadMessageLabel;
 
     @FXML
     private ProgressBar loadXmlProgressBar;
@@ -148,7 +141,7 @@ public class SuperDuperController {
     @FXML private Pane viewMapComponent;
     @FXML private ViewMapController viewMapComponentController;
 
-
+    @FXML private VBox vBox;
     @FXML
     private void initialize() {
 
@@ -170,8 +163,19 @@ public class SuperDuperController {
         storesSideBarButton.disableProperty().bind(isDataLoaded.not());
         updateStoresSideBarButton.disableProperty().bind(isDataLoaded.not());
         xmlFilePathLabel.textProperty().bind(selectedFileProperty);
-        xmlLoadMessageTextArea.textProperty().bind(loadMessageFileProperty);
+        xmlLoadMessageLabel.textProperty().bind(loadMessageFileProperty);
         mainTabPain.getSelectionModel().select(loadXmlTransparentTab);
+
+        storesTransparentTab.disableProperty().bind(storesTransparentTab.selectedProperty().not());
+        loadXmlTransparentTab.disableProperty().bind(loadXmlTransparentTab.selectedProperty().not());
+        viewCustomersTransparentTab.disableProperty().bind(viewCustomersTransparentTab.selectedProperty().not());
+        viewItemsTransparentTab.disableProperty().bind(viewItemsTransparentTab.selectedProperty().not());
+        updateStoresTransparentTab.disableProperty().bind(updateStoresTransparentTab.selectedProperty().not());
+        makeAnOrderTransparentTab.disableProperty().bind(makeAnOrderTransparentTab.selectedProperty().not());
+        viewOrdersTransparentTab.disableProperty().bind(viewOrdersTransparentTab.selectedProperty().not());
+
+
+
     }
 
     @FXML
@@ -195,6 +199,17 @@ public class SuperDuperController {
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        vBox.prefHeightProperty().bind(primaryStage.heightProperty());
+        updateStoresSideBarButton.prefHeightProperty().bind(Bindings.divide(vBox.heightProperty(), 8));
+        viewCustomersSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), 8));
+        itemsSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), 8));
+        loadXmlSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), 8));
+        makeAnOrderSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), 8));
+        storesSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), 8));
+        ordersHistorySideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), 8));
+        viewMapSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), 8));
+
+
     }
 
     @FXML

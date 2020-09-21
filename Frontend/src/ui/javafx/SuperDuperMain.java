@@ -20,11 +20,16 @@ public class SuperDuperMain extends Application {
         loader.setLocation(mainFXML);
         Parent root = loader.load();
         SuperDuperController tempController = loader.getController();
-        tempController.setPrimaryStage(primaryStage);
 
         primaryStage.setTitle("Super Duper Market");
-        Scene scene = new Scene(root, 600, 400);
+
+        Scene scene = new Scene(root, 900, 430 );
         primaryStage.setScene(scene);
+        primaryStage.sizeToScene();
+        primaryStage.setMinHeight(100);
+        primaryStage.setMinWidth(100);
+        tempController.setPrimaryStage(primaryStage);
+
         primaryStage.show();
     }
 

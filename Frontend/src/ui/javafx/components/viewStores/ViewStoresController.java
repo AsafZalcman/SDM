@@ -199,7 +199,6 @@ public class ViewStoresController {
             DiscountController discountController = loader.getController();
             discountController.setStoreDiscountDto(i_DiscountDto);
             storeDiscountFlowPane.getChildren().add(singleDiscount);
-            // wordToTileController.put(word, singleWordController);
         } catch (IOException e) {
             e.printStackTrace();
         }
