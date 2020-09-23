@@ -15,11 +15,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane minHeight="200.0" minWidth="105.0" prefHeight="483.0" prefWidth="927.0" stylesheets="@SDM.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.components.main.SuperDuperController">
+<BorderPane minHeight="200.0" minWidth="105.0" prefHeight="483.0" prefWidth="927.0" stylesheets="@SDM.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.components.main.SuperDuperController">
    <left>
-      <ScrollPane minHeight="20.0" minViewportHeight="10.0" minViewportWidth="10.0" minWidth="119.0" prefViewportHeight="10.0" prefViewportWidth="10.0" styleClass="leftSideBorder" stylesheets="@SDM.css" BorderPane.alignment="CENTER">
+      <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="20.0" minViewportHeight="10.0" minViewportWidth="10.0" minWidth="119.0" prefViewportHeight="10.0" prefViewportWidth="10.0" styleClass="leftSideBorder" stylesheets="@SDM.css" BorderPane.alignment="CENTER">
          <content>
-            <VBox fx:id="vBox" focusTraversable="true" styleClass="leftSideBorder" stylesheets="@SDM.css">
+            <VBox fx:id="vBox" focusTraversable="true" prefHeight="479.0" prefWidth="115.0" styleClass="leftSideBorder" stylesheets="@SDM.css">
                <children>
                   <Label id="titleSideBarLabel" alignment="CENTER" prefHeight="40.0" prefWidth="113.0" styleClass="sideBarLabel" stylesheets="@SDM.css" text="Menu" textFill="#f2eeee">
                      <font>
@@ -84,9 +84,9 @@
                               <Label prefHeight="70.0" prefWidth="385.0" wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" fx:id="xmlLoadMessageLabel" />
                            </children>
                            <columnConstraints>
-                              <ColumnConstraints maxWidth="127.0" prefWidth="89.0" />
-                              <ColumnConstraints maxWidth="423.0" prefWidth="43.0" />
-                              <ColumnConstraints maxWidth="640.0" prefWidth="356.0" />
+                              <ColumnConstraints maxWidth="127.0" minWidth="94.0" prefWidth="112.0" />
+                              <ColumnConstraints maxWidth="423.0" minWidth="20.0" prefWidth="51.0" />
+                              <ColumnConstraints maxWidth="640.0" minWidth="346.0" prefWidth="346.0" />
                            </columnConstraints>
                            <rowConstraints>
                               <RowConstraints maxHeight="387.0" minHeight="63.0" prefHeight="73.0" />
