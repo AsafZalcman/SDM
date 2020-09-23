@@ -12,6 +12,7 @@ public class ImageUtils {
     public static final String CUSTOMER_IMAGE = "icons8-user-50.png";
     public static final String STORE_IMAGE = "icons8-small-business-50.png";
     public static final String MAP_IMAGE = "mapImg.jpg";
+    public static final String CART_IMAGE = "icons8-shopping-cart-50.png";
 
     public static Image getImage (String imageName){
         InputStream imageInputStream = ImageUtils.class.getResourceAsStream(IMAGE_FOLDER + imageName);
@@ -29,4 +30,6 @@ public class ImageUtils {
     public static ImageView getStoreIcon(){
         return getImageView(STORE_IMAGE);
     }
+
+    public static Image getCartIcon(){ return getImage(CART_IMAGE); }
 }

@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import ui.javafx.components.main.SuperDuperController;
+import ui.javafx.utils.ImageUtils;
 import ui.javafx.utils.SDMResourcesConstants;
 
 import java.net.URL;
@@ -28,6 +29,7 @@ public class SuperDuperMain extends Application {
         primaryStage.sizeToScene();
         primaryStage.setMinHeight(100);
         primaryStage.setMinWidth(100);
+        primaryStage.getIcons().add(ImageUtils.getCartIcon());
         tempController.setPrimaryStage(primaryStage);
 
         primaryStage.show();
