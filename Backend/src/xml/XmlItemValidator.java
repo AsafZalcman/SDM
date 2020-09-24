@@ -28,7 +28,7 @@ public class XmlItemValidator implements XmlValidator {
                     .map(SDMSell::getItemId)
                     .collect(Collectors.toList())
                     .contains(item.getId()))
-                throw new XmlValidatorException("Error: The item with ID: " + item.getId() + " is not for sell in any store");
+                throw new XmlValidatorException("The item with ID: " + item.getId() + " is not for sell in any store");
         }
     }
 }

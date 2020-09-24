@@ -23,7 +23,7 @@
                <children>
                   <Label id="titleSideBarLabel" alignment="CENTER" prefHeight="40.0" prefWidth="113.0" styleClass="sideBarLabel" stylesheets="@SDM.css" text="Menu" textFill="#f2eeee">
                      <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
                   <Button id="loadXml" fx:id="loadXmlSideBarButton" mnemonicParsing="false" onAction="#loadXmlBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@SDM.css" text="Load XML" />

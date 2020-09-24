@@ -35,7 +35,7 @@ public class LocationManager {
             m_LocationToILocationable.put(new Location(x , y), i_Locationable);
 
         } catch (LocationException e) {
-            throw new IllegalArgumentException("Set Location to " + i_Locationable.getClass().getSimpleName() + " with the ID: " + i_Locationable.getId() + " Failed because " + e.getMessage());
+            throw new IllegalArgumentException("Setting the location (" + x + "," + y + ") to " + i_Locationable.getClass().getSimpleName() + " with the ID: " + i_Locationable.getId() + " Failed because " + e.getMessage());
         }
     }
 
