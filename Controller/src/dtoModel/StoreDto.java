@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class  StoreDto {
+    private Store m_Store;
     private  Collection<OrderDto> m_OrdersDto;
     private  double m_DeliveriesIncome;
     private final Collection<ItemDto> m_Items;
@@ -22,6 +23,7 @@ public class  StoreDto {
 
     public StoreDto(Store i_Store) {
         this(i_Store.getId(), i_Store.getStoreName(), i_Store.getPPK(), i_Store.getLocation(), i_Store.getAllItems().stream().map(ItemDto::new).collect(Collectors.toList()));
+        m_Store = i_Store;
         m_OrdersDto = i_Store.getOrders().stream().map(OrderDto::new).collect(Collectors.toList());
 
         if (!m_OrdersDto.isEmpty()) {
@@ -71,6 +73,9 @@ public class  StoreDto {
 
     public Collection<ItemDto> getItemsDto()
     {
+        if(m_Store != null){
+            return m_Store.getAllItems().stream().map(ItemDto::new).collect(Collectors.toList());
+        }
         return m_Items;
     }
 
