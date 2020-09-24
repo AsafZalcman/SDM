@@ -110,7 +110,7 @@ public class BuyItemsController extends StepController {
     }
 
     public void itemAmountColumnInItemsToBuyTableOnEditCommit(TableColumn.CellEditEvent<ItemDto, String> itemDtoDoubleCellEditEvent) {
-        //צריך לראות האם יש דרך קלה לא לאפשר למשתמש להכניס משהו אחר חוץ ממספרים
+
         ItemDto itemDto = itemsToBuyTableView.getSelectionModel().getSelectedItem();
         try {
             double amountToAdd = Double.parseDouble(itemDtoDoubleCellEditEvent.getNewValue());

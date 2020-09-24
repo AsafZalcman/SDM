@@ -59,6 +59,7 @@ public class CreateStoreController {
                     m_ItemsToAdd);
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "The store:\"" + nameTextField.getText() + "\" was created");
             alert.show();
+            fetchData();
 
         }catch (Exception e){
             Alert alert = new Alert(Alert.AlertType.ERROR,e.getMessage());
@@ -141,6 +142,7 @@ public class CreateStoreController {
         m_IsItemListEmpty = new SimpleBooleanProperty(true);
         m_ItemsToAdd = new ArrayList<>();
         LocationViewModel m_LocationViewModel = new LocationViewModel();
+        addItemMessageLabel.setText(null);
         ppkTextField.clear();
         idTextField.clear();
         nameTextField.clear();
