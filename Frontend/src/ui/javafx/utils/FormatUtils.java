@@ -36,4 +36,17 @@ public class FormatUtils {
 
         return new TextFormatter<>(doubleFilter);
     }
+
+    public static TextFormatter<Double> getLetterFormatter() {
+        UnaryOperator<TextFormatter.Change> letterFilter = change -> {
+            String text = change.getControlNewText();
+            if (text.matches("[a-zA-Z]*")) {
+                return change;
+            }
+
+            return null;
+        };
+
+        return new TextFormatter<>(letterFilter);
+    }
 }

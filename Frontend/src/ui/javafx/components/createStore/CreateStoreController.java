@@ -76,6 +76,7 @@ public class CreateStoreController {
 
         idTextField.setTextFormatter(FormatUtils.getIntegerFormatter());
         ppkTextField.setTextFormatter(FormatUtils.getDoubleFormatter());
+        nameTextField.setTextFormatter(FormatUtils.getLetterFormatter());
         locationComboBox.setConverter(new StringConverter<Point>() {
             @Override
             public String toString(Point point) {
