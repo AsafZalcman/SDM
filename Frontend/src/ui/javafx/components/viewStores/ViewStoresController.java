@@ -131,7 +131,7 @@ public class ViewStoresController {
     private StoreUIManager m_StoreUIManager;
 
     public ViewStoresController(){
-        m_StoreUIManager = new StoreUIManager();
+        m_StoreUIManager = StoreUIManager.getInstance();
     }
 
     public void setMainController(SuperDuperController superDuperController){

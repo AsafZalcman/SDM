@@ -6,6 +6,7 @@ import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import ui.javafx.components.createStore.CreateStoreController;
 import ui.javafx.components.map.ViewMapController;
 import ui.javafx.components.order.OrdersHistoryController;
 import ui.javafx.components.updateStores.UpdateStoresController;
@@ -33,6 +35,7 @@ import java.io.File;
 
 
 public class SuperDuperController {
+
     @FXML
     private Button loadXmlSideBarButton;
 
@@ -47,6 +50,9 @@ public class SuperDuperController {
 
     @FXML
     private Button viewMapSideBarButton;
+
+    @FXML
+    private Button createStoreSideBarButton;
 
     @FXML
     private Button makeAnOrderSideBarButton;
@@ -93,6 +99,9 @@ public class SuperDuperController {
     private Tab viewOrdersTransparentTab;
 
     @FXML
+    private Tab createStoreTransparentTab;
+
+    @FXML
     private Tab makeAnOrderTransparentTab;
 
     @FXML
@@ -103,6 +112,7 @@ public class SuperDuperController {
         viewCustomersComponentController.fetchCustomers();
         mainTabPain.getSelectionModel().select(viewCustomersTransparentTab);
     }
+
 
     private SimpleBooleanProperty isFileSelected;
     private SimpleBooleanProperty isDataLoaded;
@@ -121,8 +131,8 @@ public class SuperDuperController {
         isFileSelected = new SimpleBooleanProperty(false);
         isDataLoaded = new SimpleBooleanProperty(false);
 
-        m_storeUIManager = new StoreUIManager();
-        m_ItemsUIManger = new ItemsUIManger();
+        m_storeUIManager = StoreUIManager.getInstance();
+        m_ItemsUIManger = ItemsUIManger.getInstance();
         m_CustomersUIManager=new CustomersUIManager();
     }
 
@@ -140,6 +150,8 @@ public class SuperDuperController {
     @FXML private CreateOrderController makeOrderComponentController;
     @FXML private Pane viewMapComponent;
     @FXML private ViewMapController viewMapComponentController;
+    @FXML private CreateStoreController createStoreComponentController;
+
 
     @FXML private VBox vBox;
     @FXML
@@ -153,6 +165,7 @@ public class SuperDuperController {
             viewOrdersComponentController.setMainController(this);
             makeOrderComponentController.setMainController(this);
             viewMapComponentController.setMainController(this);
+            createStoreComponentController.setMainController(this);
         }
 
         itemsSideBarButton.disableProperty().bind(isDataLoaded.not());
@@ -160,6 +173,7 @@ public class SuperDuperController {
         makeAnOrderSideBarButton.disableProperty().bind(isDataLoaded.not());
         ordersHistorySideBarButton.disableProperty().bind(isDataLoaded.not());
         viewCustomersSideBarButton.disableProperty().bind(isDataLoaded.not());
+        createStoreSideBarButton.disableProperty().bind(isDataLoaded.not());
         storesSideBarButton.disableProperty().bind(isDataLoaded.not());
         updateStoresSideBarButton.disableProperty().bind(isDataLoaded.not());
         xmlFilePathLabel.textProperty().bind(selectedFileProperty);
@@ -173,8 +187,7 @@ public class SuperDuperController {
         updateStoresTransparentTab.disableProperty().bind(updateStoresTransparentTab.selectedProperty().not());
         makeAnOrderTransparentTab.disableProperty().bind(makeAnOrderTransparentTab.selectedProperty().not());
         viewOrdersTransparentTab.disableProperty().bind(viewOrdersTransparentTab.selectedProperty().not());
-
-
+        createStoreTransparentTab.disableProperty().bind(createStoreTransparentTab.selectedProperty().not());
 
     }
 
@@ -197,19 +210,25 @@ public class SuperDuperController {
         mainTabPain.getSelectionModel().select(makeAnOrderTransparentTab);
     }
 
+    @FXML
+    void createStoreSideBarButtonOnClick(ActionEvent event) {
+        createStoreComponentController.fetchData();
+        mainTabPain.getSelectionModel().select(createStoreTransparentTab);
+    }
+
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        int numberOfButtons = vBox.getChildren().size() -1;
         vBox.prefHeightProperty().bind(primaryStage.heightProperty());
-        updateStoresSideBarButton.prefHeightProperty().bind(Bindings.divide(vBox.heightProperty(), 8));
-        viewCustomersSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), 8));
-        itemsSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), 8));
-        loadXmlSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), 8));
-        makeAnOrderSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), 8));
-        storesSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), 8));
-        ordersHistorySideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), 8));
-        viewMapSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), 8));
-
-
+        updateStoresSideBarButton.prefHeightProperty().bind(Bindings.divide(vBox.heightProperty(), numberOfButtons));
+        viewCustomersSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), numberOfButtons));
+        itemsSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), numberOfButtons));
+        loadXmlSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), numberOfButtons));
+        makeAnOrderSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), numberOfButtons));
+        storesSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), numberOfButtons));
+        ordersHistorySideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), numberOfButtons));
+        viewMapSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), numberOfButtons));
+        createStoreSideBarButton.prefHeightProperty().bind(Bindings.divide(primaryStage.heightProperty(), numberOfButtons));
     }
 
     @FXML

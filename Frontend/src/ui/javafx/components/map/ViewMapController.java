@@ -42,7 +42,7 @@ public class ViewMapController {
     public ViewMapController(){
         m_LocationViewModel = new LocationViewModel();
         m_CustomersUIManager = new CustomersUIManager();
-        m_StoreUIManager = new StoreUIManager();
+        m_StoreUIManager = StoreUIManager.getInstance();
     }
 
     public void setMainController(SuperDuperController superDuperController) {

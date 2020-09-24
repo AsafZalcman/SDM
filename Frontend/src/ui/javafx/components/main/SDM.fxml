@@ -34,6 +34,7 @@
                   <Button fx:id="makeAnOrderSideBarButton" mnemonicParsing="false" onAction="#makeAnOrderSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@SDM.css" text="Make An Order" />
                   <Button fx:id="viewCustomersSideBarButton" mnemonicParsing="false" onAction="#viewCustomersSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@SDM.css" text="View Customers" wrapText="true" />
                   <Button fx:id="updateStoresSideBarButton" mnemonicParsing="false" onAction="#updateStoresSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@SDM.css" text="Update Stores" />
+                  <Button fx:id="createStoreSideBarButton" mnemonicParsing="false" onAction="#createStoreSideBarButtonOnClick" prefHeight="48.0" prefWidth="113.0" styleClass="sideBarButtons" stylesheets="@SDM.css" text="Create Store" />
                </children>
             </VBox>
          </content>
@@ -142,6 +143,15 @@
                   </ScrollPane>
                </content>
             </Tab>
+                  <Tab fx:id="createStoreTransparentTab" styleClass="transparentTab">
+                     <content>
+                        <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                           <content>
+                              <fx:include fx:id="createStoreComponent" source="../createStore/createStore.fxml" />
+                           </content>
+                        </ScrollPane>
+                     </content>
+                  </Tab>
 
         </tabs>
       </TabPane>

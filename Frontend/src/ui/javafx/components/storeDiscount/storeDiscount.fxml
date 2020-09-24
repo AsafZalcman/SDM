@@ -31,10 +31,10 @@
          </font>
       </Label>
       <Separator prefHeight="11.0" prefWidth="600.0" GridPane.columnSpan="6" GridPane.valignment="BOTTOM" />
-      <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="61.0" text="If you Buy:" GridPane.rowIndex="1" />
-      <Label fx:id="thenYouGetLabel" minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="183.0" text="Then you get" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+      <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="80.0" text="If you Buy:" GridPane.rowIndex="1" />
+      <Label fx:id="thenYouGetLabel" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="206.0" text="Then you get" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
       <ListView fx:id="discountOfferListView" prefHeight="23.0" prefWidth="216.0" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="2" />
-      <Label fx:id="discountConditionLabel" minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="189.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <Label fx:id="discountConditionLabel" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="132.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <Label fx:id="forAdditionalLabel" minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="80.0" text="For additional:" visible="false" GridPane.rowIndex="2" />
       <Label fx:id="totalPriceLabel" prefHeight="17.0" prefWidth="66.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <Button fx:id="buyDiscountButton" mnemonicParsing="false" onAction="#buyDiscountButtonOnAction" prefHeight="58.0" prefWidth="203.0" text="Buy" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3">

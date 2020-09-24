@@ -4,14 +4,35 @@ import dtoModel.ItemDto;
 import dtoModel.StoreDto;
 import javafx.scene.control.Tooltip;
 import viewModel.ItemViewModel;
+import viewModel.OrderViewModel;
 import viewModel.StoreViewModel;
 
+import java.awt.*;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 public class StoreUIManager {
-    private StoreViewModel m_StoreViewModel = new StoreViewModel();
-    private ItemViewModel m_ItemViewModel = new ItemViewModel();
+
+    private static StoreUIManager m_Instance = null;
+    private StoreViewModel m_StoreViewModel;
+    private ItemViewModel m_ItemViewModel;
+
+    private StoreUIManager()
+    {
+        m_StoreViewModel = new StoreViewModel();
+        m_ItemViewModel = new ItemViewModel();
+    }
+    public static StoreUIManager getInstance() {
+        if (m_Instance == null) {
+            synchronized (StoreUIManager.class) {
+                if (m_Instance == null) {
+                    m_Instance = new StoreUIManager();
+                }
+            }
+        }
+        return m_Instance;
+    }
 
     public Collection<String> getStoresNames(){
         return m_StoreViewModel.getAllStores().stream().map(StoreDto::getName).collect(Collectors.toList());
@@ -39,5 +60,9 @@ public class StoreUIManager {
 
     public Tooltip getStoreMapToolTip(int i_StoreID) {
         return new Tooltip(m_StoreViewModel.getStoreMapToolTip(i_StoreID));
+    }
+
+    public void createNewStore(int i_Id, String i_Name, Point i_Location, double i_PPK, Collection<ItemDto> i_Items) throws Exception {
+        m_StoreViewModel.createNewStore(new StoreDto(i_Id, i_Name, i_PPK, i_Location, i_Items));
     }
 }

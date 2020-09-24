@@ -76,7 +76,7 @@ public class DiscountController {
     public DiscountController() {
         isStoreDiscountAvailable = new SimpleBooleanProperty(false);
         m_ToggleGroup = new ToggleGroup();
-        m_ItemsUIManger = new ItemsUIManger();
+        m_ItemsUIManger = ItemsUIManger.getInstance();
         m_OrdersUIManager = OrdersUIManager.getInstance();
     }
 

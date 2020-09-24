@@ -54,8 +54,8 @@ public class BuyItemsController extends StepController {
     private OrdersUIManager m_OrdersUIManager;
 
     public BuyItemsController() {
-        m_ItemsUIManger = new ItemsUIManger();
-        m_StoreUIManager = new StoreUIManager();
+        m_ItemsUIManger = ItemsUIManger.getInstance();
+        m_StoreUIManager = StoreUIManager.getInstance();
         m_OrdersUIManager = OrdersUIManager.getInstance();
     }
 

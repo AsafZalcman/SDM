@@ -134,7 +134,7 @@ public class InsertDetailsController extends StepController {
     }
 
     public InsertDetailsController() {
-        m_StoreUIManager = new StoreUIManager();
+        m_StoreUIManager = StoreUIManager.getInstance();
         m_CustomersUIManager = new CustomersUIManager();
         m_OrdersUIManager = OrdersUIManager.getInstance();
         storeChosen = new SimpleBooleanProperty(true);
