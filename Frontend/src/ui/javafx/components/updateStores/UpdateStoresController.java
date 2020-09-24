@@ -81,7 +81,7 @@ public class UpdateStoresController {
                     addBtn.setOnAction(event -> {
                         try {
                             m_StoreUIManager.addNewItemToStore(chooseStoreComboBox.getSelectionModel().selectedItemProperty().getValue().getId(), itemDto.getId(), Double.parseDouble(priceField.getText()));
-                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Item ID: " + itemDto.getId() + " with the price: " + priceField.getText() + " was Successfully added to the requested store");
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Item ID: " + itemDto.getId() + " with the price: " + priceField.getText() + " was Successfully added to the requested store");
                             alert.show();
                             itemWasAddedOrDeleted();
                         } catch (Exception e) {
