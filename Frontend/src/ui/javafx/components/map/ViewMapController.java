@@ -1,6 +1,7 @@
 package ui.javafx.components.map;
 import interfaces.ILocationable;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
@@ -94,6 +95,9 @@ public class ViewMapController {
         theMap.getStyleClass().add("mapGridPane");
         theMap.getStylesheets().add("map.css");
         theMap.setGridLinesVisible(true);
+        theMap.setPadding(new Insets(5,5,5,5));
+        theMap.minHeightProperty().bind(mapScrollPane.heightProperty());
+        theMap.minWidthProperty().bind(mapScrollPane.widthProperty());
 
         mapScrollPane.setContent(theMap);
     }
