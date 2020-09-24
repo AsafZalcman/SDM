@@ -225,7 +225,11 @@ public class UpdateStoresController {
     }
 
     public void fetchData(){
-        chooseStoreComboBox.getItems().setAll(m_StoreUIManager.getAllStores());
-        storageItemsListView.getItems().setAll(m_ItemUIManager.getAllItems());
+        storeItemsAnchorPane.setVisible(false);
+        storageItemsAnchorPane.setVisible(false);
+        chooseStoreComboBox.getItems().clear();
+        chooseStoreComboBox.getItems().addAll(m_StoreUIManager.getAllStores());
+        storageItemsListView.getItems().clear();
+        storageItemsListView.getItems().addAll(m_ItemUIManager.getAllItems());
     }
 }
