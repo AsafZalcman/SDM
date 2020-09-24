@@ -57,7 +57,7 @@ public class CreateStoreController {
                     locationComboBox.getValue(),
                     Double.parseDouble(ppkTextField.getText()),
                     m_ItemsToAdd);
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "The store:\"" + nameTextField.getText() + "\" was created");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "The store:\"" + nameTextField.getText() + "\" was created");
             alert.show();
             fetchData();
 

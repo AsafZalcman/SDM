@@ -199,5 +199,6 @@ public class SuperDuperManager {
              ) {
             insertNewItemToStore(i_Store.getId(), storeItem);
         }
+        LocationManager.addLocation(i_Store.getLocation().x, i_Store.getLocation().y, i_Store);
     }
 }
