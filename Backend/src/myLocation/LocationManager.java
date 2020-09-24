@@ -22,7 +22,7 @@ public class LocationManager {
 
     public static boolean isLocationAvailable(int x, int y) throws LocationException {
         isValidLocation(x, y);
-        ILocationable locationable = m_LocationToILocationable.get(new Location(x - 1, y - 1));
+        ILocationable locationable = m_LocationToILocationable.get(new Location(x, y));
         if (locationable != null) {
             throw new LocationException("The location: (" + x + "," + y + ") is already occupied By " + locationable.getClass().getSimpleName() + " with the ID: " + locationable.getId());
         }
