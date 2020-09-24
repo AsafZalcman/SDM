@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -241,6 +242,7 @@ public class SuperDuperController {
             return;
         }
 
+        xmlLoadMessageLabel.setTextFill(Color.BLACK);
         String absolutePath = selectedFile.getAbsolutePath();
         selectedFileProperty.set(absolutePath);
         isFileSelected.set(true);
@@ -248,6 +250,17 @@ public class SuperDuperController {
         loadXmlProgressBar.progressProperty().bind(loadXmlTask.progressProperty());
         isDataLoaded.bind(loadXmlTask.valueProperty());
         loadMessageFileProperty.bind(loadXmlTask.messageProperty());
+        loadXmlTask.valueProperty().addListener((observable,oldValue,newValue) ->
+        {
+            if(newValue)
+            {
+                xmlLoadMessageLabel.setTextFill(Color.GREEN);
+            }
+            else
+            {
+                xmlLoadMessageLabel.setTextFill(Color.RED);
+            }
+        });
         loadXmlPercentLabel.textProperty().bind(
                 Bindings.concat(
                         Bindings.format(
