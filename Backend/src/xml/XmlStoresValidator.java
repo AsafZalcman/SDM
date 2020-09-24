@@ -22,7 +22,7 @@ public class XmlStoresValidator implements XmlValidator {
             shopNameByIdInMap =shopIdToShopNameMap.getOrDefault(store.getId(),null);
             if(shopNameByIdInMap!=null)
             {
-                throw new XmlValidatorException("Error: Both Stores: " + shopNameByIdInMap + " and " + store.getName() + " have the same id: " + store.getId());
+                throw new XmlValidatorException("Both Stores: " + shopNameByIdInMap + " and " + store.getName() + " have the same id: " + store.getId());
             }
             shopIdToShopNameMap.put(store.getId(),store.getName());
         }

@@ -32,7 +32,7 @@ public class LoadXmlTask extends Task<Boolean> {
             updateValue(true);
             return true;
         } catch (Exception e) {
-            updateMessage(e.getMessage());
+            updateMessage("Error: " + e.getMessage());
             updateValue(false);
             return false;
         }

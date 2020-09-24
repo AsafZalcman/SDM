@@ -33,7 +33,7 @@ public class XmlStoreValidator implements XmlValidator {
                     .map(SDMItem::getId)
                     .collect(Collectors.toList())
                     .contains(sdmSell.getItemId())) {
-                throw new XmlValidatorException("Error: Store with the ID: " + i_Store.getId() + " sells an item with the ID: " + sdmSell.getItemId() + " , which not exists in the SDM-Items");
+                throw new XmlValidatorException("Store with the ID: " + i_Store.getId() + " sells an item with the ID: " + sdmSell.getItemId() + " , which not exists in the SDM-Items");
             }
         }
     }

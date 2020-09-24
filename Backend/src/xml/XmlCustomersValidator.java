@@ -22,7 +22,7 @@ public class XmlCustomersValidator implements XmlValidator {
             customerNameByIdInMap = customerIdToCustomerNameMap.getOrDefault(customer.getId(),null);
             if(customerNameByIdInMap != null)
             {
-                throw new XmlValidatorException("Error: Both Customer: " + customerNameByIdInMap + " and " + customer.getName() + " have the same id: " + customer.getId());
+                throw new XmlValidatorException("Both Customer: " + customerNameByIdInMap + " and " + customer.getName() + " have the same id: " + customer.getId());
             }
             customerIdToCustomerNameMap.put(customer.getId(),customer.getName());
         }
