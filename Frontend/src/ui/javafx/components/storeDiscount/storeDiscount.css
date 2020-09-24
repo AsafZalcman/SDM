@@ -1,8 +1,7 @@
 .storeDiscount {
-  -fx-background-color:#696969 ;
+   -fx-background-color:#32CD32;
 }
 #discountNameLabel
 {
-  -fx-background-color:#ADFF2F ;
-
+  -fx-background-color:#696969 ;
 }

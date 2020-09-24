@@ -25,7 +25,7 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <Label id="discountNameLabel" fx:id="discountNameLabel" prefHeight="29.0" prefWidth="687.0" GridPane.columnSpan="6" GridPane.valignment="TOP">
+      <Label id="discountNameLabel" fx:id="discountNameLabel" prefHeight="29.0" prefWidth="687.0" textFill="WHITE" GridPane.columnSpan="6" GridPane.valignment="TOP">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
@@ -33,7 +33,7 @@
       <Separator prefHeight="11.0" prefWidth="600.0" GridPane.columnSpan="6" GridPane.valignment="BOTTOM" />
       <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="80.0" text="If you Buy:" GridPane.rowIndex="1" />
       <Label fx:id="thenYouGetLabel" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="206.0" text="Then you get" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-      <ListView fx:id="discountOfferListView" prefHeight="23.0" prefWidth="216.0" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="2" />
+      <ListView fx:id="discountOfferListView" prefHeight="23.0" prefWidth="216.0" styleClass="storeDiscount" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="2" />
       <Label fx:id="discountConditionLabel" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="132.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <Label fx:id="forAdditionalLabel" minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="80.0" text="For additional:" visible="false" GridPane.rowIndex="2" />
       <Label fx:id="totalPriceLabel" prefHeight="17.0" prefWidth="66.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />

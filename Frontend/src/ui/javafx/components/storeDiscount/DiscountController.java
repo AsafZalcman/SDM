@@ -134,7 +134,7 @@ public class DiscountController {
                     }
 
                     String storeOfferText = storeOfferDto.getQuantity() + " " + m_ItemsUIManger.getItemDtoById(storeOfferDto.getItemId()).getItemName() + " for additional of " +
-                            storeOfferDto.getForAdditional() + " for unit";
+                            storeOfferDto.getForAdditional() + " per one";
                     setText(storeOfferText);
                 }
             }
