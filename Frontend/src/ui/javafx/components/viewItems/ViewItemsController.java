@@ -52,7 +52,7 @@ public class ViewItemsController {
     private ItemsUIManger m_ItemsUIManger;
 
     public ViewItemsController(){
-        m_ItemsUIManger = new ItemsUIManger();
+        m_ItemsUIManger = ItemsUIManger.getInstance();
     }
 
     public void setMainController(SuperDuperController superDuperController){

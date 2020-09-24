@@ -2,13 +2,12 @@ package viewModel;
 
 import dtoModel.StoreDto;
 import dtoModel.StoreOfferDto;
+import enums.PurchaseForm;
 import enums.StoreDiscountOperator;
 import javafx.util.Pair;
 import managers.SuperDuperManager;
-import models.Store;
-import models.StoreDiscount;
-import models.StoreDiscountCondition;
-import models.StoreOffer;
+import models.*;
+import myLocation.Location;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -49,13 +48,15 @@ return;
         return sb.toString();
     }
 
-    //  public void addDiscount(int i_StoreId,Pair<Integer,Integer> i_DiscountCondition, String discountOperator , Collection<StoreOfferDto> i_StoreOffers , String i_Name) {
-  //      m_SuperDuperManager.getStore(i_StoreId).addDiscount(new StoreDiscount
-  //              (new StoreDiscountCondition(i_DiscountCondition.getKey(), i_DiscountCondition.getValue()),
-  //                      StoreDiscountOperator.valueOf(discountOperator.toUpperCase()),
-  //                      i_StoreOffers.stream().map(storeOfferDto -> new StoreOffer(storeOfferDto.getItemId(), storeOfferDto.getQuantity(), storeOfferDto.getForAdditional()))
-  //                              .collect(Collectors.toList())),i_Name);
-  //  }
+    public void createNewStore(StoreDto i_StoreDto) throws Exception {
+        if(isStoreIDExistInTheSystem(i_StoreDto.getId()))
+        {
+            throw new IllegalArgumentException("Error: The id :\"" + i_StoreDto.getId() +"\" is already occupied by another store");
+        }
+        m_SuperDuperManager.addNewStore(new Store(i_StoreDto.getId(), i_StoreDto.getName(), new Location(i_StoreDto.getLocation().x, i_StoreDto.getLocation().y), i_StoreDto.getPPK()),   i_StoreDto.getItemsDto().stream()
+                .map(itemDto -> new StoreItem(new Item(itemDto.getId(), itemDto.getItemName(), itemDto.getPurchaseForm()), itemDto.getPrice()))
+                .collect(Collectors.toList()));
+    }
 }
 
 

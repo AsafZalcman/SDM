@@ -7,8 +7,23 @@ import viewModel.ItemViewModel;
 import java.util.Collection;
 
 public class ItemsUIManger {
+    private static ItemsUIManger m_Instance = null;
+    private ItemViewModel m_ItemViewModel;
 
-    ItemViewModel m_ItemViewModel = new ItemViewModel();
+    private ItemsUIManger()
+    {
+        m_ItemViewModel = new ItemViewModel();
+    }
+    public static ItemsUIManger getInstance() {
+        if (m_Instance == null) {
+            synchronized (ItemsUIManger.class) {
+                if (m_Instance == null) {
+                    m_Instance = new ItemsUIManger();
+                }
+            }
+        }
+        return m_Instance;
+    }
 
     public Collection<ItemDto> getAllItems() {
        return m_ItemViewModel.getAllItems();

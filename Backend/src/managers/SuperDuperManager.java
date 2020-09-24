@@ -192,4 +192,12 @@ public class SuperDuperManager {
     {
         return m_OrderManager.getAvailableDiscounts();
     }
+
+    public void addNewStore(Store i_Store,Collection<StoreItem> i_ItemsOfStore) throws Exception {
+        m_StoreManager.addStore(i_Store);
+        for (StoreItem storeItem: i_ItemsOfStore
+             ) {
+            insertNewItemToStore(i_Store.getId(), storeItem);
+        }
+    }
 }
