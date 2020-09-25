@@ -40,7 +40,7 @@ public class FormatUtils {
     public static TextFormatter<Double> getLetterFormatter() {
         UnaryOperator<TextFormatter.Change> letterFilter = change -> {
             String text = change.getControlNewText();
-            if (text.matches("[a-zA-Z]*")) {
+            if (text.matches("([a-zA-Z]+ ?)*")) {
                 return change;
             }
 
