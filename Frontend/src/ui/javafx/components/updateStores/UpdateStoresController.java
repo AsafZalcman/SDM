@@ -80,6 +80,10 @@ public class UpdateStoresController {
                     addBtn.disableProperty().bind(priceField.textProperty().isEmpty());
                     addBtn.setOnAction(event -> {
                         try {
+                            if (Double.parseDouble(priceField.getText()) <= 0)
+                            {
+                                throw new IllegalArgumentException("Price value must be a positive number");
+                            }
                             m_StoreUIManager.addNewItemToStore(chooseStoreComboBox.getSelectionModel().selectedItemProperty().getValue().getId(), itemDto.getId(), Double.parseDouble(priceField.getText()));
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Item ID: " + itemDto.getId() + " with the price: " + priceField.getText() + " was Successfully added to the requested store");
                             alert.show();
@@ -144,6 +148,10 @@ public class UpdateStoresController {
                     updatePriceBtn.disableProperty().bind(priceField.textProperty().isEmpty());
                     updatePriceBtn.setOnAction(event -> {
                         try {
+                            if (Double.parseDouble(priceField.getText()) <= 0)
+                            {
+                                throw new IllegalArgumentException("Price value must be a positive number");
+                            }
                             m_StoreUIManager.updateStoreItemPrice(chooseStoreComboBox.getSelectionModel().selectedItemProperty().getValue().getId(), itemDto.getId(), Double.parseDouble(priceField.getText()));
                             Alert alert = new Alert((Alert.AlertType.INFORMATION), "The price for item ID: " + itemDto.getId() + " has been successfully updates to " + priceField.getText());
                             alert.show();

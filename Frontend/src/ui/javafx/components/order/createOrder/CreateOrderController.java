@@ -111,6 +111,7 @@ public class CreateOrderController {
 
     public void fetchMakeOrderComponent(){
         endOfStepButton.setText("Next");
+        endOfOrderLabel.setText(null);
         m_CurrentButtonIndex = 0;
         selectCurrentButton();
     }
