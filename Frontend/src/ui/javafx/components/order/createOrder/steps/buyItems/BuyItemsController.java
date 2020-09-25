@@ -114,6 +114,10 @@ public class BuyItemsController extends StepController {
         ItemDto itemDto = itemsToBuyTableView.getSelectionModel().getSelectedItem();
         try {
             double amountToAdd = Double.parseDouble(itemDtoDoubleCellEditEvent.getNewValue());
+            if(amountToAdd<=0)
+            {
+                throw new IllegalArgumentException("Amount value must be a positive number");
+            }
             m_OrdersUIManager.addItemToOrder(itemDto.getId(), amountToAdd);
             itemAddedLabel.setText("The item with the id \"" + itemDto.getId() + "\" was added " + amountToAdd + " times to the order");
             itemAddedLabel.setTextFill(Color.GREEN);

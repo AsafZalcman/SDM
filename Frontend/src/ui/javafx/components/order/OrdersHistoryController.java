@@ -62,6 +62,7 @@ public class OrdersHistoryController {
                 return null;
             }
         });
+
     }
 
   public void fetchOrders()
@@ -80,6 +81,9 @@ public class OrdersHistoryController {
             ordersLabel.setVisible(false);
             noOrdersToShowLabel.setVisible(true);
         } else {
+            ordersComboBox.setVisible(true);
+            ordersLabel.setVisible(true);
+            noOrdersToShowLabel.setVisible(false);
             ordersComboBox.getItems().setAll(storageOrderDtos);
         }
     }

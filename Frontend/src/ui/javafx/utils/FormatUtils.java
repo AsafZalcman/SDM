@@ -27,7 +27,8 @@ public class FormatUtils {
 
         UnaryOperator<TextFormatter.Change> doubleFilter = change -> {
             String text = change.getControlNewText();
-            if (text.isEmpty() || (validEditingState.matcher(text).matches() && text.length() != text.chars().filter(ch -> ch == '0' || ch == '.').count())) {
+            if (validEditingState.matcher(text).matches()) {
+
                 return change;
             } else {
                 return null;
@@ -36,6 +37,7 @@ public class FormatUtils {
 
         return new TextFormatter<>(doubleFilter);
     }
+
 
     public static TextFormatter<Double> getLetterFormatter() {
         UnaryOperator<TextFormatter.Change> letterFilter = change -> {

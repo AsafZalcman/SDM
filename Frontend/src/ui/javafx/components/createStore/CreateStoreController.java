@@ -119,16 +119,22 @@ public class CreateStoreController {
                     Button addBtn = new Button("Add Item");
                     addBtn.disableProperty().bind(priceField.textProperty().isEmpty());
                     addBtn.setOnAction(event -> {
-                        m_ItemsToAdd.add(new ItemDto(itemDto.getId(),
-                                itemDto.getItemName(),
-                                itemDto.getPurchaseForm(),
-                                Double.parseDouble(priceField.getText()),
-                                0.0,
-                                false));
-                        param.getItems().removeAll(itemDto);
-                        m_IsItemListEmpty.set(false);
-                        addItemMessageLabel.setText("Item ID: \"" + itemDto.getId() + "\" with the price: \"" + priceField.getText() + "\" was Successfully added to the requested store");
-                    });
+                        if (Double.parseDouble(priceField.getText()) <= 0)
+                        {
+                            Alert alert = new Alert(Alert.AlertType.ERROR,"Price value must be a positive number");
+                            alert.show();
+                        }
+                        else {
+                            m_ItemsToAdd.add(new ItemDto(itemDto.getId(),
+                                    itemDto.getItemName(),
+                                    itemDto.getPurchaseForm(),
+                                    Double.parseDouble(priceField.getText()),
+                                    0.0,
+                                    false));
+                            param.getItems().removeAll(itemDto);
+                            m_IsItemListEmpty.set(false);
+                            addItemMessageLabel.setText("Item ID: \"" + itemDto.getId() + "\" with the price: \"" + priceField.getText() + "\" was Successfully added to the requested store");
+                        }});
                     root.getChildren().addAll(addBtn);
 
                     setText(null);
