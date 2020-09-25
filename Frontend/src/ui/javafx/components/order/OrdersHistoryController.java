@@ -43,7 +43,7 @@ public class OrdersHistoryController {
 
             OrderSummaryController orderSummaryController = loader.getController();
             orderSummaryController.setStorageOrder(ordersComboBox.getValue());
-            orderSummaryFlowPane.getChildren().add(singleOrderSummary);
+            orderSummaryFlowPane.getChildren().setAll(singleOrderSummary);
         } catch (IOException e) {
             e.printStackTrace();
         }
