@@ -53,7 +53,7 @@ public class CreateStoreController {
 
         try {
             StoreUIManager.getInstance().createNewStore(Integer.parseInt(idTextField.getText()),
-                    nameTextField.getText(),
+                    nameTextField.getText().trim(),
                     locationComboBox.getValue(),
                     Double.parseDouble(ppkTextField.getText()),
                     m_ItemsToAdd);
