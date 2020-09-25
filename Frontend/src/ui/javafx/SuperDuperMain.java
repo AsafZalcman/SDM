@@ -24,7 +24,7 @@ public class SuperDuperMain extends Application {
 
         primaryStage.setTitle("Super Duper Market");
 
-        Scene scene = new Scene(root, 900, 430 );
+        Scene scene = new Scene(root, 1120, 625 );
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();
         primaryStage.setMinHeight(100);

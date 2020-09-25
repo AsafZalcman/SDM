@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="578.0" prefWidth="921.0" styleClass="tab" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.components.order.createOrder.CreateOrderController">
+<BorderPane prefHeight="582.0" prefWidth="998.0" styleClass="tab" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.components.order.createOrder.CreateOrderController">
                      <top>
                         <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                            <children>
@@ -25,7 +25,7 @@
                               <Label layoutX="340.0" layoutY="75.0" text="Buy Items" />
                               <Label layoutX="799.0" layoutY="75.0" text="Order Summary" />
                               <Separator layoutX="132.0" layoutY="58.0" prefHeight="0.0" prefWidth="208.0" />
-                              <Separator layoutX="-2.0" layoutY="102.0" prefHeight="3.0" prefWidth="921.0" />
+                              <Separator layoutX="-2.0" layoutY="102.0" prefHeight="0.0" prefWidth="998.0" />
                               <Button fx:id="endOfStepButton" disable="true" layoutX="8.0" layoutY="110.0" mnemonicParsing="false" onAction="#endOfStepButtonOnAction" prefHeight="76.0" prefWidth="84.0" text="Next" />
                   <RadioButton fx:id="addDiscountsRadioButton" disable="true" layoutX="572.0" layoutY="49.0" mnemonicParsing="false" toggleGroup="$orderProgressToggleGroup" />
                   <Separator layoutX="361.0" layoutY="58.0" prefHeight="0.0" prefWidth="208.0" />

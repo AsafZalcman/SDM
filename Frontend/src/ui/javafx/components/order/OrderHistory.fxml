@@ -6,11 +6,13 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.components.order.OrdersHistoryController">
+<AnchorPane prefHeight="582.0" prefWidth="998.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.components.order.OrdersHistoryController">
    <children>
-      <ComboBox fx:id="ordersComboBox" onAction="#ordersComboBoxOnSelected" prefWidth="150.0" AnchorPane.leftAnchor="45.0" />
-      <Label fx:id="ordersLabel" text="Orders:" />
+      <ComboBox fx:id="ordersComboBox" layoutX="87.0" layoutY="14.0" onAction="#ordersComboBoxOnSelected" prefHeight="31.0" prefWidth="163.0" AnchorPane.leftAnchor="87.0" />
+      <Label fx:id="ordersLabel" layoutX="14.0" layoutY="16.0" text="Orders:">
+         <font>
+            <Font name="Bell MT" size="21.0" />
+         </font></Label>
       <FlowPane fx:id="orderSummaryFlowPane" prefHeight="478.0" prefWidth="920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
       <Label fx:id="noOrdersToShowLabel" alignment="CENTER" prefHeight="43.0" prefWidth="530.0" text="No Orders To Show" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <font>
