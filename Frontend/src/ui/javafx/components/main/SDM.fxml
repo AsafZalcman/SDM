@@ -52,7 +52,7 @@
                      <content>
                         <ScrollPane focusTraversable="false" prefHeight="200.0" prefWidth="200.0">
                            <content>
-                              <fx:include fx:id="updateStoresComponent" minHeight="582.0" minWidth="998.0" source="../updateStores/updateStores.fxml" />
+                              <fx:include fx:id="updateStoresComponent" source="../updateStores/updateStores.fxml" />
                            </content>
                         </ScrollPane>
                      </content>
@@ -61,7 +61,7 @@
                      <content>
                         <ScrollPane prefHeight="200.0" prefWidth="200.0">
                            <content>
-                              <fx:include fx:id="viewStoresComponent" minHeight="582.0" minWidth="998.0" source="../viewStores/ViewStores.fxml" />
+                              <fx:include fx:id="viewStoresComponent" source="../viewStores/ViewStores.fxml" />
                            </content>
                         </ScrollPane>
                      </content>
@@ -107,7 +107,7 @@
                      <content>
                         <ScrollPane prefHeight="513.0" prefWidth="795.0">
                            <content>
-                              <fx:include fx:id="viewItemsComponent" minHeight="582.0" minWidth="998.0" source="../viewItems/viewItems.fxml" />
+                              <fx:include fx:id="viewItemsComponent" source="../viewItems/viewItems.fxml" />
                            </content>
                         </ScrollPane>
                      </content>
@@ -116,7 +116,7 @@
                      <content>
                         <ScrollPane prefHeight="200.0" prefWidth="200.0">
                            <content>
-                              <fx:include fx:id="viewCustomersComponent" minHeight="582.0" minWidth="998.0" source="../viewCustomer/viewCustomer.fxml" />
+                              <fx:include fx:id="viewCustomersComponent" source="../viewCustomer/viewCustomer.fxml" />
                            </content>
                         </ScrollPane>
                      </content>
@@ -125,7 +125,7 @@
                      <content>
                         <ScrollPane prefHeight="200.0" prefWidth="795.0">
                            <content>
-                              <fx:include fx:id="viewOrdersComponent" minHeight="582.0" minWidth="998.0" source="../order/OrderHistory.fxml" />
+                              <fx:include fx:id="viewOrdersComponent" source="../order/OrderHistory.fxml" />
                            </content>
                         </ScrollPane>
                      </content>
@@ -134,7 +134,7 @@
                <content>
                   <ScrollPane prefHeight="200.0" prefWidth="200.0">
                      <content>
-                        <fx:include fx:id="makeOrderComponent" minHeight="582.0" minWidth="998.0" source="../order/createOrder/CreateOrder.fxml" />
+                        <fx:include fx:id="makeOrderComponent" source="../order/createOrder/CreateOrder.fxml" />
                      </content>
                   </ScrollPane>
                </content></Tab>
@@ -142,7 +142,7 @@
                <content>
                   <ScrollPane prefHeight="200.0" prefWidth="200.0">
                      <content>
-                        <fx:include fx:id="viewMapComponent" minHeight="582.0" minWidth="998.0" source="../map/map.fxml" />
+                        <fx:include fx:id="viewMapComponent" source="../map/map.fxml" />
                      </content>
                   </ScrollPane>
                </content>
@@ -151,7 +151,7 @@
                      <content>
                         <ScrollPane prefHeight="200.0" prefWidth="200.0">
                            <content>
-                              <fx:include fx:id="createStoreComponent" minHeight="582.0" minWidth="998.0" source="../createStore/createStore.fxml" />
+                              <fx:include fx:id="createStoreComponent" source="../createStore/createStore.fxml" />
                            </content>
                         </ScrollPane>
                      </content>
