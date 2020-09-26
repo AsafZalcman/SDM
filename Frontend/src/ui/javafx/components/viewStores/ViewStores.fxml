@@ -24,9 +24,9 @@
       <RowConstraints maxHeight="544.0" minHeight="10.0" prefHeight="533.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <TabPane prefHeight="511.0" prefWidth="697.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="1" GridPane.rowSpan="2">
+      <TabPane fx:id="viewStoresTabPane" prefHeight="511.0" prefWidth="697.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="1" GridPane.rowSpan="2">
          <tabs>
-            <Tab text="About">
+            <Tab fx:id="aboutTab" text="About">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="504.0" prefWidth="697.0">
                      <children>
@@ -86,10 +86,10 @@
                         <TableView fx:id="storeItemTableViewInViewStoresTab" prefHeight="512.0" prefWidth="683.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <columns>
                               <TableColumn fx:id="storeItemIDTableColumn" text="Id" />
-                              <TableColumn fx:id="storeItemNameTableColumn" prefWidth="192.0" text="Name" />
-                              <TableColumn fx:id="storeItemPurchaseFormTableColumn" prefWidth="150.0" text="Purchase Form" />
-                              <TableColumn fx:id="storeItemPriceTableColumn" prefWidth="109.0" text="Price" />
-                              <TableColumn fx:id="storeItemSoldSoFarTableColumn" prefWidth="150.0" text="Sold so far" />
+                              <TableColumn fx:id="storeItemNameTableColumn" prefWidth="279.0" text="Name" />
+                              <TableColumn fx:id="storeItemPurchaseFormTableColumn" prefWidth="216.0" text="Purchase Form" />
+                              <TableColumn fx:id="storeItemPriceTableColumn" prefWidth="137.0" text="Price" />
+                              <TableColumn fx:id="storeItemSoldSoFarTableColumn" prefWidth="155.0" text="Sold so far" />
                            </columns>
                         </TableView>
                      </children>
@@ -107,11 +107,11 @@
                         </Label>
                         <TableView id="ordersTableViewInViewStoresTab" fx:id="ordersTableViewInViewStoresTab" layoutX="7.0" prefHeight="474.0" prefWidth="687.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <columns>
-                              <TableColumn id="orderDateTableColumnInViewStores" fx:id="orderDateTableColumnInViewStores" prefWidth="166.0" text="Date" />
-                              <TableColumn id="orderTotalItemsTableColumnInViewStores" fx:id="orderTotalItemsTableColumnInViewStores" prefWidth="123.0" text="Total Items" />
-                              <TableColumn id="orderItemsCostTableColumnInViewStores" fx:id="orderItemsCostTableColumnInViewStores" prefWidth="152.0" text="Total Items Cost " />
-                              <TableColumn id="orderDeliveryCostTableColumnInViewStores" fx:id="orderDeliveryCostTableColumnInViewStores" prefWidth="109.0" text="Delivery Cost" />
-                              <TableColumn id="orderTotalCostTableColumnInViewStores" fx:id="orderTotalCostTableColumnInViewStores" prefWidth="134.0" text="Total Order Cost" />
+                              <TableColumn id="orderDateTableColumnInViewStores" fx:id="orderDateTableColumnInViewStores" prefWidth="250.0" text="Date" />
+                              <TableColumn id="orderTotalItemsTableColumnInViewStores" fx:id="orderTotalItemsTableColumnInViewStores" prefWidth="172.0" text="Total Items" />
+                              <TableColumn id="orderItemsCostTableColumnInViewStores" fx:id="orderItemsCostTableColumnInViewStores" prefWidth="151.0" text="Total Items Cost " />
+                              <TableColumn id="orderDeliveryCostTableColumnInViewStores" fx:id="orderDeliveryCostTableColumnInViewStores" prefWidth="146.0" text="Delivery Cost" />
+                              <TableColumn id="orderTotalCostTableColumnInViewStores" fx:id="orderTotalCostTableColumnInViewStores" prefWidth="147.0" text="Total Order Cost" />
                            </columns>
                         </TableView>
                      </children>

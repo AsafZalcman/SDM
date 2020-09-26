@@ -28,6 +28,12 @@ import ui.javafx.utils.SDMResourcesConstants;
 public class ViewStoresController {
 
     @FXML
+    private TabPane viewStoresTabPane;
+
+    @FXML
+    private Tab aboutTab;
+
+    @FXML
     private ResourceBundle resources;
 
     @FXML
@@ -205,7 +211,32 @@ public class ViewStoresController {
     }
 
     public void fetchStores() {
+        clearAboutTab();
+        clearItemsTab();
+        clearOrdersTab();
+        clearSalesTab();
+        viewStoresTabPane.getSelectionModel().select(aboutTab);
         storesCollectionListView.getItems().clear();
         storesCollectionListView.getItems().addAll(m_StoreUIManager.getAllStores());
+    }
+
+    private void clearSalesTab() {
+        storeDiscountFlowPane.getChildren().clear();
+        storeDiscountsAvailableLabel.setVisible(true);
+    }
+
+    private void clearOrdersTab() {
+        ordersTableViewInViewStoresTab.getItems().clear();
+    }
+
+    private void clearItemsTab() {
+        storeItemTableViewInViewStoresTab.getItems().clear();
+    }
+
+    private void clearAboutTab() {
+        storeIDLabel.setText(null);
+        storeNameLabel.setText(null);
+        storePPKLabel.setText(null);
+        storeIncomesDeliveriesLabel.setText(null);
     }
 }
