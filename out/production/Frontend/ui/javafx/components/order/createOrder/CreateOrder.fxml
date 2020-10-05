@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="582.0" prefWidth="998.0" styleClass="tab" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.components.order.createOrder.CreateOrderController">
+                     <top>
+                        <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <RadioButton fx:id="insertDetailsRadioButton" disable="true" layoutX="114.0" layoutY="49.0" mnemonicParsing="false">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="orderProgressToggleGroup" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton fx:id="buyItemsRadioButton" disable="true" layoutX="343.0" layoutY="49.0" mnemonicParsing="false" toggleGroup="$orderProgressToggleGroup" />
+                              <Label layoutX="108.0" layoutY="75.0" text="Insert Details" />
+                              <Label layoutX="340.0" layoutY="75.0" text="Buy Items" />
+                              <Label layoutX="799.0" layoutY="75.0" text="Order Summary" />
+                              <Separator layoutX="132.0" layoutY="58.0" prefHeight="0.0" prefWidth="208.0" />
+                              <Separator layoutX="-2.0" layoutY="102.0" prefHeight="0.0" prefWidth="998.0" />
+                              <Button fx:id="endOfStepButton" disable="true" layoutX="8.0" layoutY="110.0" mnemonicParsing="false" onAction="#endOfStepButtonOnAction" prefHeight="76.0" prefWidth="84.0" text="Next" />
+                  <RadioButton fx:id="addDiscountsRadioButton" disable="true" layoutX="572.0" layoutY="49.0" mnemonicParsing="false" toggleGroup="$orderProgressToggleGroup" />
+                  <Separator layoutX="361.0" layoutY="58.0" prefHeight="0.0" prefWidth="208.0" />
+                  <Separator layoutX="590.0" layoutY="58.0" prefHeight="0.0" prefWidth="208.0" />
+                  <Label layoutX="566.0" layoutY="75.0" text="Add Discounts" />
+            <RadioButton fx:id="orderSummaryRadioButton" disable="true" layoutX="801.0" layoutY="49.0" mnemonicParsing="false" toggleGroup="$orderProgressToggleGroup" />
+            <Label fx:id="endOfOrderLabel" alignment="CENTER" layoutX="145.0" layoutY="140.0" prefHeight="51.0" prefWidth="688.0">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+                           </children>
+                        </Pane>
+                     </top>
+   <center>
+      <ScrollPane BorderPane.alignment="CENTER">
+         <content>
+            <FlowPane fx:id="currentStepFlowPane" prefHeight="374.0" prefWidth="918.0" />
+         </content>
+      </ScrollPane>
+   </center>
+                  </BorderPane>

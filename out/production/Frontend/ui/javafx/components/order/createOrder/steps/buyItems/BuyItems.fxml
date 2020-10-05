@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<GridPane prefHeight="368.0" prefWidth="793.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.components.order.createOrder.steps.buyItems.BuyItemsController">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="244.0" minWidth="10.0" prefWidth="114.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="434.0" minWidth="10.0" prefWidth="420.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="39.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="189.0" minWidth="10.0" prefWidth="189.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints maxHeight="96.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="248.0" minHeight="10.0" prefHeight="248.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="71.0" minHeight="10.0" prefHeight="71.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
+   </rowConstraints>
+   <children>
+      <TableView fx:id="itemsToBuyTableView" prefHeight="216.0" prefWidth="372.0" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.rowSpan="3">
+        <columns>
+          <TableColumn fx:id="itemIdColumnInItemsToBuyTable" editable="false" prefWidth="56.0" text="Id" />
+          <TableColumn fx:id="itemNameColumnInItemsToBuyTable" editable="false" prefWidth="169.0" text="Name" />
+            <TableColumn fx:id="itemPurchaseFormColumnInItemsToBuyTable" editable="false" prefWidth="130.0" text="Purchase Form" />
+            <TableColumn fx:id="itemPriceColumnInItemsToBuyTable" editable="false" prefWidth="111.0" text="Price" />
+            <TableColumn fx:id="itemAmountColumnInItemsToBuyTable" onEditCommit="#itemAmountColumnInItemsToBuyTableOnEditCommit" prefWidth="137.0" text="Amount" />
+        </columns>
+      </TableView>
+      <Label fx:id="itemAddedLabel" prefHeight="182.0" prefWidth="190.0" textFill="#17dd2a" wrapText="true" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowSpan="2">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="437.0" text="Items to buy">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" prefHeight="21.0" prefWidth="432.0" text="To add an item to the cart insert the amount and press Enter">
+               <font>
+                  <Font name="Bell MT Bold" size="16.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+   </children>
+</GridPane>

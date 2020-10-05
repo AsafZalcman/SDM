@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="998.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.components.viewItems.ViewItemsController">
+   <children>
+      <TableView id="itemsTableViewInViewItemsTab" fx:id="itemsTableViewInViewItemsTab" prefHeight="542.0" prefWidth="906.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
+         <columns>
+            <TableColumn fx:id="itemIdTableColumnInViewItems" minWidth="0.0" prefWidth="102.0" resizable="false" text="Id" />
+            <TableColumn fx:id="itemNameTableColumnInViewItems" prefWidth="99.0" resizable="false" text="Name" />
+            <TableColumn fx:id="itemPurchaseFormTableColumnInViewItems" prefWidth="199.0" resizable="false" text="Purchase Form" />
+            <TableColumn fx:id="itemHowManyStoresSellTableColumnInViewItems" prefWidth="258.0" resizable="false" text="How many stores sell it" />
+            <TableColumn fx:id="itemAveragePriceTableColumnInViewItems" prefWidth="187.0" resizable="false" text="Average price" />
+            <TableColumn fx:id="itemTotalSoldSoFarTableColumnInViewItems" prefWidth="151.0" resizable="false" text="Total sold so far" />
+         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+   </children>
+</AnchorPane>

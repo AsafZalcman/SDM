@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: ui.javafx.SuperDuperMain
+Class-Path: Controller.jar Backend.jar
+

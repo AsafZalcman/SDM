@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="Frontend:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Frontend_jar</output-path>
+    <root id="root">
+      <element id="archive" name="Frontend.jar">
+        <element id="module-output" name="Frontend" />
+      </element>
+    </root>
+  </artifact>
+</component>

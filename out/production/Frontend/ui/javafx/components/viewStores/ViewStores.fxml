@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane prefHeight="582.0" prefWidth="998.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.components.viewStores.ViewStoresController">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="689.0" minWidth="10.0" prefWidth="130.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="870.0" minWidth="10.0" prefWidth="868.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints maxHeight="506.0" minHeight="10.0" prefHeight="49.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="544.0" minHeight="10.0" prefHeight="533.0" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <children>
+      <TabPane fx:id="viewStoresTabPane" prefHeight="511.0" prefWidth="697.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="1" GridPane.rowSpan="2">
+         <tabs>
+            <Tab fx:id="aboutTab" text="About">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="504.0" prefWidth="697.0">
+                     <children>
+                        <Label layoutX="29.0" layoutY="104.0" text="Store ID:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="29.0" layoutY="214.0" text="Store name:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="30.0" layoutY="315.0" text="PPK:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="29.0" layoutY="399.0" text="Incomes from deliveries:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="227.0" layoutY="33.0" prefHeight="35.0" prefWidth="194.0" text="Basic Details">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Label>
+                        <Label id="storeIDLabel" fx:id="storeIDLabel" layoutX="246.0" layoutY="104.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label id="storeNameLabel" fx:id="storeNameLabel" layoutX="245.0" layoutY="214.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label id="storePPKLabel" fx:id="storePPKLabel" layoutX="245.0" layoutY="315.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label id="storeIncomesDeliveriesLabel" fx:id="storeIncomesDeliveriesLabel" layoutX="245.0" layoutY="399.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Items">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="storeItemTableViewInViewStoresTab" prefHeight="512.0" prefWidth="683.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <columns>
+                              <TableColumn fx:id="storeItemIDTableColumn" text="Id" />
+                              <TableColumn fx:id="storeItemNameTableColumn" prefWidth="279.0" text="Name" />
+                              <TableColumn fx:id="storeItemPurchaseFormTableColumn" prefWidth="216.0" text="Purchase Form" />
+                              <TableColumn fx:id="storeItemPriceTableColumn" prefWidth="137.0" text="Price" />
+                              <TableColumn fx:id="storeItemSoldSoFarTableColumn" prefWidth="155.0" text="Sold so far" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Orders">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label id="storeOrdersAvailableLabel" fx:id="storeOrdersAvailableLabel" alignment="CENTER" layoutX="7.0" layoutY="-6.0" prefHeight="479.0" prefWidth="687.0" text="No orders available">
+                           <font>
+                              <Font size="48.0" />
+                           </font>
+                        </Label>
+                        <TableView id="ordersTableViewInViewStoresTab" fx:id="ordersTableViewInViewStoresTab" layoutX="7.0" prefHeight="474.0" prefWidth="687.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <columns>
+                              <TableColumn id="orderDateTableColumnInViewStores" fx:id="orderDateTableColumnInViewStores" prefWidth="250.0" text="Date" />
+                              <TableColumn id="orderTotalItemsTableColumnInViewStores" fx:id="orderTotalItemsTableColumnInViewStores" prefWidth="172.0" text="Total Items" />
+                              <TableColumn id="orderItemsCostTableColumnInViewStores" fx:id="orderItemsCostTableColumnInViewStores" prefWidth="151.0" text="Total Items Cost " />
+                              <TableColumn id="orderDeliveryCostTableColumnInViewStores" fx:id="orderDeliveryCostTableColumnInViewStores" prefWidth="146.0" text="Delivery Cost" />
+                              <TableColumn id="orderTotalCostTableColumnInViewStores" fx:id="orderTotalCostTableColumnInViewStores" prefWidth="147.0" text="Total Order Cost" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Sales">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="489.0" prefWidth="534.0">
+                     <children>
+                        <ScrollPane fx:id="storeDiscountScrollPane" layoutX="2.0" layoutY="-3.0" prefHeight="485.0" prefWidth="694.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <content>
+                              <FlowPane fx:id="storeDiscountFlowPane" />
+                           </content>
+                        </ScrollPane>
+                        <Label id="storeOrdersAvailableLabel" fx:id="storeDiscountsAvailableLabel" alignment="CENTER" prefHeight="476.0" prefWidth="695.0" text="No sales available" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <font>
+                              <Font size="48.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+      <Label alignment="CENTER" prefHeight="55.0" prefWidth="134.0" style="-fx-background-color: #333645;" text="Stores" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <ListView id="storesCollectionListView" fx:id="storesCollectionListView" editable="true" prefHeight="493.0" prefWidth="116.0" GridPane.rowIndex="1" />
+   </children>
+</GridPane>
