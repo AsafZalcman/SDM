@@ -16,19 +16,19 @@ public class ItemViewModel {
         m_SuperDuperManager = SuperDuperManager.getInstance();
     }
 
-    public Collection<ItemDto> getAllItems()
+    public Collection<ItemDto> getAllItems(String i_ZoneName)
     {
-        return m_SuperDuperManager.getItemManager().getAllItems().stream().map(ItemDto::new).collect(Collectors.toList());
+        return m_SuperDuperManager.getAllItems(i_ZoneName).stream().map(ItemDto::new).collect(Collectors.toList());
     }
 
-    public ItemDto getItemDtoById(int i_Id)
+    public ItemDto getItemDtoById(String i_ZoneName,int i_Id)
     {
-       return new ItemDto(m_SuperDuperManager.getItem(i_Id));
+       return new ItemDto(m_SuperDuperManager.getItem(i_ZoneName,i_Id));
     }
 
-    public Collection<ItemDto> getAllItemsOfStore(int i_StoreId)
+    public Collection<ItemDto> getAllItemsOfStore(String i_ZoneName,int i_StoreId)
     {
-       Store store= m_SuperDuperManager.getStoreManager().getStore(i_StoreId);
+       Store store= m_SuperDuperManager.getStore(i_ZoneName,i_StoreId);
         Collection<ItemDto> res = new ArrayList<>();
         for (StoreItem storeItem:store.getAllItems()
              ) {
@@ -37,24 +37,20 @@ public class ItemViewModel {
         return res;
     }
 
-    public Collection<StorageItemDto> getAllStorageItems(){
-        return m_SuperDuperManager.getAllStorageItems().stream().map(StorageItemDto::new).collect(Collectors.toList());
+    public Collection<StorageItemDto> getAllStorageItems(String i_ZoneName){
+        return m_SuperDuperManager.getAllStorageItems(i_ZoneName).stream().map(StorageItemDto::new).collect(Collectors.toList());
     }
 
-    public void addNewItemToStore(int i_StoreID, int i_NewItemID, double i_NewItemPrice) throws Exception{
-        StoreItem newStoreItem = new StoreItem(m_SuperDuperManager.getItem(i_NewItemID), i_NewItemPrice);
-        m_SuperDuperManager.insertNewItemToStore(i_StoreID, newStoreItem);
+    public void addNewItemToStore(String i_ZoneName,int i_StoreID, int i_NewItemID, double i_NewItemPrice) throws Exception{
+        StoreItem newStoreItem = new StoreItem(m_SuperDuperManager.getItem(i_ZoneName,i_NewItemID), i_NewItemPrice);
+        m_SuperDuperManager.insertNewItemToStore(i_ZoneName,i_StoreID, newStoreItem);
     }
 
-    public boolean isItemExistInTheSystem(int i_ItemID){
-        return m_SuperDuperManager.isItemExist(i_ItemID);
-    }
-
-    public boolean isStoreItemIDBelongToTheStore(int i_StoreID, int i_ItemID){
-        return m_SuperDuperManager.isStoreItemBelongToTheStore(i_StoreID, i_ItemID);
-    }
-
-    public void deleteItemFromStore(int i_storeID, int i_ItemID) throws Exception {
-        m_SuperDuperManager.deleteStoreItem(i_storeID, i_ItemID);
-    }
+ //   public boolean isItemExistInTheSystem(int i_ItemID){
+ //       return m_SuperDuperManager.isItemExist(i_ItemID);
+ //   }
+//
+ //   public boolean isStoreItemIDBelongToTheStore(int i_StoreID, int i_ItemID){
+ //       return m_SuperDuperManager.isStoreItemBelongToTheStore(i_StoreID, i_ItemID);
+ //   }
 }

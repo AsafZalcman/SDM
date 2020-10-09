@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Backend/Backend.iml" filepath="$PROJECT_DIR$/Backend/Backend.iml" />
       <module fileurl="file://$PROJECT_DIR$/Controller/Controller.iml" filepath="$PROJECT_DIR$/Controller/Controller.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Frontend/Frontend.iml" filepath="$PROJECT_DIR$/Frontend/Frontend.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/SDM.iml" filepath="$PROJECT_DIR$/.idea/SDM.iml" />
       <module fileurl="file://$PROJECT_DIR$/sdmWebApp/sdmWebApp.iml" filepath="$PROJECT_DIR$/sdmWebApp/sdmWebApp.iml" />
     </modules>

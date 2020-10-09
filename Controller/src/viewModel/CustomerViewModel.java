@@ -25,14 +25,9 @@ public class CustomerViewModel {
         return m_SuperDuperManager.getAllCustomers().stream().map(CustomerDto::new).collect(Collectors.toList());
     }
 
-    public String getCustomerMapToolTip(int i_CustomerID) {
-        Customer customer = m_SuperDuperManager.getCustomer(i_CustomerID);
-        StringBuilder sb = new StringBuilder();
-        sb.append("Location: ").append(customer.getLocation()).append("\n")
-                .append("ID: ").append(customer.getId()).append("\n")
-                .append("Name: ").append(customer.getName()).append("\n")
-                .append("Amount of Orders: ").append(customer.getAmountOfOrders()).append("\n");
-
-        return sb.toString();
+    //return the unique id of the created user
+    // raise exception if the user is already exists
+    public int addCustomer(String i_Name) throws Exception {
+        return m_SuperDuperManager.addCustomer(i_Name);
     }
 }
