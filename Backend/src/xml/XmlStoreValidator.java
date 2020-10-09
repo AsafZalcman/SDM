@@ -2,10 +2,10 @@ package xml;
 
 import myLocation.LocationException;
 import myLocation.LocationManager;
-import xml.jaxb.schema.generatedV2.SDMItem;
-import xml.jaxb.schema.generatedV2.SDMSell;
-import xml.jaxb.schema.generatedV2.SDMStore;
-import xml.jaxb.schema.generatedV2.SuperDuperMarketDescriptor;
+import xml.jaxb.schema.generated.SDMItem;
+import xml.jaxb.schema.generated.SDMSell;
+import xml.jaxb.schema.generated.SDMStore;
+import xml.jaxb.schema.generated.SuperDuperMarketDescriptor;
 
 import java.util.Collection;
 import java.util.HashMap;

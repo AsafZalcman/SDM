@@ -5,8 +5,7 @@ import models.*;
 import myLocation.Location;
 import myLocation.LocationManager;
 import enums.PurchaseForm;
-import xml.jaxb.schema.generatedV2.*;
-
+import xml.jaxb.schema.generated.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,7 +15,6 @@ public class JaxbConverter {
     SuperDuperMarketDescriptor m_SuperDuperMarketDescriptor;
     Map<Integer,Item> m_Items;
     Collection<Store> m_Stores;
-    Collection<Customer> m_Customers;
 
     public JaxbConverter(IJaxbDataLoader i_IJaxbLoader)
     {
@@ -58,6 +56,11 @@ public class JaxbConverter {
         m_SuperDuperMarketDescriptor = m_IJaxbLoader.load(i_PathToFile);
     }
 
+    public String getZoneName()
+    {
+        return m_SuperDuperMarketDescriptor.getSDMZone().getName();
+    }
+
 
     private Store convertToStore(SDMStore i_JaxbStore) {
         List<StoreItem> storeItems = new ArrayList<>(i_JaxbStore.getSDMPrices().getSDMSell().size());
@@ -77,12 +80,6 @@ public class JaxbConverter {
         return newStore;
     }
 
-    private Customer convertToCustomer(SDMCustomer i_JaxbCustomer){
-        Customer newCustomer = new Customer(i_JaxbCustomer.getId(), i_JaxbCustomer.getName(), new Location(i_JaxbCustomer.getLocation().getX(),i_JaxbCustomer.getLocation().getY()));
-        LocationManager.addLocation(i_JaxbCustomer.getLocation().getX(),i_JaxbCustomer.getLocation().getY(),newCustomer);
-        return newCustomer;
-    }
-
     private StoreItem convertToStoreItem(SDMSell i_JaxbStoreItem) {
         return new StoreItem(m_Items.get(i_JaxbStoreItem.getItemId()),i_JaxbStoreItem.getPrice());
     }
@@ -100,18 +97,5 @@ public class JaxbConverter {
         Collection<StoreOffer> storeOffers = i_Discount.getThenYouGet().getSDMOffer().stream()
                 .map(sdmOffer -> new StoreOffer(sdmOffer.getItemId(),sdmOffer.getQuantity(),sdmOffer.getForAdditional())).collect(Collectors.toList());
         return new StoreDiscount(discountCondition,discountOperator,storeOffers,i_Discount.getName());
-    }
-
-    public Collection<Customer> getCustomers() {
-        if(m_SuperDuperMarketDescriptor==null)
-        {
-            return null;
-        }
-
-        if(m_Customers==null)
-        {
-            m_Customers = m_SuperDuperMarketDescriptor.getSDMCustomers().getSDMCustomer().stream().map(this::convertToCustomer).collect(Collectors.toList());
-        }
-        return m_Customers;
     }
 }

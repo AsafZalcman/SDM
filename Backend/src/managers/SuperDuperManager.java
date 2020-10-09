@@ -12,14 +12,14 @@ import java.util.*;
 
 public class SuperDuperManager {
     private static SuperDuperManager m_Instance = null;
-    private OrderManager m_OrderManager;
-    private StoreManager m_StoreManager;
-    private ItemManager m_ItemManager;
+    private Map<String,Zone> m_ZoneNameToZoneMap;
     private CustomersManager m_CustomersManager;
-
+    private AccountManager m_AccountManager;
 
     private SuperDuperManager() {
-
+m_ZoneNameToZoneMap = new HashMap<>();
+        m_CustomersManager = new CustomersManager();
+        m_AccountManager=new AccountManager();
     }
 
     public static SuperDuperManager getInstance() {
@@ -33,17 +33,17 @@ public class SuperDuperManager {
         return m_Instance;
     }
 
-    public StoreManager getStoreManager() {
-        return m_StoreManager;
-    }
+ //  public StoreManager getStoreManager() {
+ //      return m_StoreManager;
+ //  }
 
-    public ItemManager getItemManager() {
-        return m_ItemManager;
-    }
+ //  public ItemManager getItemManager() {
+ //      return m_ItemManager;
+ //  }
 
-    public OrderManager getOrderManager() {
-        return m_OrderManager;
-    }
+ //  public OrderManager getOrderManager() {
+ //       return m_OrderManager;
+  //   }
 
     public void loadSuperDuperDataFromXml(String i_PathToFile) throws Exception {
         Map<Location, ILocationable> currentLocations = new HashMap<>(LocationManager.getLocations());
@@ -51,134 +51,94 @@ public class SuperDuperManager {
         try {
             JaxbConverter jaxbConverter = JaxbConverterFactory.create(JaxbConverterFactory.JaxbConverterType.XML);
             jaxbConverter.loadJaxbData(i_PathToFile);
-            m_ItemManager = new ItemManager(jaxbConverter.getItems());
-            m_StoreManager = new StoreManager(jaxbConverter.getStores());
-            m_OrderManager = new OrderManager();
-            m_CustomersManager = new CustomersManager(jaxbConverter.getCustomers());
-            initializeStorageItems();
-        }catch (Exception e)
-        {
+            synchronized (this) {
+                if (m_ZoneNameToZoneMap.get(jaxbConverter.getZoneName()) != null) {
+                    throw new IllegalAccessException("Zone:\"" + jaxbConverter.getZoneName() + "\" is already exists");
+                }
+                m_ZoneNameToZoneMap.put(jaxbConverter.getZoneName(), new Zone(jaxbConverter.getZoneName(),
+                        new StoreManager(jaxbConverter.getStores()),
+                        new ItemManager(jaxbConverter.getItems()),
+                        new OrderManager()));
+            }
+        } catch (Exception e) {
             LocationManager.setLocations(currentLocations);
             throw e;
         }
     }
 
-    private void initializeStorageItems() {
-        for (Integer itemID : m_ItemManager.getAllItemsId()) {
-            m_ItemManager.setNewStoreSellItForStorageItem(itemID, m_StoreManager.howManyStoreSellTheInputItem(itemID));
-            m_ItemManager.setNewAvgPriceForStorageItem(itemID, m_StoreManager.getItemAvgPrice(itemID));
-        }
+    public Store getStore(String i_ZoneName,Integer i_StoreID) {
+        return m_ZoneNameToZoneMap.get(i_ZoneName).getStore(i_StoreID);
     }
 
-    public Store getStore(Integer i_StoreID) {
-        return m_StoreManager.getStore(i_StoreID);
+    public Item getItem(String i_ZoneName,Integer i_ItemID) {
+        return m_ZoneNameToZoneMap.get(i_ZoneName).getItem(i_ItemID);
     }
 
-    public Item getItem(Integer i_ItemID) {
-        return m_ItemManager.getItem(i_ItemID);
+ //  public void addItemToOrder(String i_ZoneName,Store store,Item i_Item, Double i_AmountOfSells) {
+ //      if (store == null) {
+ //          store = getCheapestStoreForItem(i_ZoneName,i_Item.getId());
+ //      }
+
+ //      m_OrderManager.addItemFromCurrentStore(store, i_Item, i_AmountOfSells);
+ //  }
+
+ //  public void addItemInDiscountToOrder(String i_DiscountName,int i_ItemId,double i_Price , double i_Amount)
+ //  {
+ //      Store store = m_StoreManager.getStoreFromDiscountName(i_DiscountName);
+ //      if(store ==null)
+ //      {
+ //          throw new IllegalArgumentException("The discount named :\"" + i_DiscountName +"\" is not exists");
+ //      }
+ //      m_OrderManager.addItemFromCurrentStore(store,new OrderItem(new StoreItem(getItem(i_ItemId),i_Price,i_Amount),true));
+ //  }
+
+ //   public void createNewOrder(Customer customer, LocalDate date) {
+ //       m_OrderManager.create(customer,date);
+ //   }
+//
+ //   public void executeNewOrder() {
+ //       m_OrderManager.executeOrder();
+ //       StorageOrder currentStorageOrder = m_OrderManager.getCurrentOrder();
+ //       for (OrderItem orderItem : currentStorageOrder.getOrder().getAllItems()) {
+ //           m_ItemManager.addStorageItemSales(orderItem.getStoreItem().getItem().getId(), orderItem.getStoreItem().getAmountOfSells());
+ //       }
+//
+ //       m_CustomersManager.getCustomer(currentStorageOrder.getCustomerId()).addOrder(currentStorageOrder);
+ //       m_OrderManager.cleanup();
+ //   }
+//
+ //   public StorageOrder getCurrentOrder() {
+ //       return m_OrderManager.getCurrentOrder();
+ //   }
+
+    public Collection<StorageItem> getAllStorageItems(String i_ZoneName){
+        return m_ZoneNameToZoneMap.get(i_ZoneName).getAllStorageItems();
     }
 
-    public void addItemToOrder(Store store,Item i_Item, Double i_AmountOfSells) {
-        if (store == null) {
-            store = getCheapestStoreForItem(i_Item.getId());
-        }
-
-        m_OrderManager.addItemFromCurrentStore(store, i_Item, i_AmountOfSells);
+    private Store getCheapestStoreForItem(String i_ZoneName,int i_ItemId) {
+        return  m_ZoneNameToZoneMap.get(i_ZoneName).getCheapestStoreForItem(i_ItemId);
     }
 
-    public void addItemInDiscountToOrder(String i_DiscountName,int i_ItemId,double i_Price , double i_Amount)
-    {
-        Store store = m_StoreManager.getStoreFromDiscountName(i_DiscountName);
-        if(store ==null)
-        {
-            throw new IllegalArgumentException("The discount named :\"" + i_DiscountName +"\" is not exists");
-        }
-        m_OrderManager.addItemFromCurrentStore(store,new OrderItem(new StoreItem(getItem(i_ItemId),i_Price,i_Amount),true));
+    public void insertNewItemToStore(String i_ZoneName,int i_StoreID, StoreItem i_NewStoreItem) throws Exception {
+        this.m_ZoneNameToZoneMap.get(i_ZoneName).insertNewItemToStore(i_StoreID, i_NewStoreItem);
+     }
+
+    public boolean isItemExist(String i_ZoneName,int i_ItemID){
+        return this.m_ZoneNameToZoneMap.get(i_ZoneName).isItemExist(i_ItemID);
     }
 
-    public void createNewOrder(Customer customer, LocalDate date) {
-        m_OrderManager.create(customer,date);
+    public boolean isStoreItemBelongToTheStore(String i_ZoneName,int i_StoreID, int i_ItemID) {
+        return this.m_ZoneNameToZoneMap.get(i_ZoneName).isStoreItemBelongToTheStore(i_StoreID, i_ItemID);
     }
 
-    public void executeNewOrder() {
-        m_OrderManager.executeOrder();
-        StorageOrder currentStorageOrder = m_OrderManager.getCurrentOrder();
-        for (OrderItem orderItem : currentStorageOrder.getOrder().getAllItems()) {
-            m_ItemManager.addStorageItemSales(orderItem.getStoreItem().getItem().getId(), orderItem.getStoreItem().getAmountOfSells());
-        }
-
-        m_CustomersManager.getCustomer(currentStorageOrder.getCustomerId()).addOrder(currentStorageOrder);
-        m_OrderManager.cleanup();
+    public boolean isStoreIDExist(String i_ZoneName,int i_StoreID){
+        return this.m_ZoneNameToZoneMap.get(i_ZoneName).isStoreIDExist(i_StoreID);
     }
 
-    public StorageOrder getCurrentOrder() {
-        return m_OrderManager.getCurrentOrder();
-    }
-
-    public Collection<StorageItem> getAllStorageItems(){
-        return m_ItemManager.getAllStorageItems();
-    }
-
-    //only for debug
-    @Override
-    public String toString() {
-        StringBuilder items = new StringBuilder("items:");
-        for (Item item : m_ItemManager.getAllItems()
-        ) {
-            items.append(item);
-        }
-
-        StringBuilder stores = new StringBuilder("stores:");
-        for (Store store : m_StoreManager.getAllStores()
-        ) {
-            stores.append(store);
-        }
-        return items + "\n" + stores;
-    }
-
-    public Store getCheapestStoreForItem(int i_ItemId) {
-        return m_StoreManager.getCheapestStoreForItem(i_ItemId);
-    }
-
-    public void updateStoreItemPrice(int i_StoreID, int i_StoreItemID, double i_NewPrice){
-        m_StoreManager.updateStoreItemPrice(i_StoreID, i_StoreItemID, i_NewPrice);
-        m_ItemManager.setNewAvgPriceForStorageItem(i_StoreItemID, m_StoreManager.getItemAvgPrice(i_StoreItemID));
-    }
-
-    public void insertNewItemToStore(int i_StoreID, StoreItem i_NewStoreItem) throws Exception {
-        this.m_StoreManager.insertNewItemToStore(i_StoreID, i_NewStoreItem);
-        this.m_ItemManager.addStorageItemSellItValue(i_NewStoreItem.getItem().getId(), 1);
-        int storeItemID = i_NewStoreItem.getItem().getId();
-        this.m_ItemManager.setNewAvgPriceForStorageItem(storeItemID, m_StoreManager.getItemAvgPrice(storeItemID));
-    }
-
-    public boolean isItemExist(int i_ItemID){
-        return m_ItemManager.isItemExist(i_ItemID);
-    }
-
-    public boolean isStoreItemBelongToTheStore(int i_StoreID, int i_ItemID) {
-        return m_StoreManager.isItemExist(i_StoreID, i_ItemID);
-    }
-
-    public boolean isStoreIDExist(int i_StoreID){
-        return m_StoreManager.isStoreIDExist(i_StoreID);
-    }
-
-    public void deleteStoreItem(int i_StoreID, int i_ItemID) throws Exception {
-        if(m_ItemManager.getStorageItemNumberOfStoreSellIt(i_ItemID) <= 1){
-            throw new Exception("Operation failed: This is the only store that sell this item, so it can not be remove");
-        }
-        else{
-            m_StoreManager.deleteStoreItem(i_StoreID, i_ItemID);
-            this.m_ItemManager.addStorageItemSellItValue(i_ItemID, -1);
-            this.m_ItemManager.setNewAvgPriceForStorageItem(i_ItemID, m_StoreManager.getItemAvgPrice(i_ItemID));
-        }
-    }
-
-    public void abortOrder() {
-        m_OrderManager.cleanup();
-    }
-
+ //   public void abortOrder() {
+ //       m_OrderManager.cleanup();
+ //   }
+//
     public Collection<Customer> getAllCustomers() {
         return m_CustomersManager.getAllCustomers();
     }
@@ -188,17 +148,26 @@ public class SuperDuperManager {
        return  m_CustomersManager.getCustomer(i_CustomerId);
     }
 
-    public Map<Store,List<StoreDiscount>> getAvailableDiscountsForCurrentOrder()
-    {
-        return m_OrderManager.getAvailableDiscounts();
+  //  public Map<Store,List<StoreDiscount>> getAvailableDiscountsForCurrentOrder()
+  //  {
+  //      return m_OrderManager.getAvailableDiscounts();
+  //  }
+
+    public int addCustomer(String i_Name) throws Exception {
+        int id = m_CustomersManager.addCustomer(i_Name);
+        m_AccountManager.addAccount(id);
+        return id;
     }
 
-    public void addNewStore(Store i_Store,Collection<StoreItem> i_ItemsOfStore) throws Exception {
-        m_StoreManager.addStore(i_Store);
-        for (StoreItem storeItem: i_ItemsOfStore
-             ) {
-            insertNewItemToStore(i_Store.getId(), storeItem);
-        }
-        LocationManager.addLocation(i_Store.getLocation().x, i_Store.getLocation().y, i_Store);
+    public void addNewStore(String i_ZoneName,Store i_Store,Collection<StoreItem> i_ItemsOfStore) throws Exception {
+        this.m_ZoneNameToZoneMap.get(i_ZoneName).addNewStore(i_Store,i_ItemsOfStore);
+    }
+
+    public Collection<Store> getAllStores(String i_ZoneName) {
+        return m_ZoneNameToZoneMap.get(i_ZoneName).getAllStores();
+    }
+
+    public Collection<Item> getAllItems(String i_ZoneName) {
+       return m_ZoneNameToZoneMap.get(i_ZoneName).getAllItems();
     }
 }

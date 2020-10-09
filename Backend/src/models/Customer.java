@@ -8,17 +8,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Customer implements IUniquely, ILocationable {
+public class Customer implements IUniquely {
 
     private final int m_Id;
     private final String m_Name;
-    private final Location m_Location;
     private List<StorageOrder> m_StorageOrders;
 
-    public Customer(int i_Id, String i_Name, Location i_Location) {
+    public Customer(int i_Id, String i_Name) {
         this.m_Id = i_Id;
         this.m_Name = i_Name;
-        this.m_Location = i_Location;
     }
 
     @Override
@@ -29,11 +27,6 @@ public class Customer implements IUniquely, ILocationable {
     public String getName() {
         return m_Name;
 
-    }
-
-    @Override
-    public Location getLocation() {
-        return m_Location;
     }
 
     public List<StorageOrder> getOrders() {

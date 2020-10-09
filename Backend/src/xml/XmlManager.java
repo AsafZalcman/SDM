@@ -1,8 +1,7 @@
 package xml;
 
 import xml.jaxb.IJaxbDataLoader;
-import xml.jaxb.schema.generatedV2.SuperDuperMarketDescriptor;
-
+import xml.jaxb.schema.generated.SuperDuperMarketDescriptor;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -12,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class XmlManager implements IJaxbDataLoader {
 
@@ -30,7 +28,6 @@ public class XmlManager implements IJaxbDataLoader {
         m_Validators.add(new XmlItemValidator());
         m_Validators.add(new XmlStoresValidator());
         m_Validators.add(new XmlStoreValidator());
-        m_Validators.add(new XmlCustomersValidator());
         m_Validators.add(new XmlDiscountValidator());
     }
 
