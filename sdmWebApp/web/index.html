@@ -3,17 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <title>SDM</title>
-    <link rel="stylesheet" href="style.css"/>
+    <style>
+        * {
+            position: relative;
+            background: #2F303A;
+        }
+
+        .home-headers {
+            position: absolute;
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: normal;
+
+            display: flex;
+            align-items: center;
+            text-align: center;
+
+            color: #FFF1F1;
+        }
+
+        .home-headers h1{
+            width: 741px;
+            height: 88px;
+            left: 588px;
+            top: 0px;
+
+            font-size: 72px;
+            line-height: 108px
+        }
+
+        .home-headers h3{
+            width: 613px;
+            height: 86px;
+            left: -106px;
+            top: 100px;
+
+            font-size: 36px;
+            line-height: 54px;
+        }
+
+        input[type=submit] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+
+        .getStart-form{
+            border-radius: 5px;
+            padding: 20px;
+            position: absolute;
+            top: 529px;
+            left: 865px;
+        }
+    </style>
 </head>
 <body>
-    <div class="home-headers">
-        <h1>Super Duper Market</h1>
-        <h3>Make a Smart Shopping</h3>
+<div class="home-headers">
+    <h1>Super Duper Market</h1>
+    <h3>Make a Smart Shopping</h3>
     </div>
     <div class="getStart-form">
         <form method="GET" action="getStart">
             <input type="submit" value="Click to Start">
-         </form>
+        </form>
     </div>
 </body>
 </html>
