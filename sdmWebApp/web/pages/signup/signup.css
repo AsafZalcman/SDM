@@ -1,0 +1,87 @@
+*{
+    position: relative;
+
+    background: #2F303A;
+}
+
+.signup-headers{
+    position: absolute;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FFF1F1;
+}
+
+.signup-headers h1{
+    width: 678px;
+    height: 137px;
+    left: 621px;
+    top: -24px;
+
+    font-size: 72px;
+    line-height: 108px;
+}
+
+.signup-headers h3{
+    width: 803px;
+    height: 66px;
+    left: -56px;
+    top: 59px;
+
+    font-size: 36px;
+    line-height: 54px;
+}
+
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+
+.signup-form{
+    border-radius: 5px;
+    padding: 20px;
+    position: absolute;
+    top: 291px;
+    left: 824px;
+}
+
+label{
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    color: #FFF1F1;
+    font-size: 21px;
+}
+
+select{
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    color: #FFF1F1;
+    font-size: 14px;
+}
