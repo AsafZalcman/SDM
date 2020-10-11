@@ -19,18 +19,20 @@ public class Store implements IDelivery, IUniquely, ILocationable {
     private List<Order> m_Orders;
     private List<StoreDiscount> m_StoreDiscounts;
     private double m_TotalCostOfDelivery = 0;
+    private final String m_OwnerName;
 
-    public Store(int i_StoreID, String i_StoreName, Location i_Location, double i_PPK) {
+    public Store(int i_StoreID, String i_StoreName, Location i_Location, double i_PPK , String i_OwnerName) {
         this.m_StoreID = i_StoreID;
         this.m_StoreName = i_StoreName;
         this.m_Location = i_Location;
         this.m_PPK = i_PPK;
         m_IdToStoreItem = new HashMap<>();
         m_Orders = new ArrayList<>();
+        m_OwnerName =i_OwnerName;
     }
 
-    public Store(int i_StoreID, String i_StoreName, Location i_Location, double i_PPK, Collection<StoreItem> i_Items) {
-        this(i_StoreID, i_StoreName, i_Location, i_PPK);
+    public Store(int i_StoreID, String i_StoreName, Location i_Location, double i_PPK,Collection<StoreItem> i_Items,String i_OwnerName) {
+        this(i_StoreID, i_StoreName, i_Location, i_PPK,i_OwnerName);
         createIdToStoreMapFromCollection(i_Items);
     }
 
@@ -55,6 +57,11 @@ public class Store implements IDelivery, IUniquely, ILocationable {
 
     public void setPPK(double m_PPK) {
         this.m_PPK = m_PPK;
+    }
+
+    public String getOwnerName()
+    {
+        return m_OwnerName;
     }
 
     @Override
@@ -97,7 +104,7 @@ public class Store implements IDelivery, IUniquely, ILocationable {
     }
 
     public Order createOrder(LocalDate i_orderDate, Location i_customerLocation, Map<Integer, Double> i_itemIdToAmountOfSellMap) {
-      return createOrder(i_orderDate,i_customerLocation,i_itemIdToAmountOfSellMap,Collections.emptyList());
+        return createOrder(i_orderDate,i_customerLocation,i_itemIdToAmountOfSellMap,Collections.emptyList());
     }
     public Order createOrder(LocalDate i_orderDate, Location i_customerLocation, Map<Integer, Double> i_itemIdToAmountOfSellMap, Collection<OrderItem> i_ItemsInDiscount) {
         Map<Integer, OrderItem> itemIdToStoreItemsMap = new HashMap<>();

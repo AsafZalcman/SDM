@@ -4,9 +4,7 @@ import models.Store;
 import myLocation.Location;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.util.*;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class  StoreDto {
@@ -19,10 +17,11 @@ public class  StoreDto {
     private final double m_PPK;
     private final String m_Name;
     private final int m_Id;
+    private final String m_OwnerString;
 
 
     public StoreDto(Store i_Store) {
-        this(i_Store.getId(), i_Store.getStoreName(), i_Store.getPPK(), i_Store.getLocation(), i_Store.getAllItems().stream().map(ItemDto::new).collect(Collectors.toList()));
+        this(i_Store.getId(), i_Store.getStoreName(), i_Store.getPPK(), i_Store.getLocation(), i_Store.getAllItems().stream().map(ItemDto::new).collect(Collectors.toList()),i_Store.getOwnerName());
         m_Store = i_Store;
         m_OrdersDto = i_Store.getOrders().stream().map(OrderDto::new).collect(Collectors.toList());
 
@@ -37,12 +36,12 @@ public class  StoreDto {
         }
     }
 
-    public StoreDto(int i_Id,String i_Name,double i_PPK,Point i_Location,Collection<ItemDto> i_Items)
+    public StoreDto(int i_Id,String i_Name,double i_PPK,Point i_Location,Collection<ItemDto> i_Items,String i_OwnerName)
     {
-        this(i_Id,i_Name,i_PPK,i_Location,i_Items,Collections.emptyList());
+        this(i_Id,i_Name,i_PPK,i_Location,i_Items,Collections.emptyList(),i_OwnerName);
     }
 
-    public StoreDto(int i_Id,String i_Name,double i_PPK,Point i_Location,Collection<ItemDto> i_Items,Collection<StoreDiscountDto> i_Discounts)
+    public StoreDto(int i_Id,String i_Name,double i_PPK,Point i_Location,Collection<ItemDto> i_Items,Collection<StoreDiscountDto> i_Discounts,String i_OwnerName)
     {
         m_Id=i_Id;
         m_Name=i_Name;
@@ -52,6 +51,7 @@ public class  StoreDto {
         m_Discounts=i_Discounts;
         m_DeliveriesIncome = 0.0;
         m_OrdersDto=Collections.emptyList();
+        m_OwnerString =i_OwnerName;
     }
 
 
@@ -94,5 +94,9 @@ public class  StoreDto {
     public double getDeliveryPrice(Point i_DestPoint)
     {
         return m_Location.distance(i_DestPoint) * getPPK();
+    }
+
+    public String getOwnerName() {
+        return m_OwnerString;
     }
 }

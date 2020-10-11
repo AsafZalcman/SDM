@@ -75,6 +75,25 @@ public class OrderManager {
  */
         b_IsCreated = true;
     }
+  //  public void create(Customer i_Customer, LocalDate i_Date) {
+  //      if (m_StoresToItemsMap == null) {
+  //          throw new IllegalStateException("Cannot create an empty order");
+  //      }
+  //      List<OrderItem> allOrderItems = new ArrayList<>();
+  //      Order tempOrder;
+  //      int totalDeliveryPrice = 0;
+  //      for (Map.Entry<Store, Map<Integer, Double>> entry : m_StoresToItemsMap.entrySet()) {
+  //          tempOrder = entry.getKey().createOrder(i_Date, i_Customer.getLocation(), entry.getValue(),m_StoresToItemsInDiscounts.getOrDefault(entry.getKey(),Collections.emptyList()));
+  //          m_StoreToOrderMap.put(entry.getKey(), tempOrder);
+  //          totalDeliveryPrice += tempOrder.getDeliveryPrice();
+  //          allOrderItems.addAll(tempOrder.getAllItems());
+  //      }
+
+ //       m_CurrentOrder = new StorageOrder(++counter, new Order(i_Date, i_Customer.getLocation(), totalDeliveryPrice, allOrderItems ), m_StoreToOrderMap.entrySet().stream()
+ //               .collect(Collectors.toMap(entry -> entry.getKey().getId(),
+ //                       Map.Entry::getValue)) ,i_Customer.getId());
+ //       b_IsCreated = true;
+ //   }
     public void executeOrder()
     {
         for (Map.Entry<Store,Order> entry: m_StoreToOrderMap.entrySet()

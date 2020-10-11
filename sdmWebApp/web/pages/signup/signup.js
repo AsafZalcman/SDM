@@ -2,18 +2,17 @@ $(function() {
     $("#signup-form").submit(function () {
             $.ajax({
                 data: $(this).serialize(),
-                url: this.action,
-                timeout: 2000,
+                url: buildUrlWithContextPath("users"),
                 method: 'POST',
-                error: function () {
-                    console.error("Failed to send ajax");
+                error: function (response) {
+                    console.error("Failed to send ajax:" + response.responseText);
                 },
-                success: function (response) {
-                    if (response.status !== 200) {
-                        //handle error
-                        console.log('Im in the response.status != 200');
+                success: function () {
+                        console.log('Redirect to dashboard');
+                    localStorage["userRole"] = document.getElementById('role').value
+                    window.location.href = buildUrlWithContextPath("pages/dashboard/dashboard.html")
                     }
-                }
             })
+        return false;
     });
 });

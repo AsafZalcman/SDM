@@ -1,7 +1,7 @@
 package managers;
 
 import models.Account;
-import models.AccountOperation;
+import models.AccountMovement;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -19,10 +19,6 @@ public class AccountManager {
         m_IdToAccountMap.put(i_Id, i_Account);
     }
 
-    public void removeAccount(int i_Id) {
-        m_IdToAccountMap.remove(i_Id);
-    }
-
     public void addAccount(int i_Id) {
         addAccount(i_Id, new Account());
     }
@@ -33,13 +29,13 @@ public class AccountManager {
 
     public void loadBalance(int i_Id, LocalDate i_Date, double i_Amount)
     {
-        m_IdToAccountMap.get(i_Id).doOperation(AccountOperation.AccountOperationType.LOAD,i_Date,i_Amount);
+        m_IdToAccountMap.get(i_Id).doOperation(AccountMovement.AccountOperationType.LOAD,i_Date,i_Amount);
     }
 
     public void transferMoney(int i_FromId, LocalDate i_Date, double i_Amount , int i_ToId)
     {
-        m_IdToAccountMap.get(i_FromId).doOperation(AccountOperation.AccountOperationType.TRANSFER_PAYMENT,i_Date,i_Amount);
-        m_IdToAccountMap.get(i_ToId).doOperation(AccountOperation.AccountOperationType.ACCEPT_PAYMENT,i_Date,i_Amount);
+        m_IdToAccountMap.get(i_FromId).doOperation(AccountMovement.AccountOperationType.TRANSFER_PAYMENT,i_Date,i_Amount);
+        m_IdToAccountMap.get(i_ToId).doOperation(AccountMovement.AccountOperationType.ACCEPT_PAYMENT,i_Date,i_Amount);
     }
 
     private boolean isAccountExists(int i_Id) {

@@ -14,7 +14,7 @@ import java.util.Collection;
 
 public class XmlManager implements IJaxbDataLoader {
 
-    private final static String JAXB_XML_GAME_PACKAGE_NAME = "xml.jaxb.schema.generatedV2";
+    private final static String JAXB_XML_GAME_PACKAGE_NAME = "xml.jaxb.schema.generated";
     private final static String XML_SUFFIX = ".xml";
     private final Collection<XmlValidator> m_Validators;
 
@@ -37,18 +37,23 @@ public class XmlManager implements IJaxbDataLoader {
             throw new IllegalArgumentException("Error:\"" + i_PathToFile + "\" file does not  have " + XML_SUFFIX + " suffix");
         }
         try (InputStream inputStream = new FileInputStream(i_PathToFile)) {
-            SuperDuperMarketDescriptor superDuperMarketDescriptor = deserializeFrom(inputStream);
-            for (XmlValidator validator : m_Validators
-            ) {
-                validator.validate(superDuperMarketDescriptor);
-            }
-            return superDuperMarketDescriptor;
+          return load(inputStream);
 
         } catch (FileNotFoundException e) {
             throw new FileNotFoundException("Error:\"" + i_PathToFile + "\"" + " file is not exists");
         } catch (IOException | JAXBException e) {
             throw new Exception("Error: A general glitch occurred while loading \"" + i_PathToFile + "\"" + "\n" + e.getMessage());
         }
+    }
+
+    @Override
+    public SuperDuperMarketDescriptor load(InputStream i_FileInputStream) throws Exception {
+        SuperDuperMarketDescriptor superDuperMarketDescriptor = deserializeFrom(i_FileInputStream);
+        for (XmlValidator validator : m_Validators
+        ) {
+            validator.validate(superDuperMarketDescriptor);
+        }
+        return superDuperMarketDescriptor;
     }
 
         private static SuperDuperMarketDescriptor deserializeFrom(InputStream i_InputStream) throws JAXBException {
