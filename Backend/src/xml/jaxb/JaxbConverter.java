@@ -15,6 +15,7 @@ public class JaxbConverter {
     SuperDuperMarketDescriptor m_SuperDuperMarketDescriptor;
     Map<Integer,Item> m_Items;
     Collection<Store> m_Stores;
+    private int m_OwnerId;
 
     public JaxbConverter(IJaxbDataLoader i_IJaxbLoader)
     {
@@ -52,8 +53,9 @@ public class JaxbConverter {
         return m_Items.values();
     }
 
-    public void loadJaxbData(String i_PathToFile) throws Exception {
+    public void loadJaxbData(String i_PathToFile, int i_OwnerId) throws Exception {
         m_SuperDuperMarketDescriptor = m_IJaxbLoader.load(i_PathToFile);
+        m_OwnerId=i_OwnerId;
     }
 
     public String getZoneName()
@@ -68,7 +70,7 @@ public class JaxbConverter {
         ) {
             storeItems.add(convertToStoreItem(sdmSell));
         }
-        Store newStore = new Store(i_JaxbStore.getId(), i_JaxbStore.getName(), new Location(i_JaxbStore.getLocation().getX(), i_JaxbStore.getLocation().getY()), i_JaxbStore.getDeliveryPpk(), storeItems);
+        Store newStore = new Store(i_JaxbStore.getId(), i_JaxbStore.getName(), new Location(i_JaxbStore.getLocation().getX(), i_JaxbStore.getLocation().getY()), i_JaxbStore.getDeliveryPpk(), storeItems,m_OwnerId);
 
         if (i_JaxbStore.getSDMDiscounts() != null) {
             for (SDMDiscount sdmDiscount : i_JaxbStore.getSDMDiscounts().getSDMDiscount()

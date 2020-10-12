@@ -45,17 +45,18 @@ m_ZoneNameToZoneMap = new HashMap<>();
  //       return m_OrderManager;
   //   }
 
-    public void loadSuperDuperDataFromXml(String i_PathToFile) throws Exception {
+    public void loadSuperDuperDataFromXml(String i_PathToFile,int i_OwnerId) throws Exception {
         Map<Location, ILocationable> currentLocations = new HashMap<>(LocationManager.getLocations());
         LocationManager.initLocations();
         try {
             JaxbConverter jaxbConverter = JaxbConverterFactory.create(JaxbConverterFactory.JaxbConverterType.XML);
-            jaxbConverter.loadJaxbData(i_PathToFile);
+            jaxbConverter.loadJaxbData(i_PathToFile,i_OwnerId);
             synchronized (this) {
                 if (m_ZoneNameToZoneMap.get(jaxbConverter.getZoneName()) != null) {
                     throw new IllegalAccessException("Zone:\"" + jaxbConverter.getZoneName() + "\" is already exists");
                 }
                 m_ZoneNameToZoneMap.put(jaxbConverter.getZoneName(), new Zone(jaxbConverter.getZoneName(),
+                        i_OwnerId,
                         new StoreManager(jaxbConverter.getStores()),
                         new ItemManager(jaxbConverter.getItems()),
                         new OrderManager()));

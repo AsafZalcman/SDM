@@ -19,10 +19,11 @@ public class  StoreDto {
     private final double m_PPK;
     private final String m_Name;
     private final int m_Id;
+    private final int m_OwnerId;
 
 
     public StoreDto(Store i_Store) {
-        this(i_Store.getId(), i_Store.getStoreName(), i_Store.getPPK(), i_Store.getLocation(), i_Store.getAllItems().stream().map(ItemDto::new).collect(Collectors.toList()));
+        this(i_Store.getId(), i_Store.getStoreName(), i_Store.getPPK(), i_Store.getLocation(), i_Store.getAllItems().stream().map(ItemDto::new).collect(Collectors.toList()),i_Store.getOwnerID());
         m_Store = i_Store;
         m_OrdersDto = i_Store.getOrders().stream().map(OrderDto::new).collect(Collectors.toList());
 
@@ -37,12 +38,12 @@ public class  StoreDto {
         }
     }
 
-    public StoreDto(int i_Id,String i_Name,double i_PPK,Point i_Location,Collection<ItemDto> i_Items)
+    public StoreDto(int i_Id,String i_Name,double i_PPK,Point i_Location,Collection<ItemDto> i_Items,int i_OwnerId)
     {
-        this(i_Id,i_Name,i_PPK,i_Location,i_Items,Collections.emptyList());
+        this(i_Id,i_Name,i_PPK,i_Location,i_Items,Collections.emptyList(),i_OwnerId);
     }
 
-    public StoreDto(int i_Id,String i_Name,double i_PPK,Point i_Location,Collection<ItemDto> i_Items,Collection<StoreDiscountDto> i_Discounts)
+    public StoreDto(int i_Id,String i_Name,double i_PPK,Point i_Location,Collection<ItemDto> i_Items,Collection<StoreDiscountDto> i_Discounts,int i_OwnerId)
     {
         m_Id=i_Id;
         m_Name=i_Name;
@@ -52,6 +53,7 @@ public class  StoreDto {
         m_Discounts=i_Discounts;
         m_DeliveriesIncome = 0.0;
         m_OrdersDto=Collections.emptyList();
+        m_OwnerId=i_OwnerId;
     }
 
 
@@ -94,5 +96,9 @@ public class  StoreDto {
     public double getDeliveryPrice(Point i_DestPoint)
     {
         return m_Location.distance(i_DestPoint) * getPPK();
+    }
+
+    public int getOwnerId() {
+        return m_OwnerId;
     }
 }

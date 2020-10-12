@@ -19,18 +19,20 @@ public class Store implements IDelivery, IUniquely, ILocationable {
     private List<Order> m_Orders;
     private List<StoreDiscount> m_StoreDiscounts;
     private double m_TotalCostOfDelivery = 0;
+    private final int m_OwnerID;
 
-    public Store(int i_StoreID, String i_StoreName, Location i_Location, double i_PPK) {
+    public Store(int i_StoreID, String i_StoreName, Location i_Location, double i_PPK , int i_OwnerId) {
         this.m_StoreID = i_StoreID;
         this.m_StoreName = i_StoreName;
         this.m_Location = i_Location;
         this.m_PPK = i_PPK;
         m_IdToStoreItem = new HashMap<>();
         m_Orders = new ArrayList<>();
+        m_OwnerID=i_OwnerId;
     }
 
-    public Store(int i_StoreID, String i_StoreName, Location i_Location, double i_PPK, Collection<StoreItem> i_Items) {
-        this(i_StoreID, i_StoreName, i_Location, i_PPK);
+    public Store(int i_StoreID, String i_StoreName, Location i_Location, double i_PPK,Collection<StoreItem> i_Items,int i_OwnerId) {
+        this(i_StoreID, i_StoreName, i_Location, i_PPK,i_OwnerId);
         createIdToStoreMapFromCollection(i_Items);
     }
 
@@ -55,6 +57,11 @@ public class Store implements IDelivery, IUniquely, ILocationable {
 
     public void setPPK(double m_PPK) {
         this.m_PPK = m_PPK;
+    }
+
+    public int getOwnerID()
+    {
+        return  m_OwnerID;
     }
 
     @Override

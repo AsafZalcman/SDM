@@ -33,7 +33,7 @@ public class StoreViewModel {
         {
             throw new IllegalArgumentException("Error: The id :\"" + i_StoreDto.getId() +"\" is already occupied by another store");
         }
-        m_SuperDuperManager.addNewStore(i_ZoneName,new Store(i_StoreDto.getId(), i_StoreDto.getName(), new Location(i_StoreDto.getLocation().x, i_StoreDto.getLocation().y), i_StoreDto.getPPK()),   i_StoreDto.getItemsDto().stream()
+        m_SuperDuperManager.addNewStore(i_ZoneName,new Store(i_StoreDto.getId(), i_StoreDto.getName(), new Location(i_StoreDto.getLocation().x, i_StoreDto.getLocation().y), i_StoreDto.getPPK(),i_StoreDto.getOwnerId()),   i_StoreDto.getItemsDto().stream()
                 .map(itemDto -> new StoreItem(new Item(itemDto.getId(), itemDto.getItemName(), itemDto.getPurchaseForm()), itemDto.getPrice()))
                 .collect(Collectors.toList()));
     }

@@ -13,6 +13,7 @@ public class Zone {
     private StoreManager m_StoreManager;
     private ItemManager m_ItemManager;
     private final String m_Name;
+    private final int m_OwnerId;
 
     public StoreManager getStoreManager() {
         return m_StoreManager;
@@ -28,12 +29,13 @@ public class Zone {
 
     public String getName(){return m_Name;}
 
- public Zone (String i_Name,StoreManager i_StoreManager,ItemManager i_ItemManager,OrderManager i_OrderManager)
+ public Zone (String i_Name,int i_OwnerId,StoreManager i_StoreManager,ItemManager i_ItemManager,OrderManager i_OrderManager)
  {
      m_ItemManager=i_ItemManager;
      m_OrderManager=i_OrderManager;
      m_StoreManager=i_StoreManager;
      m_Name=i_Name;
+     m_OwnerId=i_OwnerId;
      initializeStorageItems();
  }
 
@@ -46,6 +48,11 @@ public class Zone {
 
     public Store getStore(Integer i_StoreID) {
         return m_StoreManager.getStore(i_StoreID);
+    }
+
+    public int getOwnerId()
+    {
+        return m_OwnerId;
     }
 
     public Item getItem(Integer i_ItemID) {
