@@ -51,23 +51,28 @@ public class OrderManager {
     }
 
 
-    public void create(Customer i_Customer, LocalDate i_Date) {
+    public void create(User i_User, LocalDate i_Date) {
         if (m_StoresToItemsMap == null) {
             throw new IllegalStateException("Cannot create an empty order");
         }
         List<OrderItem> allOrderItems = new ArrayList<>();
         Order tempOrder;
         int totalDeliveryPrice = 0;
+        /*
         for (Map.Entry<Store, Map<Integer, Double>> entry : m_StoresToItemsMap.entrySet()) {
-            tempOrder = entry.getKey().createOrder(i_Date, i_Customer.getLocation(), entry.getValue(),m_StoresToItemsInDiscounts.getOrDefault(entry.getKey(),Collections.emptyList()));
+            tempOrder = entry.getKey().createOrder(i_Date, i_User.getLocation(), entry.getValue(),m_StoresToItemsInDiscounts.getOrDefault(entry.getKey(),Collections.emptyList()));
             m_StoreToOrderMap.put(entry.getKey(), tempOrder);
             totalDeliveryPrice += tempOrder.getDeliveryPrice();
             allOrderItems.addAll(tempOrder.getAllItems());
         }
+        */
 
-        m_CurrentOrder = new StorageOrder(++counter, new Order(i_Date, i_Customer.getLocation(), totalDeliveryPrice, allOrderItems ), m_StoreToOrderMap.entrySet().stream()
+/*
+        m_CurrentOrder = new StorageOrder(++counter, new Order(i_Date, i_User.getLocation(), totalDeliveryPrice, allOrderItems ), m_StoreToOrderMap.entrySet().stream()
                 .collect(Collectors.toMap(entry -> entry.getKey().getId(),
-                        Map.Entry::getValue)) ,i_Customer.getId());
+                        Map.Entry::getValue)) , i_User.getId());
+
+ */
         b_IsCreated = true;
     }
     public void executeOrder()

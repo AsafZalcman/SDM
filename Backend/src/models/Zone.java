@@ -70,8 +70,8 @@ public class Zone {
         m_OrderManager.addItemFromCurrentStore(store,new OrderItem(new StoreItem(getItem(i_ItemId),i_Price,i_Amount),true));
     }
 
-    public void createNewOrder(Customer customer, LocalDate date) {
-        m_OrderManager.create(customer,date);
+    public void createNewOrder(User user, LocalDate date) {
+        m_OrderManager.create(user,date);
     }
 
     public void executeNewOrder() {

@@ -7,6 +7,10 @@
         <element id="directory" name="classes">
           <element id="module-output" name="sdmWebApp" />
         </element>
+        <element id="directory" name="lib">
+          <element id="artifact" artifact-name="Controller:jar" />
+          <element id="artifact" artifact-name="Backend:jar" />
+        </element>
       </element>
     </root>
   </artifact>

@@ -1,5 +1,6 @@
 package managers;
 
+import enums.UserType;
 import interfaces.ILocationable;
 import models.*;
 import myLocation.Location;
@@ -7,18 +8,17 @@ import myLocation.LocationManager;
 import xml.jaxb.JaxbConverter;
 import xml.jaxb.JaxbConverterFactory;
 
-import java.time.LocalDate;
 import java.util.*;
 
 public class SuperDuperManager {
     private static SuperDuperManager m_Instance = null;
     private Map<String,Zone> m_ZoneNameToZoneMap;
-    private CustomersManager m_CustomersManager;
+    private UsersManager m_UsersManager;
     private AccountManager m_AccountManager;
 
     private SuperDuperManager() {
 m_ZoneNameToZoneMap = new HashMap<>();
-        m_CustomersManager = new CustomersManager();
+        m_UsersManager = new UsersManager();
         m_AccountManager=new AccountManager();
     }
 
@@ -69,6 +69,8 @@ m_ZoneNameToZoneMap = new HashMap<>();
     public Store getStore(String i_ZoneName,Integer i_StoreID) {
         return m_ZoneNameToZoneMap.get(i_ZoneName).getStore(i_StoreID);
     }
+
+
 
     public Item getItem(String i_ZoneName,Integer i_ItemID) {
         return m_ZoneNameToZoneMap.get(i_ZoneName).getItem(i_ItemID);
@@ -139,13 +141,13 @@ m_ZoneNameToZoneMap = new HashMap<>();
  //       m_OrderManager.cleanup();
  //   }
 //
-    public Collection<Customer> getAllCustomers() {
-        return m_CustomersManager.getAllCustomers();
+    public Collection<User> getAllCustomers() {
+        return m_UsersManager.getAllUsers();
     }
 
-    public Customer getCustomer (int i_CustomerId)
+    public User getCustomer (int i_CustomerId)
     {
-       return  m_CustomersManager.getCustomer(i_CustomerId);
+       return  m_UsersManager.getUser(i_CustomerId);
     }
 
   //  public Map<Store,List<StoreDiscount>> getAvailableDiscountsForCurrentOrder()
@@ -153,8 +155,8 @@ m_ZoneNameToZoneMap = new HashMap<>();
   //      return m_OrderManager.getAvailableDiscounts();
   //  }
 
-    public int addCustomer(String i_Name) throws Exception {
-        int id = m_CustomersManager.addCustomer(i_Name);
+    public int addUser(String i_Name, UserType i_UserType) throws Exception {
+        int id = m_UsersManager.addUser(i_Name, i_UserType);
         m_AccountManager.addAccount(id);
         return id;
     }

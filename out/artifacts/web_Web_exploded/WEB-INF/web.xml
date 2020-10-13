@@ -7,8 +7,16 @@
         <servlet-name>GetStartServlet</servlet-name>
         <servlet-class>servlets.GetStartServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UserServlet</servlet-name>
+        <servlet-class>servlets.UserServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GetStartServlet</servlet-name>
         <url-pattern>/getStart</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserServlet</servlet-name>
+        <url-pattern>/newUser</url-pattern>
     </servlet-mapping>
 </web-app>

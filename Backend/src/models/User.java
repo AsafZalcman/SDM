@@ -1,22 +1,24 @@
 package models;
 
-import interfaces.ILocationable;
+import enums.UserType;
 import interfaces.IUniquely;
-import myLocation.Location;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Customer implements IUniquely {
+public class User implements IUniquely {
 
+    private UserType m_UserType;
     private final int m_Id;
     private final String m_Name;
     private List<StorageOrder> m_StorageOrders;
 
-    public Customer(int i_Id, String i_Name) {
+
+    public User(int i_Id, String i_Name, UserType i_UserType) {
         this.m_Id = i_Id;
         this.m_Name = i_Name;
+        this.m_UserType = i_UserType;
     }
 
     @Override
@@ -26,7 +28,6 @@ public class Customer implements IUniquely {
 
     public String getName() {
         return m_Name;
-
     }
 
     public List<StorageOrder> getOrders() {
