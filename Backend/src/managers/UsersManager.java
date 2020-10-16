@@ -37,9 +37,10 @@ public class UsersManager {
     }
 
     public int addUser(String i_UserName, UserType i_UserType) throws Exception {
-        int id = i_UserName.toLowerCase().hashCode();
+        String newUserRepresentString = i_UserName.toLowerCase() + i_UserType.getValue();
+        int id = newUserRepresentString.hashCode();
         if (m_UserIdToUser.get(id) != null) {
-            throw new Exception("User:\"" + i_UserName.toLowerCase() + "\" is already exists");
+            throw new Exception("User: " + i_UserName.toLowerCase() + " with the role: " + i_UserType.getValue() + " is already exists");
         }
         addUser(new User(id, i_UserName, i_UserType));
         return id;

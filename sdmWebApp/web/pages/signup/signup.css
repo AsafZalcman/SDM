@@ -85,3 +85,8 @@ select{
     color: #FFF1F1;
     font-size: 14px;
 }
+
+.red-border{
+    border-width: 10px;
+    border-color: red;
+}

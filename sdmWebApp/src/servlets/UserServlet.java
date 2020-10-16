@@ -15,7 +15,7 @@ import static constants.Constants.ROLE;
 import static constants.Constants.USERNAME;
 
 public class UserServlet extends HttpServlet {
-    private final String DASHBOARD_URL = "/pages/dashboard/dashboard.html";
+    private final String DASHBOARD_URL = "pages/dashboard/dashboard.html";
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -24,18 +24,15 @@ public class UserServlet extends HttpServlet {
         String usernameFromParameter = request.getParameter(USERNAME);
         String userRoleFromParameter = request.getParameter(ROLE);
 
-        if(usernameFromParameter == null || usernameFromParameter.isEmpty()){
-            //Validation Error
-        }else{
             synchronized (this) {
                 try {
                     int newUserID = userViewModel.addUser(usernameFromParameter, userRoleFromParameter);
                     request.getSession(true).setAttribute(USERNAME, usernameFromParameter);
                     response.sendRedirect(DASHBOARD_URL);
                 }catch (Exception e){
-                    //Display Error
+                    response.sendError(400, e.getMessage());
                 }
             }
-        }
+
     }
 }

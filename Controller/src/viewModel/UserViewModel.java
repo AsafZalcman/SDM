@@ -22,12 +22,7 @@ public class UserViewModel {
     //return the unique id of the created user
     // raise exception if the user is already exists
     public int addUser(String i_Name, String i_UserType) throws Exception {
-        UserType userType = null;
-        try {
-            userType = UserType.valueOf(i_UserType);
-        }catch (Exception e){
-            System.out.println(e);
-        }
+        UserType userType = UserType.valueOf(i_UserType.toUpperCase());
         return m_SuperDuperManager.addUser(i_Name, userType);
     }
 
