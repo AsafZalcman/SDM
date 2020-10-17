@@ -9,7 +9,7 @@
     </servlet>
     <servlet>
         <servlet-name>UserServlet</servlet-name>
-        <servlet-class>servlets.UserServlet</servlet-class>
+        <servlet-class>servlets.UsersServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>GetStartServlet</servlet-name>

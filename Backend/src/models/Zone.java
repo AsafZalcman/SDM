@@ -2,7 +2,7 @@ package models;
 
 import managers.*;
 import myLocation.LocationManager;
-import java.time.LocalDate;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +13,7 @@ public class Zone {
     private StoreManager m_StoreManager;
     private ItemManager m_ItemManager;
     private final String m_Name;
+    private final String m_OwnerName;
 
     public StoreManager getStoreManager() {
         return m_StoreManager;
@@ -28,14 +29,15 @@ public class Zone {
 
     public String getName(){return m_Name;}
 
- public Zone (String i_Name,StoreManager i_StoreManager,ItemManager i_ItemManager,OrderManager i_OrderManager)
- {
-     m_ItemManager=i_ItemManager;
-     m_OrderManager=i_OrderManager;
-     m_StoreManager=i_StoreManager;
-     m_Name=i_Name;
-     initializeStorageItems();
- }
+    public Zone (String i_Name,String i_OwnerName,ItemManager i_ItemManager,StoreManager i_StoreManager,OrderManager i_OrderManager)
+    {
+        m_ItemManager=i_ItemManager;
+        m_OrderManager=i_OrderManager;
+        m_StoreManager=i_StoreManager;
+        m_Name=i_Name;
+        m_OwnerName =i_OwnerName;
+        initializeStorageItems();
+    }
 
     private void initializeStorageItems() {
         for (Integer itemID : m_ItemManager.getAllItemsId()) {
@@ -46,6 +48,11 @@ public class Zone {
 
     public Store getStore(Integer i_StoreID) {
         return m_StoreManager.getStore(i_StoreID);
+    }
+
+    public String getOwnerName()
+    {
+        return m_OwnerName;
     }
 
     public Item getItem(Integer i_ItemID) {
@@ -70,9 +77,9 @@ public class Zone {
         m_OrderManager.addItemFromCurrentStore(store,new OrderItem(new StoreItem(getItem(i_ItemId),i_Price,i_Amount),true));
     }
 
-    public void createNewOrder(User user, LocalDate date) {
-        m_OrderManager.create(user,date);
-    }
+  //  public void createNewOrder(User user, LocalDate date) {
+  //      m_OrderManager.create(user,date);
+  //  }
 
     public void executeNewOrder() {
         m_OrderManager.executeOrder();
@@ -81,7 +88,7 @@ public class Zone {
             m_ItemManager.addStorageItemSales(orderItem.getStoreItem().getItem().getId(), orderItem.getStoreItem().getAmountOfSells());
         }
 
-    //    m_CustomersManager.getCustomer(currentStorageOrder.getCustomerId()).addOrder(currentStorageOrder);
+        //    m_CustomersManager.getCustomer(currentStorageOrder.getCustomerId()).addOrder(currentStorageOrder);
         m_OrderManager.cleanup();
     }
 
@@ -157,7 +164,7 @@ public class Zone {
     }
 
     public Collection<Store> getAllStores() {
-      return   m_StoreManager.getAllStores();
+        return   m_StoreManager.getAllStores();
     }
 
     public Collection<Item> getAllItems() {
