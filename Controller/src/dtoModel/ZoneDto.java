@@ -8,33 +8,41 @@ import java.util.stream.Collectors;
 
 public class ZoneDto {
 
-    private final Zone m_Zone;
+    private final  Collection<StorageItemDto> m_StorageItemsDtos;
+    private final Collection<StoreDto> m_StoresDtos;
+    private final Collection<OrderDto> m_OrdersDtos;
+    private final String m_Name;
+    private final String m_OwnerName;
+
     public ZoneDto(Zone i_Zone)
     {
-        m_Zone=i_Zone;
+        m_StorageItemsDtos = i_Zone.getAllStorageItems().stream().map(StorageItemDto::new).collect(Collectors.toList());
+        m_Name=i_Zone.getName();
+        m_OrdersDtos = Collections.emptyList();
+        m_OwnerName=i_Zone.getName();
+        m_StoresDtos=i_Zone.getAllStores().stream().map(StoreDto::new).collect(Collectors.toList());
     }
 
     public String getName()
     {
-        return m_Zone.getName();
+        return m_Name;
     }
     public String getOwnerName()
     {
-        return m_Zone.getOwnerName();
+        return m_OwnerName;
     }
-    public Collection<ItemDto> getAllItems()
+    public Collection<StorageItemDto> getAllItems()
     {
-        return m_Zone.getAllItems().stream().map(ItemDto::new).collect(Collectors.toList());
+        return m_StorageItemsDtos;
     }
 
     public Collection<StoreDto> getAllStores()
     {
-        return m_Zone.getAllStores().stream().map(StoreDto::new).collect(Collectors.toList());
+        return m_StoresDtos;
     }
 
     public Collection<OrderDto> getAllOrders()
     {
-        return Collections.emptyList();
-        //return m_Zone.getAllOrders();
+        return m_OrdersDtos;
     }
 }

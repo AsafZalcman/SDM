@@ -10,7 +10,7 @@ public class LocationManager {
     public static final int Y_UPPER_LIMIT = 50;
     public static final int Y_LOWER_LIMIT = 1;
     //maybe should be Interface which implement getId and getLocation instead of Integer
-    private static Map<Location, ILocationable> m_LocationToILocationable = new HashMap<>();
+    private static Map<String, List<Location>> m_ZoneToLocations = new HashMap<>();
 
     public static void isValidLocation(int x, int y) throws LocationException {
         boolean res = x <= X_UPPER_LIMIT && x >= X_LOWER_LIMIT && y <= Y_UPPER_LIMIT && y >= Y_LOWER_LIMIT;
@@ -20,70 +20,57 @@ public class LocationManager {
         }
     }
 
-    public static boolean isLocationAvailable(int x, int y) throws LocationException {
+    public static boolean isLocationAvailable(String i_ZoneName,int x, int y) throws LocationException {
         isValidLocation(x, y);
-        ILocationable locationable = m_LocationToILocationable.get(new Location(x, y));
-        if (locationable != null) {
-            throw new LocationException("The location: (" + x + "," + y + ") is already occupied By " + locationable.getClass().getSimpleName() + " with the ID: " + locationable.getId());
+        List<Location> locations =  m_ZoneToLocations.get(i_ZoneName);
+        if ( locations!=null && m_ZoneToLocations.get(i_ZoneName).contains(new Location(x,y))) {
+            throw new LocationException("The location: (" + x + "," + y + ") is already occupied");
         }
         return true;
     }
 
-    public static void addLocation(int x, int y, ILocationable i_Locationable) throws IllegalArgumentException {
+    public static void addLocation(String i_ZoneName,int x, int y) throws IllegalArgumentException {
         try {
-            isLocationAvailable(x, y);
-            m_LocationToILocationable.put(new Location(x , y), i_Locationable);
+            isLocationAvailable(i_ZoneName,x, y);
+            List<Location> locations = m_ZoneToLocations.getOrDefault(i_ZoneName,new ArrayList<>());
+            locations.add(new Location(x , y));
+            m_ZoneToLocations.put(i_ZoneName, locations);
 
         } catch (LocationException e) {
-            throw new IllegalArgumentException("Setting the location (" + x + "," + y + ") to " + i_Locationable.getClass().getSimpleName() + " with the ID: " + i_Locationable.getId() + " Failed because " + e.getMessage());
+            throw new IllegalArgumentException("Setting the location (" + x + "," + y + ") in zone:\"" + i_ZoneName + "\" Failed because " + e.getMessage());
         }
     }
 
-    public static void setLocations(Map<Location, ILocationable> i_LocationToId) {
-        m_LocationToILocationable = i_LocationToId;
-    }
+//  public static void setLocations(Map<Location, ILocationable> i_LocationToId) {
+//      m_ZoneToLocations = i_LocationToId;
+//  }
 
-    public static Map<Location, ILocationable> getLocations() {
-        return m_LocationToILocationable ;
-    }
+//    public static Map<String, List<Location>> getLocations() {
+ //       return m_ZoneToLocations;
+//    }
 
-    public static void initLocations() {
-        m_LocationToILocationable.clear();
-    }
+//   public static void initLocations() {
+//       m_ZoneToLocations.clear();
+//   }
 
-    public static Location getMaxLocation() {
-        int maxY = 1;
-        int maxX = maxY;
-        for(Location location: m_LocationToILocationable.keySet()){
-            if(location.x > maxX){ maxX = location.x; }
-            if(location.y > maxY){ maxY = location.y; }
-        }
-        maxX++;
-        maxY++;
-        
-        return new Location(maxX,maxY);
-    }
+//   public static Location getMaxLocation() {
+//       int maxY = 1;
+//       int maxX = maxY;
+//       for(Location location: m_ZoneToLocations.keySet()){
+//           if(location.x > maxX){ maxX = location.x; }
+//           if(location.y > maxY){ maxY = location.y; }
+//       }
+//       maxX++;
+//       maxY++;
+//
+//       return new Location(maxX,maxY);
+//   }
 
-    public static ILocationable getILocationable(Location i_Location){
-        return m_LocationToILocationable.get(i_Location);
-    }
+//   public static ILocationable getILocationable(Location i_Location){
+//       return m_ZoneToLocations.get(i_Location);
+//   }
 
-    public static Collection<Location> getAllAvailableLocations(){
-        List<Location> locationList = new ArrayList<>();
-        for (int i = X_LOWER_LIMIT ;i<=X_UPPER_LIMIT ; i++ )
-        {
-            for (int j = Y_LOWER_LIMIT ; j<=Y_UPPER_LIMIT ; j++)
-            {
-                try {
-                    if(isLocationAvailable(i,j))
-                    {
-                      locationList.add(new Location(i,j));
-                    }
-                } catch (LocationException ignored) {
-                }
-            }
-        }
-
-        return locationList;
+    public static Collection<Location> getAllAvailableLocations(String i_ZoneName){
+       return m_ZoneToLocations.get(i_ZoneName);
     }
 }

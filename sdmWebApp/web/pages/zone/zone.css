@@ -37,3 +37,24 @@
     position: absolute;
     right: 5px;
 }
+
+.table {
+    flex: 2 0 0;
+    border: 1px black solid;
+    border-radius: 6px;
+    width: 100%;
+}
+.table th {
+    padding: 0% 5% 2% 1%;
+    background: lightskyblue;
+}
+.table tr {
+    background: lightsteelblue;
+    color: navy;
+}
+.table tr:hover {
+    background: blanchedalmond;
+}
+.table td {
+    height: 40px;
+}

@@ -160,7 +160,7 @@ public class Zone {
         ) {
             insertNewItemToStore(i_Store.getId(), storeItem);
         }
-        LocationManager.addLocation(i_Store.getLocation().x, i_Store.getLocation().y, i_Store);
+        LocationManager.addLocation(m_Name,i_Store.getLocation().x, i_Store.getLocation().y);
     }
 
     public Collection<Store> getAllStores() {

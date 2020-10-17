@@ -18,7 +18,7 @@ public class Store implements IDelivery, IUniquely, ILocationable {
     private Map<Integer, StoreItem> m_IdToStoreItem;
     private List<Order> m_Orders;
     private List<StoreDiscount> m_StoreDiscounts;
-    private double m_TotalCostOfDelivery = 0;
+    private double m_IncomesFromDeliveries = 0;
     private final String m_OwnerName;
     private List<StoreFeedback> m_StoreFeedbacks;
 
@@ -101,8 +101,8 @@ public class Store implements IDelivery, IUniquely, ILocationable {
         return m_IdToStoreItem.get(i_Id);
     }
 
-    public double getTotalCostOfDelivery() {
-        return m_TotalCostOfDelivery;
+    public double getIncomesFromDeliveries() {
+        return m_IncomesFromDeliveries;
     }
 
     public Order createOrder(LocalDate i_orderDate, Location i_customerLocation, Map<Integer, Double> i_itemIdToAmountOfSellMap) {
@@ -126,7 +126,7 @@ public class Store implements IDelivery, IUniquely, ILocationable {
     public void addOrder(Order i_Order)
     {
         m_Orders.add(i_Order);
-        m_TotalCostOfDelivery += i_Order.getDeliveryPrice();
+        m_IncomesFromDeliveries += i_Order.getDeliveryPrice();
         for (OrderItem orderItem : i_Order.getAllItems()
         ) {
             m_IdToStoreItem.get(orderItem.getStoreItem().getItem().getId()).addAmountOfSells(orderItem.getStoreItem().getAmountOfSells());
