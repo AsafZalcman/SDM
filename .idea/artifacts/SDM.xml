@@ -9,8 +9,8 @@
         </element>
         <element id="directory" name="lib">
           <element id="artifact" artifact-name="Controller:jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../gson-2.1.jar" />
           <element id="artifact" artifact-name="Backend:jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/sdmWebApp/web/WEB-INF/lib/gson-2.1.jar" />
         </element>
       </element>
     </root>

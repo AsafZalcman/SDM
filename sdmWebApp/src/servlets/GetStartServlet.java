@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class GetStartServlet extends HttpServlet {
     private final String SIGNUP_URL = "pages/signup/signup.html";
-    private final String DASHBOARD_URL = "/pages/dashboard/dashboard.html";
+    private final String DASHBOARD_URL = "pages/dashboard/dashboard.html";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         String usernameFromSession = SessionUtils.getUsername(request);

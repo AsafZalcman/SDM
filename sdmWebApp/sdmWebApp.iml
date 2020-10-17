@@ -22,10 +22,11 @@
     <orderEntry type="library" exported="" scope="PROVIDED" name="Tomcat 8.5.58" level="application_server_libraries" />
     <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
     <orderEntry type="module" module-name="Controller" />
+    <orderEntry type="library" name="Java EE 6-Java EE 6 (2)" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../gson-2.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/web/WEB-INF/lib/gson-2.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

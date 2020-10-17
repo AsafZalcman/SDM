@@ -256,8 +256,8 @@ function refreshZoneListCallback(zones) {
         tdNumberOfOrders.appendTo(tr);
         tdAveragePriceOfOrdersWithoutDelivery.appendTo(tr);
         tr.click(function() {
-            setCurrentZone(zone.name)
-            location.href = buildUrlWithContextPath("index.html");
+            setCurrentZone(zone.name);
+            location.href = buildUrlWithContextPath("pages/zone/zone.html");
         });
         $("#zonesTable").append(tr)
 
