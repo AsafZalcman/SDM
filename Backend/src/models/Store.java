@@ -20,6 +20,7 @@ public class Store implements IDelivery, IUniquely, ILocationable {
     private List<StoreDiscount> m_StoreDiscounts;
     private double m_TotalCostOfDelivery = 0;
     private final String m_OwnerName;
+    private List<StoreFeedback> m_StoreFeedbacks;
 
     public Store(int i_StoreID, String i_StoreName, Location i_Location, double i_PPK , String i_OwnerName) {
         this.m_StoreID = i_StoreID;
@@ -29,6 +30,7 @@ public class Store implements IDelivery, IUniquely, ILocationable {
         m_IdToStoreItem = new HashMap<>();
         m_Orders = new ArrayList<>();
         m_OwnerName =i_OwnerName;
+        m_StoreFeedbacks = new ArrayList<>();
     }
 
     public Store(int i_StoreID, String i_StoreName, Location i_Location, double i_PPK,Collection<StoreItem> i_Items,String i_OwnerName) {
@@ -202,6 +204,49 @@ public class Store implements IDelivery, IUniquely, ILocationable {
 
     public int getTotalAmountOfOrders(){
         return m_Orders.size();
+    }
+
+    public void addFeedback(StoreFeedback i_StoreFeedback)
+    {
+        m_StoreFeedbacks.add(i_StoreFeedback);
+    }
+    public Collection<StoreFeedback> getAllFeedbacks(){
+        return m_StoreFeedbacks;
+    }
+
+    public static class StoreFeedback
+    {
+        private final int m_Rank;
+        private final String m_Description;
+        private final String m_UserName;
+        private final LocalDate m_Date;
+        public StoreFeedback(int i_Rank, String i_Description, String i_UserName, LocalDate i_Date)
+        {
+            m_Date=i_Date;
+            m_Description=i_Description;
+            m_Rank=i_Rank;
+            m_UserName=i_UserName;
+        }
+        public StoreFeedback(int i_Rank, String i_UserName, LocalDate i_Date)
+        {
+            this(i_Rank,"",i_UserName,i_Date);
+        }
+
+        public int getRank() {
+            return m_Rank;
+        }
+
+        public String getDescription() {
+            return m_Description;
+        }
+
+        public String getUserName() {
+            return m_UserName;
+        }
+
+        public LocalDate getDate() {
+            return m_Date;
+        }
     }
 
 }
