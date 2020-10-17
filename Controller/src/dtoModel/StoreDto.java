@@ -4,6 +4,7 @@ import models.Store;
 import myLocation.Location;
 
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,7 @@ public class  StoreDto {
     private final String m_Name;
     private final int m_Id;
     private final String m_OwnerString;
+    private  Collection<StoreFeedbackDto> m_StoreFeedbackDtos;
 
 
     public StoreDto(Store i_Store) {
@@ -34,6 +36,8 @@ public class  StoreDto {
                     .map(StoreDiscountDto::new)
                     .collect(Collectors.toList());
         }
+
+        m_StoreFeedbackDtos = i_Store.getAllFeedbacks().stream().map(StoreFeedbackDto::new).collect(Collectors.toList());
     }
 
     public StoreDto(int i_Id,String i_Name,double i_PPK,Point i_Location,Collection<ItemDto> i_Items,String i_OwnerName)
@@ -52,6 +56,7 @@ public class  StoreDto {
         m_DeliveriesIncome = 0.0;
         m_OrdersDto=Collections.emptyList();
         m_OwnerString =i_OwnerName;
+        m_StoreFeedbackDtos = Collections.emptyList();
     }
 
 
@@ -98,5 +103,37 @@ public class  StoreDto {
 
     public String getOwnerName() {
         return m_OwnerString;
+    }
+
+    public Collection<StoreFeedbackDto> getFeedbacks()
+    {
+        return m_StoreFeedbackDtos;
+    }
+
+    private class StoreFeedbackDto
+    {
+        Store.StoreFeedback m_StoreFeedback;
+        public StoreFeedbackDto (Store.StoreFeedback i_StoreFeedback)
+        {
+            m_StoreFeedback=i_StoreFeedback;
+        }
+
+        public int getRank() {
+            return m_StoreFeedback.getRank();
+        }
+
+        public String getDescription() {
+            return m_StoreFeedback.getDescription();
+
+        }
+
+        public String getUserName() {
+            return m_StoreFeedback.getUserName();
+
+        }
+
+        public LocalDate getDate() {
+            return m_StoreFeedback.getDate();
+        }
     }
 }
