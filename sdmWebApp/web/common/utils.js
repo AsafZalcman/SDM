@@ -1,4 +1,9 @@
 function isCustomer(){return localStorage["userRole"] === "Customer"}
+function setUserRole(role){localStorage["userRole"] = role}
+function setCurrentZone(zoneName){localStorage["currentZone"] = zoneName}
+function getCurrentZone(){return localStorage["currentZone"]}
+
+
 function isFloatNumber(item,evt) {
     evt = (evt) ? evt : window.event;
     var charCode = (evt.which) ? evt.which : evt.keyCode;

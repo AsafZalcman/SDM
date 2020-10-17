@@ -9,7 +9,7 @@ $(function() {
                 },
                 success: function () {
                         console.log('Redirect to dashboard');
-                    localStorage["userRole"] = document.getElementById('role').value
+                    setUserRole(document.getElementById('role').value)
                     window.location.href = buildUrlWithContextPath("pages/dashboard/dashboard.html")
                     }
             })

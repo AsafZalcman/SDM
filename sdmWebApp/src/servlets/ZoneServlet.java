@@ -36,7 +36,7 @@ public class ZoneServlet extends HttpServlet {
             String jsonResponse;
             String zoneName = request.getParameter(Constants.ZONE_NAME_PARAMETER);
             if (zoneName == null) {
-                //get all zones
+                //get summary of all zones
                 Collection<SimpleZoneDto> simpleZoneDtoCollection = zoneViewModel.getAllZones().stream().map(SimpleZoneDto::new).collect(Collectors.toList());
                 jsonResponse = gson.toJson(simpleZoneDtoCollection);
             }
@@ -44,7 +44,7 @@ public class ZoneServlet extends HttpServlet {
             {
                 //return specific zone
                 System.out.println("requested zone: " + zoneName);
-                jsonResponse="";
+                jsonResponse = gson.toJson(zoneViewModel.getZone(zoneName));
             }
             System.out.println(jsonResponse);
 
@@ -66,7 +66,6 @@ public class ZoneServlet extends HttpServlet {
             InputStream fileInputStream = new ArrayList<>(request.getParts()).get(0).getInputStream();
 
             try {
-                //we should get the userName? or the user id and convert to his name?
                 zoneViewModel.loadZoneFromXml(fileInputStream, userName);
                 out.println(gson.toJson(new LoadFileStatus(true, "")));
             } catch (Exception e) {
