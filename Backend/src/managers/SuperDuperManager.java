@@ -48,46 +48,36 @@ m_ZoneNameToZoneMap = new HashMap<>();
 
     //need to avoid this duplicate
     public void loadSuperDuperDataFromXml(String i_PathToFile,String i_OwnerName) throws Exception {
-        Map<Location, ILocationable> currentLocations = new HashMap<>(LocationManager.getLocations());
-        LocationManager.initLocations();
         try {
             JaxbConverter jaxbConverter = JaxbConverterFactory.create(JaxbConverterFactory.JaxbConverterType.XML);
             jaxbConverter.loadJaxbData(i_PathToFile,i_OwnerName);
-            synchronized (this) {
-                if (m_ZoneNameToZoneMap.get(jaxbConverter.getZoneName()) != null) {
-                    throw new IllegalAccessException("Zone:\"" + jaxbConverter.getZoneName() + "\" is already exists");
-                }
-                m_ZoneNameToZoneMap.put(jaxbConverter.getZoneName(), new Zone(jaxbConverter.getZoneName(),
-                        i_OwnerName,
-                        new ItemManager(jaxbConverter.getItems()),
-                        new StoreManager(jaxbConverter.getStores()),
-                        new OrderManager()));
-            }
+            getDataFromJaxb(jaxbConverter,i_OwnerName);
+
         } catch (Exception e) {
-            LocationManager.setLocations(currentLocations);
             throw e;
         }
     }
 
    public void loadSuperDuperDataFromXml(InputStream i_InputStream,String i_OwnerName) throws Exception {
-       Map<Location, ILocationable> currentLocations = new HashMap<>(LocationManager.getLocations());
-       LocationManager.initLocations();
        try {
            JaxbConverter jaxbConverter = JaxbConverterFactory.create(JaxbConverterFactory.JaxbConverterType.XML);
            jaxbConverter.loadJaxbData(i_InputStream,i_OwnerName);
-           synchronized (this) {
-               if (m_ZoneNameToZoneMap.get(jaxbConverter.getZoneName()) != null) {
-                   throw new IllegalAccessException("Zone:\"" + jaxbConverter.getZoneName() + "\" is already exists");
-               }
-               m_ZoneNameToZoneMap.put(jaxbConverter.getZoneName(), new Zone(jaxbConverter.getZoneName(),
-                       i_OwnerName,
-                       new ItemManager(jaxbConverter.getItems()),
-                       new StoreManager(jaxbConverter.getStores()),
-                       new OrderManager()));
-           }
+           getDataFromJaxb(jaxbConverter,i_OwnerName);
        } catch (Exception e) {
-           LocationManager.setLocations(currentLocations);
            throw e;
+       }
+   }
+
+   private void getDataFromJaxb(JaxbConverter i_JaxbConverter,String i_OwnerName ) throws IllegalAccessException {
+       synchronized (this) {
+           if (m_ZoneNameToZoneMap.get(i_JaxbConverter.getZoneName()) != null) {
+               throw new IllegalAccessException("Zone:\"" + i_JaxbConverter.getZoneName() + "\" is already exists");
+           }
+           m_ZoneNameToZoneMap.put(i_JaxbConverter.getZoneName(), new Zone(i_JaxbConverter.getZoneName(),
+                   i_OwnerName,
+                   new ItemManager(i_JaxbConverter.getItems()),
+                   new StoreManager(i_JaxbConverter.getStores()),
+                   new OrderManager()));
        }
    }
 
