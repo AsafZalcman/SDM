@@ -170,6 +170,11 @@ $(function() {
     {
         $('#loadMoney').hide()
     }
+    else
+    {
+        $('#uploadForm').hide()
+    }
+
 });
 
 $( function() {

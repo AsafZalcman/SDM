@@ -20,8 +20,7 @@ public class ZoneDto {
     }
     public String getOwnerName()
     {
-        return "not implemented";
-        //m_Zone.getOwnerName();
+        return m_Zone.getOwnerName();
     }
     public Collection<ItemDto> getAllItems()
     {
