@@ -1,385 +1,608 @@
 var zoneDetailsTabName = "details"
 var currentTab=zoneDetailsTabName
-function getContentOfSelectedBtn(selectedBtn) {
-    let res = "";
-    currentTab = selectedBtn
-    $('.zoneArea').hide()
-    switch (selectedBtn){
-        case 'makeAnOrder':
-            res ="<h1> In Make An order </h1>";
-            break;
-        case 'rank':
-            res ="<h1> In Rank </h1>";
-            break;
-        case 'customerOrderHistory':
-            res ="<h1> In customerOrderHistory </h1>";
-            break;
-        case 'managerOrderHistory':
-            res ="<h1> In managerOrderHistory </h1>";
-            break;
-        case 'feedback':
-            res ="<h1> In feedback </h1>";
-            break;
-        case 'newStore':
-            res ="<h1> In newStore </h1>";
-            createNewStore()
-            break;
-        case  zoneDetailsTabName:
-            res = "<h1>In Zone Details</h1>"
-            loadZoneDetails()
-            break;
-    }
-    return res;
-}
-
-function switchContent(evt, selectedBtn){
-    $(".active").removeClass("active");
-    evt.currentTarget.className += " active";
-    $(".zone-content").empty();
-    $(".zone-content").append(getContentOfSelectedBtn(selectedBtn))
-}
-
-$(function () {
-    var customerMenuButtons = $("<button onclick=\"switchContent(event,'makeAnOrder')\">Make an order</button>\n" +
-        "    <button onclick=\"switchContent(event,'rank')\">Rank managers</button>\n" +
-        "    <button onclick=\"switchContent(event,'customerOrderHistory')\">Orders history</button>");
-    var managerMenuButtons = $("<button onclick=\"switchContent(event,'managerOrderHistory')\">Orders history</button>\n" +
-        "    <button onclick=\"switchContent(event,'feedback')\">Feedbacks</button>\n" +
-        "    <button onclick=\"switchContent(event,'newStore')\">Create new store</button>");
-    if(isCustomer()){
-        $(".topnav .dynamicButtons", this).append(customerMenuButtons);
-    }else{
-        $(".topnav .dynamicButtons", this).append(managerMenuButtons);
-    }
-});
-
-$(function () {
-    $(".backButton").click(function () {
-        setCurrentZone("")
-        location.href = buildUrlWithContextPath("pages/dashboard/dashboard.html");
-    });
-
-    loadZoneDetails()
-});
-
 var refreshRate = 2000; //milli seconds
 
-function loadZoneDetails()
-{
-    refreshZoneDetails()
-}
-
-function triggerAjaxZoneDetailsTables() {
-    if(currentTab === zoneDetailsTabName) {
-        setTimeout(refreshZoneDetails, refreshRate);
-    }
-}
-
-function refreshZoneDetails() {
-    $.ajax
-    (
-        {
-            url: buildUrlWithContextPath("zones"),
-            data: "zoneName=" + getCurrentZone(),
-            success: function(zone) {
-                loadStorageItemsList(zone.m_StorageItemsDtos);
-                loadStoresList(zone.m_StoresDtos);
-                triggerAjaxZoneDetailsTables()
-
-            }
+    async function setContentOfSelectedBtn(selectedBtn) {
+        currentTab = selectedBtn
+        $(".zone-content").empty();
+        switch (selectedBtn) {
+            case 'makeAnOrder':
+                $(".zone-content").append(await loadMakeOrder());
+                activateOnLoadMakeAnOrder();
+                break;
+            case 'rank':
+                res = "<h1> In Rank </h1>";
+                break;
+            case 'customerOrderHistory':
+                res = "<h1> In customerOrderHistory </h1>";
+                break;
+            case 'managerOrderHistory':
+                res = "<h1> In managerOrderHistory </h1>";
+                break;
+            case 'feedback':
+                res = "<h1> In feedback </h1>";
+                break;
+            case 'newStore':
+                createNewStore()
+                break;
+            case  zoneDetailsTabName:
+                loadZoneDetails()
+                break;
         }
-    )
 }
 
-//{
-//"m_StorageItemsDtos":[
-//    {
-//        "m_ItemDto":{
-//            "m_ItemId":1,
-//            "m_ItemName":"Ketshop",
-//            "m_PurchaseForm":"QUANTITY",
-//            "m_FromDiscount":false
-//        },
-//        "m_StoresSellIt":1,
-//        "m_AvgPrice":20.0,
-//        "m_Sales":0.0
-//    },
-//    {
-//        "m_ItemDto":{
-//            "m_ItemId":2,
-//            "m_ItemName":"Banana",
-//            "m_PurchaseForm":"WEIGHT",
-//            "m_FromDiscount":false
-//        },
-//        "m_StoresSellIt":2,
-//        "m_AvgPrice":15.0,
-//        "m_Sales":0.0
-//    }],
-//    "m_StoresDtos":[
-//
-// }
-
-//    {
-//        "m_ItemDto":{
-//            "m_ItemId":1,
-//            "m_ItemName":"Ketshop",
-//            "m_PurchaseForm":"QUANTITY",
-//            "m_FromDiscount":false
-//        },
-//        "m_StoresSellIt":1,
-//        "m_AvgPrice":20.0,
-//        "m_Sales":0.0
-//    },
-function loadStorageItemsList(items) {
-    if(!$("#storageItemsTable").length)  // table not exists
-    {
-        addTable("storageItemsTable", 6, "Storage Items", ["ID", "Name", "Purchase Form", "How Many Stores Sell", "Average Price", "Sold So Far"])
+    function switchContent(evt, selectedBtn) {
+        $(".active").removeClass("active");
+        evt.currentTarget.className += " active";
+        setContentOfSelectedBtn(selectedBtn);
     }
-        loadStorageItemsListData(items)
 
-}
-function loadStorageItemsListData(items)
-{
-    $("#storageItemsTable table tbody").empty()
-    $.each(items || [], function(index, item){
-        var tr = $(document.createElement('tr'));
-        var tdID = $(document.createElement('td')).text(item.m_ItemDto.m_ItemId);
-        var tdName = $(document.createElement('td')).text(item.m_ItemDto.m_ItemName);
-        var tdPurchaseForm = $(document.createElement('td')).text(item.m_ItemDto.m_PurchaseForm);
-        var tdStoresSellIt = $(document.createElement('td')).text(item.m_StoresSellIt);
-        var tdAveragePrice =    $(document.createElement('td')).text(show2DecimalPlaces(item.m_AvgPrice))
-        var tdSells = $(document.createElement('td')).text(show2DecimalPlaces(item.m_Sales));
-
-        tdID.appendTo(tr);
-        tdName.appendTo(tr);
-        tdPurchaseForm.appendTo(tr);
-        tdStoresSellIt.appendTo(tr);
-        tdAveragePrice.appendTo(tr);
-        tdSells.appendTo(tr);
-        $("#storageItemsTable table tbody").append(tr)
+    $(function () {
+        var customerMenuButtons = $("<button onclick=\"switchContent(event,'makeAnOrder')\">Make an order</button>\n" +
+            "    <button onclick=\"switchContent(event,'rank')\">Rank managers</button>\n" +
+            "    <button onclick=\"switchContent(event,'customerOrderHistory')\">Orders history</button>");
+        var managerMenuButtons = $("<button onclick=\"switchContent(event,'managerOrderHistory')\">Orders history</button>\n" +
+            "    <button onclick=\"switchContent(event,'feedback')\">Feedbacks</button>\n" +
+            "    <button onclick=\"switchContent(event,'newStore')\">Create new store</button>");
+        if (isCustomer()) {
+            $(".topnav .dynamicButtons", this).append(customerMenuButtons);
+        } else {
+            $(".topnav .dynamicButtons", this).append(managerMenuButtons);
+        }
     });
-}
-//          "m_OrdersDto":[
-//          ],
-//          "m_DeliveriesIncome":0.0,
-//          "m_Items":[
-//             {
-//                "m_ItemId":1,
-//                "m_ItemName":"Ketshop",
-//                "m_PurchaseForm":"QUANTITY",
-//                "m_Price":20.0,
-//                "m_AmountOfSell":0.0,
-//                "m_FromDiscount":false
-//             },
-//             {
-//                "m_ItemId":2,
-//                "m_ItemName":"Banana",
-//                "m_PurchaseForm":"WEIGHT",
-//                "m_Price":10.0,
-//                "m_AmountOfSell":0.0,
-//                "m_FromDiscount":false
-//             }
-//          ],
-//       ,
-//          "m_Location":{
-//             "x":3,
-//             "y":4
-//          },
-//          "m_PPK":30.0,
-//          "m_Name":"super baba",
-//          "m_Id":1,
-//          "m_OwnerName":"asafza@mta.ac.il",
-//          "m_StoreFeedbackDtos":[
-//
-//          ]
-//       }
-function loadStoresList(stores) {
-    if(!$("#storesTable").length)  // table not exists
-    {
-        addTable("storesTable", 8, "Available Stores", ["ID", "Name",
-            "Owner Name",
-            "Location",
-            "Number Of Orders",
-            "PPK",
-            "Incomes From Items",
-            "Incomes From Deliveries"])
+
+    $(function () {
+        $(".backButton").click(function () {
+            setCurrentZone("")
+            location.href = buildUrlWithContextPath("pages/dashboard/dashboard.html");
+        });
+
+        loadZoneDetails()
+    });
+
+/*make order tab */
+async function loadMakeOrder(){
+    var mainBlockDiv = loadMainBlock();
+    var selectItemsDiv = loadSelectItemBlock();
+    var selectDiscounts = loadSelectDiscountsBlock();
+    var container = "<div class=\"makeAnOrder\" id=\"makeAnOrder\">" + "\n" + mainBlockDiv + "\n" +  selectItemsDiv + "\n" + selectDiscounts  + "\n" + "</div>";
+
+    return container;
     }
-   loadStoreTableData(stores);
+
+    function loadMainBlock() {
+        return "<div class=\"main-block\">\n" +
+            "        <h1>Make an order</h1>\n" +
+            "        <form id=\"pre-form\" action=\"\">\n" +
+            "            <fieldset>\n" +
+            "            <div class=\"pre-inputs\">\n" +
+            "                <label for=\"datepicker\">Choose date:</label>\n" +
+            "                <input type=\"text\" id=\"datepicker\" name=\"date\" required>\n" +
+            "\n" +
+            "                <br><br>\n" +
+            "\n" +
+            "                <label for=\"orderLocation\">Choose your location:</label>\n" +
+            "                <select name=\"location\" id=\"orderLocation\" required>\n" +
+            "                    <option value=\"\" disabled selected>Select your location..</option>\n" +
+            "                </select>\n" +
+            "\n" +
+            "                <br><br>\n" +
+            "            </div>\n" +
+            "            <h3>Select your type of order:</h3>\n" +
+            "            <div class=\"orderType\">\n" +
+            "                    <input type=\"radio\" value=\"static\" id=\"radioStatic\" name=\"method\"/>\n" +
+            "                    <label for=\"radioStatic\" class=\"radio\">Static order</label>\n" +
+            "\n" +
+            "\n" +
+            "                    <input type=\"radio\" value=\"dynamic\" id=\"radioDynamic\" name=\"method\" checked/>\n" +
+            "                    <label for=\"radioDynamic\" class=\"radio\">Dynamic order</label>\n" +
+            "            </div>\n" +
+            "            <br>\n" +
+            "            <div class=\"staticSelectStore\" hidden>\n" +
+            "                <label for=\"selectStore\">Select store:</label>\n" +
+            "                <select name=\"selectStore\" id=\"selectStore\">\n" +
+            "                    <option value=\"\" disabled selected>Select store..</option>\n" +
+            "                </select>\n" +
+            "            </div>\n" +
+            "\n" +
+            "            <input type=\"submit\" value=\"Press to Continue\">\n" +
+            "            </fieldset>\n" +
+            "        </form>\n" +
+            "    </div>";
+    }
+
+    function loadSelectItemBlock() {
+    return "<div class=\"select-item-block\" hidden>\n" +
+     "        <table id=\"selectItemTable\" class=\"tableView\">\n" +
+     "            <tr>\n" +
+     "                <th>ID</th>\n" +
+     "                <th>Name</th>\n" +
+     "                <th>Purchase Form</th>\n" +
+     "                <th>Price</th>\n" +
+     "                <th>Amount</th>\n" +
+     "                <th></th>\n" +
+     "            </tr>\n" +
+     "        </table>\n" +
+     "        <form id=\"selectItemForm\" action=\"\">\n" +
+     "        <input type=\"submit\" value=\"Press to Continue\">\n" +
+     "        </form>\n" +
+     "    </div>";
 }
 
-function loadStoreTableData(stores)
-{
-    $("#storesTable table tbody").empty()
-    $("#storeItemsTable table tbody").empty()
-    $.each(stores || [], function(index, store){
-        var tr = $(document.createElement('tr'));
-        var tdID = $(document.createElement('td')).text(store.m_Id);
-        var tdName = $(document.createElement('td')).text(store.m_Name);
-        var tdOwnerName = $(document.createElement('td')).text(store.m_OwnerName);
-        var tdLocation = $(document.createElement('td')).text("("+store.m_Location.x +"," +store.m_Location.y +")");
-        var tdPPK = $(document.createElement('td')).text(show2DecimalPlaces(store.m_PPK));
-        var tdNumberOfOrders = $(document.createElement('td')).text(store.m_OrdersDto.length);
-        var itemsIncomes = 0
-        $.each(store.m_OrdersDto|| [], function(index, order) {
-            itemsIncomes += order.m_TotalItemsPrice
-        });
-        var tdIncomesFromItems = $(document.createElement('td')).text(show2DecimalPlaces(itemsIncomes));
-        var tdIncomesFromDeliveries = $(document.createElement('td')).text(show2DecimalPlaces(store.m_DeliveriesIncome));
+function loadSelectDiscountsBlock(){
+    return "    <div id=\"select-discounts-block\" hidden>\n" +
+        "        <h1>Here are the discounts!</h1>\n" +
+        "        <select id=\"storeDiscount\" name=\"storeDiscount\" required>\n" +
+        "            <option value=\"\" disabled selected>Select store...</option>\n" +
+        "        </select>\n" +
+        "        <div id=\"discounts\">\n" +
+        "        </div>\n" +
+        "        <form id=\"selectDiscountForm\" action=\"\">\n" +
+        "        <input type=\"submit\" value=\"Press to Continue\">\n" +
+        "        </form>\n" +
+        "    </div>";
+}
 
-        tdID.appendTo(tr);
-        tdName.appendTo(tr);
-        tdOwnerName.appendTo(tr);
-        tdLocation.appendTo(tr);
-        tdNumberOfOrders.appendTo(tr);
-        tdPPK.appendTo(tr);
-        tdIncomesFromItems.appendTo(tr);
-        tdIncomesFromDeliveries.appendTo(tr);
 
-        tr.click(function() {
-            var currentTable = document.getElementById("storeItemsTable");
-            if(currentTable!==null)
-            {
-                currentTable.parentElement.removeChild(currentTable);
-            }
-            addTable("storeItemsTable",5,"Available Items Of "+store.m_Name,["ID","Name","Purchase Form","Price","Sold So Far"])
-            $.each(store.m_Items || [], function(index, storeItem){
-                var trItem = $(document.createElement('tr'));
-                var tdID = $(document.createElement('td')).text(storeItem.m_ItemId);
-                var tdName = $(document.createElement('td')).text(storeItem.m_ItemName);
-                var tdPurchaseForm = $(document.createElement('td')).text(storeItem.m_PurchaseForm);
-                var tdPrice = $(document.createElement('td')).text(show2DecimalPlaces(storeItem.m_Price));
-                var tdSoldSoFar = $(document.createElement('td')).text((storeItem.m_AmountOfSell));
+    function activateOnLoadMakeAnOrder() {
+        $("#datepicker").datepicker();
+    getAllAvailableLocationsMakeAnOrder();
+    getAllZoneStoresMakeAnOrder();
+    onLoadRadioButtonsMakeAnOrder();
+    submitFirstStepMakeAnOrder();
+    onLoadDiscountSelect();
+}
 
-                tdID.appendTo(trItem);
-                tdName.appendTo(trItem);
-                tdPurchaseForm.appendTo(trItem);
-                tdPrice.appendTo(trItem);
-                tdSoldSoFar.appendTo(trItem);
-                $("#storeItemsTable table tbody").append(trItem)
-            });
-        });
-        $("#storesTable table").append(tr)
+function onLoadDiscountSelect(){
+    $('#storeDiscount').change(function (){
+        var storeID = $(this).val();
+        $('#discounts' + storeID).show();
     });
 }
 
-function addTable(id,numberOfColumns,title,headers) {
-    var myTableDiv = document.getElementById("zone-content");
-    var container = document.createElement('div');
-    container.id = id
-    var spanTitle =document.createElement('span')
-        spanTitle.textContent = title;
-    var table = document.createElement('table');
-    table.className="table"
-    var tableHeaders = document.createElement('thead');
-    var tr = document.createElement('TR');
-    var tableBody = document.createElement('tbody');
 
-    for (var i = 0; i < numberOfColumns; i++) {
-            var th = document.createElement('th');
-            th.colspan="1"
-            th.textContent = headers[i]
-            tr.appendChild(th);
-    }
-    container.appendChild(spanTitle)
-    table.appendChild(tableBody);
-    table.appendChild(tableHeaders);
-    tableHeaders.appendChild(tr)
-    container.appendChild(table)
-    myTableDiv.appendChild(container)
 
-}
-function createNewStore() {
-loadAvailableLocations()
-    loadAvailableItems()
-}
-function loadAvailableLocations() {
-    $.ajax
-    ({
+    function getAllAvailableLocationsMakeAnOrder() {
+        $.ajax({
             data: "zoneName=" + getCurrentZone(),
             url: buildUrlWithContextPath("locations"),
+            method: 'GET',
+            error: function (response) {
+                console.error("Failed to send ajax:" + response.responseText);
+            },
             success: function (locations) {
-                $.each(locations || [], function (index, location) {
-                    var locationStr = "(" + location.x + "," + location.y +")"
-                    $("#availableLocations").append($("<option></option>")
-                        .attr("value", JSON.stringify({x:location.x,y:location.y}))
-                        .text(locationStr))
-                        .className="locationAvailableOption"
-                })
+                $.each(locations, function (index, location) {
+                    var locationStr = "(" + location.x + "," + location.y + ")";
+                    $('#orderLocation').append($("<option></option>").attr("value", JSON.stringify({
+                        x: location.x,
+                        y: location.y
+                    }))
+                        .text(locationStr));
+                });
             }
-        }
-    )
-}
+        });
+    }
 
-var requestedItems=[]
-function loadAvailableItems() {
-    $.ajax
-    ({
+    function getAllZoneStoresMakeAnOrder() {
+        $.ajax({
             data: "zoneName=" + getCurrentZone(),
-            url: buildUrlWithContextPath("items"),
+            url: buildUrlWithContextPath("zones"),
+            method: 'GET',
+            error: function (response) {
+                console.error("Failed to send ajax:" + response.responseText);
+            },
+            success: function (zone) {
+                $.each(zone.m_StoresDtos, function (index, store) {
+                    $('#selectStore').append($("<option></option>").attr("value", store.m_Id)
+                        .text(store.m_Name));
+                });
+            }
+        });
+    }
+
+    function onLoadRadioButtonsMakeAnOrder() {
+        $('input[type="radio"]').click(function () {
+            if ($(this).attr("value") == "static") {
+                $(".staticSelectStore").show();
+                $("#selectStore").prop('required', true);
+            }
+            if ($(this).attr("value") == "dynamic") {
+                $(".staticSelectStore").hide();
+                $("#selectStore").prop('required', false);
+
+            }
+        });
+
+        $('input[type="radio"]').trigger('click');  // trigger the event
+    }
+
+    async function submitFirstStepMakeAnOrder() {
+        $('.select-item-block').hide();
+        $('#pre-form').submit(function () {
+            var parameters = $(this).serialize();
+
+            parameters = parameters.concat("&zone=" + getCurrentZone());
+
+            try {
+                $.ajax({
+                    data: parameters,
+                    url: buildUrlWithContextPath("makeOrder"),
+                    timeout: 2000,
+                    method: 'post',
+                    error: function () {
+                        console.error("Failed to submit");
+                    },
+                    success: async function (r) {
+                        await getAllItemsMakeAnOrder();
+                        $('.select-item-block').show();
+                        $('#pre-form fieldset').prop('disabled', 'disabled');
+
+                        submitSecondStepMakeAnOrder();
+                    }
+                });
+            } catch (e) {
+                console.log("Error invoking the ajax !" + e);
+            }
+            return false
+        });
+    }
+
+    function addItemToOrder(id, amount) {
+        try {
+            var parameters = "id=" + id + "&amount=" + amount;
+            $.ajax({
+                data: parameters,
+                url: buildUrlWithContextPath("makeOrder/item"),
+                method: 'post',
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                success: function (r) {
+                    alert("Item add successfully");
+                },
+                complete: function () {
+                    $("#" + id + "amount").val("");
+                },
+            });
+        } catch (e) {
+            console.log("Error invoking the ajax !" + e);
+        }
+    }
+
+
+function getAllItemsMakeAnOrder(){
+    try {
+        $.ajax({
+            url: buildUrlWithContextPath("makeOrder/item"),
+            method: 'get',
+            error: function (err) {
+                console.error("Failed to submit" + err);
+            },
             success: function (items) {
                 $.each(items || [], function (index, item) {
-                    var trItem = $(document.createElement('tr'));
-                    var td = $(document.createElement('td'));
-                    td.append($("<label></label>")
-                        .text="Item ID:" + item.m_ItemId)
-                    td.append($("<label>Enter Price:</label>"))
-                    td.append($("<input onkeypress=\"return isFloatNumber(this,event)\" name='price' type='text' required/>")
-                        .attr("id", item.m_ItemId + "price")
-                        .attr("value",0.0))
-                    var button = $(document.createElement('button')).text("Add Item")
-                    button.click(function()
-                         {
-                             var priceVal = parseFloat($("#" + item.m_ItemId + "price").val())
-                             if(priceVal <= 0.0)
-                             {
-                                 alert("Price must be positive number!!");
-                             }
-                             else {
-                                 trItem.remove()
-                                 requestedItems.push({id: item.m_ItemId, price: priceVal})
-                                 alert("Item was added successfully!!");
+                    var tr = $(document.createElement('tr'));
+                    var tdID = $(document.createElement('td')).text(item.m_ItemId);
+                    var tdName = $(document.createElement('td')).text(item.m_ItemName);
+                    var tdPurchaseForm = $(document.createElement('td')).text(item.m_PurchaseForm);
+                    var tdPrice = $(document.createElement('td')).text(item.m_Price);
+                    var tdAmount = $(document.createElement('td'));
+                    var tdSubmit = $(document.createElement('td'));
 
-                             }
-                         })
-                    button.appendTo(td)
-                    td.appendTo(trItem)
-                    $("#itemsTable").append(trItem)
-                })
+                    tdAmount.append($("<input onkeypress=\"return isFloatNumber(this,event)\" name='amount' type='text' style='color: white; text-align: center;' required/>")
+                        .attr("id", item.m_ItemId + "amount"));
+
+                    var button = $(document.createElement('button')).text("Add Item");
+                    button.addClass("addItemBtn");
+                    //button.setAttribute('onclick', 'addItemToOrder(item.m_ItemId, parseFloat($("#" + item.m_ItemId + "amount").val()))');
+                    button.click(function () {
+                        var amountVal = parseFloat($("#" + item.m_ItemId + "amount").val());
+                        addItemToOrder(item.m_ItemId, amountVal);
+                    });
+
+                });
             }
+
+            });
+        } catch (e) {
+            console.log("Error invoking the ajax !" + e);
         }
-    )
+    }
+
+
+function setDiscountToDiv(storeID, storeName, discounts){
+    $('#storeDiscount').append($("<option></option>").attr("value", storeID)
+        .text(storeName));
+
+    var discountsContainer = document.createElement('div');
+    discountsContainer.id = "discounts" + storeID;
+    discountsContainer.hidden = true;
+
+    $.each(discounts || [], function(index, discount){
+        console.log("Discount number " + index + " is " + discount);
+        var discountDiv = document.createElement('div');
+        discountDiv.id = "discountNum" + index;
+        var discountName = document.createElement('h3');
+        discountName.textContent = discount.m_Name;
+        discountDiv.append(discountName);
+        discountDiv.className = "discountComp";
+
+        discountsContainer.append(discountDiv);
+    });
+    $('#discounts').append(discountsContainer);
 }
 
-$(function() {
-    $("#createStoreForm").submit(function () {
-        if(requestedItems.length === 0)
-        {
-            alert("Cannot Create Empty Store!!");
-        }
-        else {
+
+function submitSecondStepMakeAnOrder(){
+    $("#selectItemForm").submit(function (){
+        try {
             $.ajax({
-                data: $(this).serialize() + "&items=" + JSON.stringify(requestedItems) + "&zoneName=" + getCurrentZone(),
-                dataType: 'json',
-                url: buildUrlWithContextPath("stores"),
-                method: 'POST',
-                error: function (response) {
-                    console.error(response);
+                url: buildUrlWithContextPath("makeOrder/discount"),
+                method: 'get',
+                error: function () {
+                    console.error("Failed to submit");
                 },
                 success: function (response) {
-                    console.log(response);
-                    clearCreateStoreWindow()
-
+                    $.each(response, function(key, value) {
+                        setDiscountToDiv(value[0].m_Id, value[0].m_Name, value[1]);
+                    });
+                   $("#select-discounts-block").show();
+                   $('.select-item-block').find("*").attr("disabled", "disabled");
                 }
-            })
+            });
+        } catch (e) {
+            console.log("Error invoking the ajax !" + e);
         }
         return false;
     });
-});
 
-function clearCreateStoreWindow() {
-    requestedItems=[]
-    $("#itemsTable").remove()
-    $("#createStoreForm").remove()
-    createNewStore()
+
+
 }
+
+
+    /*make order tab  DONE*/
+
+    function loadZoneDetails() {
+        refreshZoneDetails()
+    }
+
+    function triggerAjaxZoneDetailsTables() {
+        if (currentTab === zoneDetailsTabName) {
+            setTimeout(refreshZoneDetails, refreshRate);
+        }
+    }
+
+    function refreshZoneDetails() {
+        $.ajax
+        (
+            {
+                url: buildUrlWithContextPath("zones"),
+                data: "zoneName=" + getCurrentZone(),
+                success: function (zone) {
+                    loadStorageItemsList(zone.m_StorageItemsDtos);
+                    loadStoresList(zone.m_StoresDtos);
+                    triggerAjaxZoneDetailsTables()
+
+                }
+            }
+        )
+    }
+
+
+    function loadStorageItemsList(items) {
+        if (!$("#storageItemsTable").length)  // table not exists
+        {
+            addTable("storageItemsTable", 6, "Storage Items", ["ID", "Name", "Purchase Form", "How Many Stores Sell", "Average Price", "Sold So Far"])
+        }
+        loadStorageItemsListData(items)
+    }
+
+
+
+    function loadStorageItemsListData(items) {
+        $("#storageItemsTable table tbody").empty()
+        $.each(items || [], function (index, item) {
+            var tr = $(document.createElement('tr'));
+            var tdID = $(document.createElement('td')).text(item.m_ItemDto.m_ItemId);
+            var tdName = $(document.createElement('td')).text(item.m_ItemDto.m_ItemName);
+            var tdPurchaseForm = $(document.createElement('td')).text(item.m_ItemDto.m_PurchaseForm);
+            var tdStoresSellIt = $(document.createElement('td')).text(item.m_StoresSellIt);
+            var tdAveragePrice = $(document.createElement('td')).text(show2DecimalPlaces(item.m_AvgPrice))
+            var tdSells = $(document.createElement('td')).text(show2DecimalPlaces(item.m_Sales));
+
+            tdID.appendTo(tr);
+            tdName.appendTo(tr);
+            tdPurchaseForm.appendTo(tr);
+            tdStoresSellIt.appendTo(tr);
+            tdAveragePrice.appendTo(tr);
+            tdSells.appendTo(tr);
+            $("#storageItemsTable table tbody").append(tr)
+        });
+    }
+
+    function loadStoresList(stores) {
+        if (!$("#storesTable").length)  // table not exists
+        {
+            addTable("storesTable", 8, "Available Stores", ["ID", "Name",
+                "Owner Name",
+                "Location",
+                "Number Of Orders",
+                "PPK",
+                "Incomes From Items",
+                "Incomes From Deliveries"])
+        }
+        loadStoreTableData(stores);
+    }
+
+    function loadStoreTableData(stores) {
+        $("#storesTable table tbody").empty()
+        $("#storeItemsTable table tbody").empty()
+        $.each(stores || [], function (index, store) {
+            var tr = $(document.createElement('tr'));
+            var tdID = $(document.createElement('td')).text(store.m_Id);
+            var tdName = $(document.createElement('td')).text(store.m_Name);
+            var tdOwnerName = $(document.createElement('td')).text(store.m_OwnerName);
+            var tdLocation = $(document.createElement('td')).text("(" + store.m_Location.x + "," + store.m_Location.y + ")");
+            var tdPPK = $(document.createElement('td')).text(show2DecimalPlaces(store.m_PPK));
+            var tdNumberOfOrders = $(document.createElement('td')).text(store.m_OrdersDto.length);
+            var itemsIncomes = 0
+            $.each(store.m_OrdersDto || [], function (index, order) {
+                itemsIncomes += order.m_TotalItemsPrice
+            });
+            var tdIncomesFromItems = $(document.createElement('td')).text(show2DecimalPlaces(itemsIncomes));
+            var tdIncomesFromDeliveries = $(document.createElement('td')).text(show2DecimalPlaces(store.m_DeliveriesIncome));
+
+            tdID.appendTo(tr);
+            tdName.appendTo(tr);
+            tdOwnerName.appendTo(tr);
+            tdLocation.appendTo(tr);
+            tdNumberOfOrders.appendTo(tr);
+            tdPPK.appendTo(tr);
+            tdIncomesFromItems.appendTo(tr);
+            tdIncomesFromDeliveries.appendTo(tr);
+
+            tr.click(function () {
+                var currentTable = document.getElementById("storeItemsTable");
+                if (currentTable !== null) {
+                    currentTable.parentElement.removeChild(currentTable);
+                }
+                addTable("storeItemsTable", 5, "Available Items Of " + store.m_Name, ["ID", "Name", "Purchase Form", "Price", "Sold So Far"])
+                $.each(store.m_Items || [], function (index, storeItem) {
+                    var trItem = $(document.createElement('tr'));
+                    var tdID = $(document.createElement('td')).text(storeItem.m_ItemId);
+                    var tdName = $(document.createElement('td')).text(storeItem.m_ItemName);
+                    var tdPurchaseForm = $(document.createElement('td')).text(storeItem.m_PurchaseForm);
+                    var tdPrice = $(document.createElement('td')).text(show2DecimalPlaces(storeItem.m_Price));
+                    var tdSoldSoFar = $(document.createElement('td')).text((storeItem.m_AmountOfSell));
+
+                    tdID.appendTo(trItem);
+                    tdName.appendTo(trItem);
+                    tdPurchaseForm.appendTo(trItem);
+                    tdPrice.appendTo(trItem);
+                    tdSoldSoFar.appendTo(trItem);
+                    $("#storeItemsTable table tbody").append(trItem)
+                });
+            });
+            $("#storesTable table").append(tr)
+        });
+    }
+
+    function addTable(id, numberOfColumns, title, headers) {
+        var myTableDiv = document.getElementById("zone-content");
+        var container = document.createElement('div');
+        container.id = id
+        var spanTitle = document.createElement('span')
+        spanTitle.textContent = title;
+        var table = document.createElement('table');
+        table.className = "table"
+        var tableHeaders = document.createElement('thead');
+        var tr = document.createElement('TR');
+        var tableBody = document.createElement('tbody');
+
+        for (var i = 0; i < numberOfColumns; i++) {
+            var th = document.createElement('th');
+            th.colspan = "1"
+            th.textContent = headers[i]
+            tr.appendChild(th);
+        }
+        container.appendChild(spanTitle)
+        table.appendChild(tableBody);
+        table.appendChild(tableHeaders);
+        tableHeaders.appendChild(tr)
+        container.appendChild(table)
+        myTableDiv.appendChild(container)
+
+    }
+
+    function createNewStore() {
+        loadAvailableLocations()
+        loadAvailableItems()
+    }
+
+    function loadAvailableLocations() {
+        $.ajax
+        ({
+                data: "zoneName=" + getCurrentZone(),
+                url: buildUrlWithContextPath("locations"),
+                success: function (locations) {
+                    $.each(locations || [], function (index, location) {
+                        var locationStr = "(" + location.x + "," + location.y + ")"
+                        $("#availableLocations").append($("<option></option>")
+                            .attr("value", JSON.stringify({x: location.x, y: location.y}))
+                            .text(locationStr))
+                            .className = "locationAvailableOption"
+                    })
+                }
+            }
+        )
+    }
+
+    var requestedItems = []
+
+    function loadAvailableItems() {
+        $.ajax
+        ({
+                data: "zoneName=" + getCurrentZone(),
+                url: buildUrlWithContextPath("items"),
+                success: function (items) {
+                    $.each(items || [], function (index, item) {
+                        var trItem = $(document.createElement('tr'));
+                        var td = $(document.createElement('td'));
+                        td.append($("<label></label>")
+                            .text = "Item ID:" + item.m_ItemId)
+                        td.append($("<label>Enter Price:</label>"))
+                        td.append($("<input onkeypress=\"return isFloatNumber(this,event)\" name='price' type='text' required/>")
+                            .attr("id", item.m_ItemId + "price")
+                            .attr("value", 0.0))
+                        var button = $(document.createElement('button')).text("Add Item")
+                        button.click(function () {
+                            var priceVal = parseFloat($("#" + item.m_ItemId + "price").val())
+                            if (priceVal <= 0.0) {
+                                alert("Price must be positive number!!");
+                            } else {
+                                trItem.remove()
+                                requestedItems.push({id: item.m_ItemId, price: priceVal})
+                                alert("Item was added successfully!!");
+
+                            }
+                        })
+                        button.appendTo(td)
+                        td.appendTo(trItem)
+                        $("#itemsTable").append(trItem)
+                    })
+                }
+            }
+        )
+    }
+
+    $(function () {
+        $("#createStoreForm").submit(function () {
+            if (requestedItems.length === 0) {
+                alert("Cannot Create Empty Store!!");
+            } else {
+                $.ajax({
+                    data: $(this).serialize() + "&items=" + JSON.stringify(requestedItems) + "&zoneName=" + getCurrentZone(),
+                    dataType: 'json',
+                    url: buildUrlWithContextPath("stores"),
+                    method: 'POST',
+                    error: function (response) {
+                        console.error(response);
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        clearCreateStoreWindow()
+
+                    }
+                })
+            }
+            return false;
+        });
+    });
+
+    function clearCreateStoreWindow() {
+        requestedItems = []
+        $("#itemsTable").remove()
+        $("#createStoreForm").remove()
+        createNewStore();
+    }
 

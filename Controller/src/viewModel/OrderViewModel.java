@@ -8,8 +8,10 @@ import managers.SuperDuperManager;
 import myLocation.Location;
 import viewModel.utils.StorageOrderUtil;
 
+import java.awt.*;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class OrderViewModel {
@@ -37,6 +39,7 @@ public class OrderViewModel {
 
  public Collection<ItemDto> getAvailableItemsForOrder() {
      if (m_AvailableItemsToBuy == null) {
+         m_AvailableItemsToBuy = new HashMap<>();
          List<ItemDto> allItems = m_SuperDuperManager.getAllItems(m_ZoneName).stream().map(ItemDto::new).collect(Collectors.toList());
 
          if (m_CurrentStore != null) {
@@ -72,9 +75,10 @@ public void setDate(LocalDate i_Date) {
     m_CurrentOrderDate = i_Date;
 }
 
-public void setLocation(Location i_Location)
+public void setLocation(Point i_Location)
 {
-m_Location=i_Location;}
+    m_Location=new Location(i_Location.x, i_Location.y);
+}
 
 public void setCustomer(int i_CustomerId) {
     m_UserID = i_CustomerId;
@@ -85,12 +89,15 @@ public void addItemToOrder(Integer i_ItemId, Double i_AmountOfSells) {
 
     if (item == null) {
         throw new IllegalArgumentException("Item with ID: " + i_ItemId + " is not exists");
-    } else if (item.getPurchaseForm() == PurchaseForm.QUANTITY) {
-        if ((i_AmountOfSells != Math.floor(i_AmountOfSells)) || Double.isInfinite(i_AmountOfSells)) {
-            throw new IllegalArgumentException("The item with ID: " + item.getId() + " is sold only in whole numbers");
+    } else{
+        if (m_CurrentStore != null && m_CurrentStore.getStoreItem(i_ItemId) == null) {
+            throw new IllegalArgumentException("The item with ID: " + i_ItemId + " is not for sell in the requested store");
         }
-    } else if (m_CurrentStore != null && m_CurrentStore.getStoreItem(i_ItemId) == null) {
-        throw new IllegalArgumentException("The item with ID: " + i_ItemId + " is not for sell in the requested store");
+        if (item.getPurchaseForm() == PurchaseForm.QUANTITY) {
+            if ((i_AmountOfSells != Math.floor(i_AmountOfSells)) || Double.isInfinite(i_AmountOfSells)) {
+                throw new IllegalArgumentException("The item with ID: " + item.getId() + " is sold only in whole numbers");
+            }
+        }
     }
 
     if (m_ItemIdToAmount == null) {
