@@ -1,6 +1,7 @@
 package managers;
 
 import models.*;
+import myLocation.Location;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -8,136 +9,58 @@ import java.util.stream.Collectors;
 
 public class OrderManager {
     private int counter = 0;
-    private Map<Store,Order> m_StoreToOrderMap = new HashMap<>();
-    private StorageOrder m_CurrentOrder;
-    private List<StorageOrder> m_StorageOrders = new ArrayList<>();
-    private boolean b_IsCreated = false;
-    private Map<Store,Map<Integer,Double>> m_StoresToItemsMap;
-    private Map<Store,List<OrderItem>> m_StoresToItemsInDiscounts = new HashMap<>();
+    private Map<Integer,StorageOrder> m_StorageOrders = new HashMap<>();
+    private Map<Integer,StorageOrder> m_OrdersToExecute = new HashMap<>();
 
-    public void addItemFromCurrentStore(Store i_Store ,Item i_Item, double i_AmountOfSells)
+
+  synchronized  public void executeOrder(int i_StorageOrderId)
     {
-        if(m_StoresToItemsMap == null)
-        {
-            m_StoresToItemsMap = new HashMap<>();
-        }
-
-        Map<Integer,Double> currentIdToAmountMap  = m_StoresToItemsMap.get(i_Store);
-
-        if(currentIdToAmountMap == null)
-        {
-            currentIdToAmountMap=new HashMap<>();
-        }
-
-        double currentAmountOfSells =currentIdToAmountMap.getOrDefault(i_Item.getId(),0.0);
-
-        currentIdToAmountMap.put(i_Item.getId(),i_AmountOfSells+currentAmountOfSells);
-        m_StoresToItemsMap.put(i_Store,currentIdToAmountMap);
-    }
-
-    public void addItemFromCurrentStore(Store i_Store ,OrderItem i_OrderItem)
-    {
-        List<OrderItem> orderItemsInDiscountOfStore = m_StoresToItemsInDiscounts.getOrDefault(i_Store,new ArrayList<>());
-        int existCurrentItemIndex = orderItemsInDiscountOfStore.indexOf(i_OrderItem);
-        if(existCurrentItemIndex!=-1)
-        {
-            i_OrderItem.getStoreItem().setAmountOfSell(i_OrderItem.getStoreItem().getAmountOfSells() + orderItemsInDiscountOfStore.get(existCurrentItemIndex).getStoreItem().getAmountOfSells());
-            orderItemsInDiscountOfStore.set(existCurrentItemIndex,i_OrderItem);
-        }
-        else {
-            orderItemsInDiscountOfStore.add(i_OrderItem);
-        }
-      m_StoresToItemsInDiscounts.put(i_Store,orderItemsInDiscountOfStore);
-    }
-
-
-    public void create(User i_User, LocalDate i_Date) {
-        if (m_StoresToItemsMap == null) {
-            throw new IllegalStateException("Cannot create an empty order");
-        }
-        List<OrderItem> allOrderItems = new ArrayList<>();
-        Order tempOrder;
-        int totalDeliveryPrice = 0;
-        /*
-        for (Map.Entry<Store, Map<Integer, Double>> entry : m_StoresToItemsMap.entrySet()) {
-            tempOrder = entry.getKey().createOrder(i_Date, i_User.getLocation(), entry.getValue(),m_StoresToItemsInDiscounts.getOrDefault(entry.getKey(),Collections.emptyList()));
-            m_StoreToOrderMap.put(entry.getKey(), tempOrder);
-            totalDeliveryPrice += tempOrder.getDeliveryPrice();
-            allOrderItems.addAll(tempOrder.getAllItems());
-        }
-        */
-
-/*
-        m_CurrentOrder = new StorageOrder(++counter, new Order(i_Date, i_User.getLocation(), totalDeliveryPrice, allOrderItems ), m_StoreToOrderMap.entrySet().stream()
-                .collect(Collectors.toMap(entry -> entry.getKey().getId(),
-                        Map.Entry::getValue)) , i_User.getId());
-
- */
-        b_IsCreated = true;
-    }
-  //  public void create(Customer i_Customer, LocalDate i_Date) {
-  //      if (m_StoresToItemsMap == null) {
-  //          throw new IllegalStateException("Cannot create an empty order");
-  //      }
-  //      List<OrderItem> allOrderItems = new ArrayList<>();
-  //      Order tempOrder;
-  //      int totalDeliveryPrice = 0;
-  //      for (Map.Entry<Store, Map<Integer, Double>> entry : m_StoresToItemsMap.entrySet()) {
-  //          tempOrder = entry.getKey().createOrder(i_Date, i_Customer.getLocation(), entry.getValue(),m_StoresToItemsInDiscounts.getOrDefault(entry.getKey(),Collections.emptyList()));
-  //          m_StoreToOrderMap.put(entry.getKey(), tempOrder);
-  //          totalDeliveryPrice += tempOrder.getDeliveryPrice();
-  //          allOrderItems.addAll(tempOrder.getAllItems());
-  //      }
-
- //       m_CurrentOrder = new StorageOrder(++counter, new Order(i_Date, i_Customer.getLocation(), totalDeliveryPrice, allOrderItems ), m_StoreToOrderMap.entrySet().stream()
- //               .collect(Collectors.toMap(entry -> entry.getKey().getId(),
- //                       Map.Entry::getValue)) ,i_Customer.getId());
- //       b_IsCreated = true;
- //   }
-    public void executeOrder()
-    {
-        for (Map.Entry<Store,Order> entry: m_StoreToOrderMap.entrySet()
-        ) {
-            entry.getKey().addOrder(entry.getValue());
-        }
-
-        m_StorageOrders.add(m_CurrentOrder);
-    }
-    public void cleanup()
-    {
-        m_CurrentOrder=null;
-        b_IsCreated=false;
-        m_StoreToOrderMap.clear();
-        m_StoresToItemsMap = null;
-        m_StoresToItemsInDiscounts.clear();
-    }
-
-    public StorageOrder getCurrentOrder()
-    {
-        return m_CurrentOrder;
-    }
-
-    public boolean isOrderCreated()
-    {
-        return b_IsCreated;
+        StorageOrder storageOrder = m_OrdersToExecute.get(i_StorageOrderId);
+        m_StorageOrders.put(i_StorageOrderId,storageOrder);
+        m_OrdersToExecute.remove(i_StorageOrderId);
     }
 
     public final Collection<StorageOrder> getStorageOrders()
     {
-        return m_StorageOrders;
+        return m_StorageOrders.values();
     }
 
-    public Map<Store,List<StoreDiscount>> getAvailableDiscounts()
+    public StorageOrder getStorageOrder(int i_StorageOrderId)
     {
-        Map<Store,List<StoreDiscount>> res = new HashMap<>();
-        for (Map.Entry<Store, Map<Integer, Double>> entry:m_StoresToItemsMap.entrySet()
-        ){
-            if(entry.getKey().haveDiscounts()) {
-                res.put(entry.getKey(), entry.getKey().getDiscounts().stream()
-                        .filter(storeDiscount -> storeDiscount.isAvailable(entry.getValue()))
-                        .collect(Collectors.toList()));
-            }
+        StorageOrder storageOrder = m_StorageOrders.get(i_StorageOrderId);
+        if (storageOrder == null)
+        {
+            storageOrder = m_OrdersToExecute.get(i_StorageOrderId);
         }
-        return res;
+        return storageOrder;
+    }
+
+    public StorageOrder createOrder(LocalDate i_Date, Location i_Location, Map<Store, Map<Integer, Double>> i_storesToItemsMap, Map<Store, List<OrderItem>> i_storesToItemsInDiscounts,int i_UserId) {
+        if (i_storesToItemsMap == null) {
+            throw new IllegalStateException("Cannot create an empty order");
+        }
+        Map<Store, Order> storeToOrderMap = new HashMap<>();
+
+        List<OrderItem> allOrderItems = new ArrayList<>();
+        Order tempOrder;
+        int totalDeliveryPrice = 0;
+        for (Map.Entry<Store, Map<Integer, Double>> entry : i_storesToItemsMap.entrySet()) {
+            tempOrder = entry.getKey().createOrder(i_Date, i_Location, entry.getValue(), i_storesToItemsInDiscounts.getOrDefault(entry.getKey(), Collections.emptyList()));
+            storeToOrderMap.put(entry.getKey(), tempOrder);
+            totalDeliveryPrice += tempOrder.getDeliveryPrice();
+            allOrderItems.addAll(tempOrder.getAllItems());
+        }
+
+        synchronized (this) {
+            StorageOrder storageOrder = new StorageOrder(++counter, new Order(i_Date, i_Location, totalDeliveryPrice, allOrderItems), storeToOrderMap.entrySet().stream()
+                    .collect(Collectors.toMap(entry -> entry.getKey().getId(),
+                            Map.Entry::getValue)), i_UserId);
+            m_OrdersToExecute.put(storageOrder.getOrderID(), storageOrder);
+            return storageOrder;
+        }
+    }
+
+    public void abortOrder(int i_storageOrderIdToAbort) {
+        m_OrdersToExecute.remove(i_storageOrderIdToAbort);
     }
 }
