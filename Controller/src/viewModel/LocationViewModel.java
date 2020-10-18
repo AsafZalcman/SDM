@@ -12,25 +12,25 @@ import java.util.stream.Collectors;
 
 public class LocationViewModel {
 
-    public Location getMaxLocation(){
-        return LocationManager.getMaxLocation();
-    }
+//    public Location getMaxLocation(){
+//        return LocationManager.getMaxLocation();
+//    }
+//
+//    public int getMaxX(){
+//        return LocationManager.getMaxLocation().x;
+//    }
+//
+//    public int getMaxY(){
+//        return LocationManager.getMaxLocation().y;
+//    }
+//
+//    public ILocationable getILocationable(int x, int y){
+//        return LocationManager.getILocationable(new Location(x, y));
+//    }
 
-    public int getMaxX(){
-        return LocationManager.getMaxLocation().x;
-    }
-
-    public int getMaxY(){
-        return LocationManager.getMaxLocation().y;
-    }
-
-    public ILocationable getILocationable(int x, int y){
-        return LocationManager.getILocationable(new Location(x, y));
-    }
-
-    public Collection<Point> getAllAvailableLocations()
+    public Collection<Point> getAllAvailableLocations(String i_ZoneName)
     {
-        return LocationManager.getAllAvailableLocations().stream()
+        return LocationManager.getAllAvailableLocations(i_ZoneName).stream()
                 .map(location -> new Point(location.x,location.y))
                 .collect(Collectors.toList());
     }

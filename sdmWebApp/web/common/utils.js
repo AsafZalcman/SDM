@@ -2,6 +2,7 @@ function isCustomer(){return localStorage["userRole"] === "Customer"}
 function setUserRole(role){localStorage["userRole"] = role}
 function setCurrentZone(zoneName){localStorage["currentZone"] = zoneName}
 function getCurrentZone(){return localStorage["currentZone"]}
+function show2DecimalPlaces (value){return Number(Math.round(parseFloat(value + 'e' + 2)) + 'e-' + 2).toFixed(2)}
 
 
 function isFloatNumber(item,evt) {

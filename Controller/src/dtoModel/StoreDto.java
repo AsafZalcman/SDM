@@ -9,7 +9,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class  StoreDto {
-    private Store m_Store;
     private  Collection<OrderDto> m_OrdersDto;
     private  double m_DeliveriesIncome;
     private final Collection<ItemDto> m_Items;
@@ -18,18 +17,14 @@ public class  StoreDto {
     private final double m_PPK;
     private final String m_Name;
     private final int m_Id;
-    private final String m_OwnerString;
+    private final String m_OwnerName;
     private  Collection<StoreFeedbackDto> m_StoreFeedbackDtos;
 
 
     public StoreDto(Store i_Store) {
         this(i_Store.getId(), i_Store.getStoreName(), i_Store.getPPK(), i_Store.getLocation(), i_Store.getAllItems().stream().map(ItemDto::new).collect(Collectors.toList()),i_Store.getOwnerName());
-        m_Store = i_Store;
         m_OrdersDto = i_Store.getOrders().stream().map(OrderDto::new).collect(Collectors.toList());
-
-        if (!m_OrdersDto.isEmpty()) {
-            m_DeliveriesIncome = m_OrdersDto.stream().mapToDouble(OrderDto::getDeliveryPrice).sum();
-        }
+        m_DeliveriesIncome = i_Store.getIncomesFromDeliveries();
 
         if (i_Store.getDiscounts() != null) {
             m_Discounts = i_Store.getDiscounts().stream()
@@ -55,7 +50,7 @@ public class  StoreDto {
         m_Discounts=i_Discounts;
         m_DeliveriesIncome = 0.0;
         m_OrdersDto=Collections.emptyList();
-        m_OwnerString =i_OwnerName;
+        m_OwnerName =i_OwnerName;
         m_StoreFeedbackDtos = Collections.emptyList();
     }
 
@@ -78,9 +73,6 @@ public class  StoreDto {
 
     public Collection<ItemDto> getItemsDto()
     {
-        if(m_Store != null){
-            return m_Store.getAllItems().stream().map(ItemDto::new).collect(Collectors.toList());
-        }
         return m_Items;
     }
 
@@ -102,7 +94,7 @@ public class  StoreDto {
     }
 
     public String getOwnerName() {
-        return m_OwnerString;
+        return m_OwnerName;
     }
 
     public Collection<StoreFeedbackDto> getFeedbacks()

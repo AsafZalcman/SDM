@@ -258,6 +258,7 @@ function refreshZoneListCallback(zones) {
         tr.click(function() {
             setCurrentZone(zone.name);
             location.href = buildUrlWithContextPath("pages/zone/zone.html");
+
         });
         $("#zonesTable").append(tr)
 

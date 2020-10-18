@@ -87,7 +87,7 @@ public class JaxbConverter {
                 newStore.addDiscount(convertToStoreDiscount(sdmDiscount));
             }
         }
-        LocationManager.addLocation(i_JaxbStore.getLocation().getX(), i_JaxbStore.getLocation().getY(), newStore);
+        LocationManager.addLocation(getZoneName(),i_JaxbStore.getLocation().getX(), i_JaxbStore.getLocation().getY());
         return newStore;
     }
 
