@@ -2,157 +2,229 @@ package viewModel;
 
 import dtoModel.*;
 import enums.PurchaseForm;
-import enums.StoreDiscountOperator;
 import javafx.util.Pair;
 import models.*;
-import models.StorageOrder;
 import managers.SuperDuperManager;
+import myLocation.Location;
 import viewModel.utils.StorageOrderUtil;
 
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-//public class OrderViewModel {
-//    private SuperDuperManager m_SuperDuperManager;
-//    private Map<Integer, Double> m_CurrentIdToAmount;
-//    private Map<StoreDiscountDto, Integer> m_UsedDiscounts = new HashMap<>();
-//    private Store m_CurrentStore;
-//    private LocalDate m_CurrentOrderDate;
-//    private Customer m_CurrentCustomer;
-//
-//    public OrderViewModel() {
-//        this.m_SuperDuperManager = SuperDuperManager.getInstance();
-//    }
-//
-//    public final StorageOrderDto getCurrentOrder() {
-//        StorageOrder order = m_SuperDuperManager.getCurrentOrder();
-//        if (order == null) {
-//            return null;
-//        }
-//        return new StorageOrderDto(order, StorageOrderUtil.convertStorageOrderStores(order.getStoresIdToOrder()));
-//    }
-//
-// // public void setStore(int i_StoreId) {
-// //     Store store = m_SuperDuperManager.getStore(i_StoreId);
-// //     if (store == null) {
-// //         throw new IllegalArgumentException("Store with ID: " + i_StoreId + " is not exists");
-// //     }
-// //     m_CurrentStore = store;
-// // }
-//
-//    public void setDate(LocalDate i_Date) {
-//        m_CurrentOrderDate = i_Date;
-//    }
-//
-//    public void setCustomer(int i_CustomerId) {
-//        Customer customer = m_SuperDuperManager.getCustomer(i_CustomerId);
-//        if (customer == null) {
-//            throw new IllegalArgumentException("Customer with ID: " + i_CustomerId + " is not exists");
-//        }
-//
-//        m_CurrentCustomer = customer;
-//    }
-//
-//// public void addItemToOrder(Integer i_ItemId, Double i_AmountOfSells) {
-////     Item item = m_SuperDuperManager.getItem(i_ItemId);
-//
-////     if (item == null) {
-////         throw new IllegalArgumentException("Item with ID: " + i_ItemId + " is not exists");
-////     } else if (item.getPurchaseForm() == PurchaseForm.QUANTITY) {
-////         if ((i_AmountOfSells != Math.floor(i_AmountOfSells)) || Double.isInfinite(i_AmountOfSells)) {
-////             throw new IllegalArgumentException("The item with ID: " + item.getId() + " is sold only in whole numbers");
-////         }
-////     } else if (m_CurrentStore != null && m_CurrentStore.getStoreItem(i_ItemId) == null) {
-////         throw new IllegalArgumentException("The item with ID: " + i_ItemId + " is not for sell in the requested store");
-////     }
-//
-////     if (m_CurrentIdToAmount == null) {
-////         m_CurrentIdToAmount = new HashMap<>();
-////     }
-////      m_CurrentIdToAmount.put(i_ItemId,i_AmountOfSells); // maybe need to think about better solution
-////     m_SuperDuperManager.addItemToOrder(m_CurrentStore, item, i_AmountOfSells);
-//
-//// }
-//
-//// public void createOrder() {
-////     //      for (Map.Entry<Integer,Double> entry: m_CurrentIdToAmount.entrySet()
-////     //           ) {
-////     //          m_SuperDuperManager.addItemToOrder(m_CurrentStore, m_SuperDuperManager.getItem(entry.getKey()), entry.getValue());
-////     //      }
-////     m_SuperDuperManager.createNewOrder(m_CurrentCustomer, m_CurrentOrderDate);
-////     cleanup();
-//// }
-//
-//// public void executeOrder() {
-////     m_SuperDuperManager.executeNewOrder();
-//// }
-//
-//// public Collection<StorageOrderDto> getAllOrders() {
-////     return SuperDuperManager.getInstance().getOrderManager().getStorageOrders().stream()
-////             .collect(Collectors.toMap(storageOrder -> storageOrder, storageOrder -> StorageOrderUtil.convertStorageOrderStores(storageOrder.getStoresIdToOrder()))).entrySet().stream().map(entry -> new StorageOrderDto(entry.getKey(), entry.getValue())).collect(Collectors.toList());
-//// }
-//
-//// public void abortOrder() {
-////     cleanup();
-////     m_SuperDuperManager.abortOrder();
-//// }
-//
-//// public void cleanup() {
-////     m_CurrentStore = null;
-////     m_CurrentCustomer = null;
-////     m_CurrentOrderDate = null;
-////     m_CurrentIdToAmount = null;
-////     m_UsedDiscounts.clear();
-//// }
-//
-//// public void buyDiscount(StoreDiscountDto i_StoreDiscount , Integer i_SelectedItemIdInOffer) {
-////     int currentUsed = m_UsedDiscounts.getOrDefault(i_StoreDiscount, 0) + 1;
-////     m_UsedDiscounts.put(i_StoreDiscount, currentUsed);
-////     if(!i_StoreDiscount.isOneOfDiscount())
-////     {
-////         for (StoreOfferDto storeOfferDto:i_StoreDiscount.getStoreOfferDtos()
-////              ) {
-////             m_SuperDuperManager.addItemInDiscountToOrder(i_StoreDiscount.getName(),storeOfferDto.getItemId(),storeOfferDto.getForAdditional(),storeOfferDto.getQuantity());
-////         }
-////     }
-////     else
-////     {
-////         StoreOfferDto selectedStoreOfferDto =  i_StoreDiscount.getStoreOfferDtos().stream()
-////                 .filter(storeOfferDto -> storeOfferDto.getItemId() == i_SelectedItemIdInOffer)
-////                 .collect(Collectors.toList()).get(0);
-////         m_SuperDuperManager.addItemInDiscountToOrder(i_StoreDiscount.getName(),selectedStoreOfferDto.getItemId(),selectedStoreOfferDto.getForAdditional(),selectedStoreOfferDto.getQuantity());
-////     }
-//// }
-//
-//// public Map<StoreDto,List<StoreDiscountDto>> getAvailableDiscountsForCurrentOrder()
-//// {
-////     Map<Integer,Double> itemIdToLeftAmount = new HashMap<>(m_CurrentIdToAmount);
-////     for (Map.Entry<StoreDiscountDto,Integer> entry:m_UsedDiscounts.entrySet()
-////          ) {
-////         Pair<Integer, Double> currentDiscountCondition = entry.getKey().getDiscountCondition();
-////         int itemId = currentDiscountCondition.getKey();
-////         double currentUsedAmount = itemIdToLeftAmount.get(itemId);
-////         //We need to subtract the amount of items which used in discounts from the total sold amount
-////         itemIdToLeftAmount.put(itemId, currentUsedAmount -  (currentDiscountCondition.getValue() * entry.getValue()));
-////     }
-//
-////     Map<StoreDto,List<StoreDiscountDto>> res = new HashMap<>();
-////     List<StoreDiscountDto> currentAvailableDiscounts;
-////     for (Map.Entry<Store,List<StoreDiscount>> entry:  m_SuperDuperManager.getAvailableDiscountsForCurrentOrder().entrySet()
-////          ) {
-////         currentAvailableDiscounts = entry.getValue().stream()
-////                 .filter(storeDiscount -> storeDiscount.isAvailable(itemIdToLeftAmount))
-////                 .map(StoreDiscountDto::new)
-////                 .collect(Collectors.toList());
-////         res.put(new StoreDto(entry.getKey()), currentAvailableDiscounts);
-////     }
-//
-////     return res;
-//// }
-//
-//// public StoreDto getStore() {
-////     return m_CurrentStore == null ? null : new StoreDto(m_CurrentStore);
-//// }
+public class OrderViewModel {
+    private SuperDuperManager m_SuperDuperManager;
+    private Map<Integer, Double> m_ItemIdToAmount;
+    private Map<Integer,Map<StoreDiscountDto, Integer>> m_UsedDiscounts = new HashMap<>();
+    private Store m_CurrentStore;
+    private LocalDate m_CurrentOrderDate;
+    private Integer m_UserID;
+    private StorageOrderDto m_CurrentOrder;
+    private Location m_Location;
+    private String m_ZoneName;
+    private Map<Integer,ItemDto> m_AvailableItemsToBuy;
+    private Map<Integer,Map<Integer,Double>> m_StoresToItemsMap;
+    private  Map<Integer,List<OrderItem>> m_StoresToItemsInDiscounts = new HashMap<>();
+
+    public OrderViewModel() {
+        this.m_SuperDuperManager = SuperDuperManager.getInstance();
+    }
+
+    public final StorageOrderDto getCurrentOrder() {
+
+        return m_CurrentOrder;
+    }
+
+ public Collection<ItemDto> getAvailableItemsForOrder() {
+     if (m_AvailableItemsToBuy == null) {
+         List<ItemDto> allItems = m_SuperDuperManager.getAllItems(m_ZoneName).stream().map(ItemDto::new).collect(Collectors.toList());
+
+         if (m_CurrentStore != null) {
+             List<ItemDto> availableItemsInStore = m_CurrentStore.getAllItems().stream().map(ItemDto::new).collect(Collectors.toList());
+             for (ItemDto itemDto : allItems
+             ) {
+                 if (!availableItemsInStore.contains(itemDto)) {
+                     availableItemsInStore.add(itemDto);
+                 }
+             }
+             allItems = availableItemsInStore;
+         }
+
+         for (ItemDto itemDto : allItems
+         ) {
+             m_AvailableItemsToBuy.put(itemDto.getId(), itemDto);
+         }
+
+     }
+     return m_AvailableItemsToBuy.values();
+ }
+
+public void setStore(int i_StoreId) {
+    m_CurrentStore = m_SuperDuperManager.getStore(m_ZoneName,i_StoreId);
+}
+
+public void setZone(String i_ZoneName)
+{
+    m_ZoneName = i_ZoneName;
+}
+
+public void setDate(LocalDate i_Date) {
+    m_CurrentOrderDate = i_Date;
+}
+
+public void setLocation(Location i_Location)
+{
+m_Location=i_Location;}
+
+public void setCustomer(int i_CustomerId) {
+    m_UserID = i_CustomerId;
+}
+
+public void addItemToOrder(Integer i_ItemId, Double i_AmountOfSells) {
+    ItemDto item = m_AvailableItemsToBuy.get(i_ItemId);
+
+    if (item == null) {
+        throw new IllegalArgumentException("Item with ID: " + i_ItemId + " is not exists");
+    } else if (item.getPurchaseForm() == PurchaseForm.QUANTITY) {
+        if ((i_AmountOfSells != Math.floor(i_AmountOfSells)) || Double.isInfinite(i_AmountOfSells)) {
+            throw new IllegalArgumentException("The item with ID: " + item.getId() + " is sold only in whole numbers");
+        }
+    } else if (m_CurrentStore != null && m_CurrentStore.getStoreItem(i_ItemId) == null) {
+        throw new IllegalArgumentException("The item with ID: " + i_ItemId + " is not for sell in the requested store");
+    }
+
+    if (m_ItemIdToAmount == null) {
+        m_ItemIdToAmount = new HashMap<>();
+    }
+     m_ItemIdToAmount.put(i_ItemId,i_AmountOfSells);
+}
+
+public StorageOrderDto createOrder() {
+    StorageOrder storageOrder = m_SuperDuperManager.createOrder(m_ZoneName, m_CurrentOrderDate, m_Location, m_StoresToItemsMap, m_StoresToItemsInDiscounts, m_UserID);
+    m_CurrentOrder = new StorageOrderDto(storageOrder, StorageOrderUtil.convertStorageOrderStores(storageOrder.getStoresIdToOrder()));
+    return m_CurrentOrder;
+}
+
+public void executeOrder() {
+    m_SuperDuperManager.executeNewOrder(m_ZoneName,m_CurrentOrder.getOrderID());
+    cleanup();
+}
+
+//public Collection<StorageOrderDto> getAllOrders() {
+//    return SuperDuperManager.getInstance().getAllOrders(m_ZoneName).getStorageOrders().stream()
+//            .collect(Collectors.toMap(storageOrder -> storageOrder, storageOrder -> StorageOrderUtil.convertStorageOrderStores(storageOrder.getStoresIdToOrder()))).entrySet().stream().map(entry -> new StorageOrderDto(entry.getKey(), entry.getValue())).collect(Collectors.toList());
 //}
 //
+//public getAllOrdersOfUser()
+
+public void abortOrder() {
+        if(m_CurrentOrder!=null) {
+            m_SuperDuperManager.abortOrder(m_ZoneName, m_CurrentOrder.getOrderID());
+        }
+    cleanup();
+}
+
+public void cleanup() {
+    m_CurrentStore = null;
+    m_CurrentOrder = null;
+    m_CurrentOrderDate = null;
+    m_ZoneName = null;
+    m_UsedDiscounts.clear();
+    m_UserID = null;
+    m_StoresToItemsInDiscounts.clear();
+    m_AvailableItemsToBuy.clear();
+    m_ItemIdToAmount.clear();
+    m_Location=null;
+    m_StoresToItemsMap.clear();
+
+}
+
+public void buyDiscount(int i_StoreId,StoreDiscountDto i_StoreDiscount , Integer i_SelectedItemIdInOffer) {
+    Map<StoreDiscountDto, Integer> currentSelectedDiscountsOfStore = m_UsedDiscounts.getOrDefault(i_StoreId, new HashMap<>());
+    int currentUsed = currentSelectedDiscountsOfStore.getOrDefault(i_StoreDiscount, 0) + 1;
+    currentSelectedDiscountsOfStore.put(i_StoreDiscount, currentUsed);
+    m_UsedDiscounts.put(i_StoreId, currentSelectedDiscountsOfStore);
+    if (i_StoreDiscount.isOneOfDiscount()) {
+        StoreOfferDto selectedStoreOfferDto = i_StoreDiscount.getStoreOfferDtos().stream()
+                .filter(storeOfferDto -> storeOfferDto.getItemId() == i_SelectedItemIdInOffer)
+                .collect(Collectors.toList()).get(0);
+        addItemToDiscountsMap(i_StoreId, new OrderItem(new StoreItem(m_SuperDuperManager.getItem(m_ZoneName, selectedStoreOfferDto.getItemId()), selectedStoreOfferDto.getForAdditional(), selectedStoreOfferDto.getQuantity()), true));
+    } else {
+        for (StoreOfferDto storeOfferDto : i_StoreDiscount.getStoreOfferDtos()
+        ) {
+            addItemToDiscountsMap(i_StoreId, new OrderItem(new StoreItem(m_SuperDuperManager.getItem(m_ZoneName, storeOfferDto.getItemId()), storeOfferDto.getForAdditional(), storeOfferDto.getQuantity()), true));
+        }
+    }
+}
+
+private void addItemToDiscountsMap(int i_StoreId,OrderItem i_OrderItem)
+{
+    List<OrderItem> orderItemsInDiscountOfStore = m_StoresToItemsInDiscounts.getOrDefault(i_StoreId,new ArrayList<>());
+    int existCurrentItemIndex = orderItemsInDiscountOfStore.indexOf(i_OrderItem);
+    if(existCurrentItemIndex!=-1)
+    {
+        i_OrderItem.getStoreItem().setAmountOfSell(i_OrderItem.getStoreItem().getAmountOfSells() + orderItemsInDiscountOfStore.get(existCurrentItemIndex).getStoreItem().getAmountOfSells());
+        orderItemsInDiscountOfStore.set(existCurrentItemIndex,i_OrderItem);
+    }
+    else {
+        orderItemsInDiscountOfStore.add(i_OrderItem);
+    }
+    m_StoresToItemsInDiscounts.put(i_StoreId,orderItemsInDiscountOfStore);
+}
+
+    public Map<StoreDto, List<StoreDiscountDto>> getAvailableDiscountsForCurrentOrder ()
+    {
+        if (m_StoresToItemsMap == null) {
+            initStoresToItemsMap();
+        }
+
+        Map<Integer, Double> itemIdToLeftAmount = new HashMap<>(m_ItemIdToAmount);
+        for (Map<StoreDiscountDto,Integer> usedDiscounts: m_UsedDiscounts.values()
+             ) {
+            for (Map.Entry<StoreDiscountDto, Integer> entry : usedDiscounts.entrySet()
+            ) {
+                Pair<Integer, Double> currentDiscountCondition = entry.getKey().getDiscountCondition();
+                int itemId = currentDiscountCondition.getKey();
+                double currentUsedAmount = itemIdToLeftAmount.get(itemId);
+                //We need to subtract the amount of items which used in discounts from the total sold amount
+                itemIdToLeftAmount.put(itemId, currentUsedAmount - (currentDiscountCondition.getValue() * entry.getValue()));
+            }
+        }
+
+
+        Map<StoreDto, List<StoreDiscountDto>> res = new HashMap<>();
+        List<StoreDiscountDto> currentAvailableDiscounts;
+        for (Integer storeID :m_StoresToItemsMap.keySet()
+        ) {
+            Store store =m_SuperDuperManager.getStore(m_ZoneName,storeID);
+            if(store.haveDiscounts())
+            {
+                currentAvailableDiscounts = store.getDiscounts().stream()
+                        .filter(storeDiscount -> storeDiscount.isAvailable(itemIdToLeftAmount))
+                        .map(StoreDiscountDto::new)
+                        .collect(Collectors.toList());
+                res.put(new StoreDto(store), currentAvailableDiscounts);
+            }
+
+        }
+
+        return res;
+    }
+
+    private void initStoresToItemsMap () {
+        m_StoresToItemsMap = new HashMap<>();
+
+        if (m_CurrentStore != null) {
+            m_StoresToItemsMap.put(m_CurrentStore.getId(), m_ItemIdToAmount);
+        } else {
+            for (Map.Entry<Integer, Double> entry : m_ItemIdToAmount.entrySet()
+            ) {
+                Store currentStore = m_SuperDuperManager.getCheapestStore(m_ZoneName, entry.getKey());
+                m_StoresToItemsMap.computeIfAbsent(currentStore.getId(), k -> new HashMap<>());
+                Map<Integer, Double> currentItemsOfStore = m_StoresToItemsMap.get(currentStore.getId());
+                currentItemsOfStore.put(entry.getKey(), entry.getValue());
+                m_StoresToItemsMap.put(currentStore.getId(), currentItemsOfStore);
+            }
+        }
+    }
+}

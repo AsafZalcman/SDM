@@ -1,11 +1,15 @@
 package models;
 
+import dtoModel.StorageOrderDto;
 import managers.*;
+import myLocation.Location;
 import myLocation.LocationManager;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Zone {
 
@@ -59,41 +63,18 @@ public class Zone {
         return m_ItemManager.getItem(i_ItemID);
     }
 
-    public void addItemToOrder(Store store,Item i_Item, Double i_AmountOfSells) {
-        if (store == null) {
-            store = getCheapestStoreForItem(i_Item.getId());
-        }
 
-        m_OrderManager.addItemFromCurrentStore(store, i_Item, i_AmountOfSells);
-    }
-
-    public void addItemInDiscountToOrder(String i_DiscountName,int i_ItemId,double i_Price , double i_Amount)
-    {
-        Store store = m_StoreManager.getStoreFromDiscountName(i_DiscountName);
-        if(store ==null)
-        {
-            throw new IllegalArgumentException("The discount named :\"" + i_DiscountName +"\" is not exists");
-        }
-        m_OrderManager.addItemFromCurrentStore(store,new OrderItem(new StoreItem(getItem(i_ItemId),i_Price,i_Amount),true));
-    }
-
-  //  public void createNewOrder(User user, LocalDate date) {
-  //      m_OrderManager.create(user,date);
-  //  }
-
-    public void executeNewOrder() {
-        m_OrderManager.executeOrder();
-        StorageOrder currentStorageOrder = m_OrderManager.getCurrentOrder();
-        for (OrderItem orderItem : currentStorageOrder.getOrder().getAllItems()) {
+   synchronized public void executeNewOrder(int i_OrderIdToExecute) {
+      m_OrderManager.executeOrder(i_OrderIdToExecute);
+      StorageOrder storageOrder = m_OrderManager.getStorageOrder(i_OrderIdToExecute);
+        for (OrderItem orderItem : storageOrder.getOrder().getAllItems()) {
             m_ItemManager.addStorageItemSales(orderItem.getStoreItem().getItem().getId(), orderItem.getStoreItem().getAmountOfSells());
         }
 
-        //    m_CustomersManager.getCustomer(currentStorageOrder.getCustomerId()).addOrder(currentStorageOrder);
-        m_OrderManager.cleanup();
-    }
-
-    public StorageOrder getCurrentOrder() {
-        return m_OrderManager.getCurrentOrder();
+       for (Map.Entry<Integer,Order> entry: storageOrder.getStoresIdToOrder().entrySet()
+       ) {
+           getStore(entry.getKey()).addOrder(entry.getValue());
+       }
     }
 
     public Collection<StorageItem> getAllStorageItems(){
@@ -145,13 +126,8 @@ public class Zone {
         return m_StoreManager.isStoreIDExist(i_StoreID);
     }
 
-    public void abortOrder() {
-        m_OrderManager.cleanup();
-    }
-
-    public Map<Store, List<StoreDiscount>> getAvailableDiscountsForCurrentOrder()
-    {
-        return m_OrderManager.getAvailableDiscounts();
+    public void abortOrder(int i_StorageOrderIdToAbort) {
+        m_OrderManager.abortOrder(i_StorageOrderIdToAbort);
     }
 
     public void addNewStore(Store i_Store,Collection<StoreItem> i_ItemsOfStore) throws Exception {
@@ -169,5 +145,11 @@ public class Zone {
 
     public Collection<Item> getAllItems() {
         return m_ItemManager.getAllItems();
+    }
+
+    public StorageOrder createOrder(LocalDate i_CurrentOrderDate, Location i_Location, Map<Integer, Map<Integer, Double>> i_StoreIdToItemsMap, Map<Integer, List<OrderItem>> i_StoreIdToItemsInDiscounts,int i_UserId) {
+   Map<Store,Map<Integer,Double>> storeToItemsMap = i_StoreIdToItemsMap.entrySet().stream().collect(Collectors.toMap(entry -> getStore(entry.getKey()), Map.Entry::getValue));
+   Map<Store, List<OrderItem>> storeToItemsInDiscounts = i_StoreIdToItemsInDiscounts.entrySet().stream().collect(Collectors.toMap(entry -> getStore(entry.getKey()),  Map.Entry::getValue));
+   return m_OrderManager.createOrder(i_CurrentOrderDate,i_Location,storeToItemsMap,storeToItemsInDiscounts,i_UserId);
     }
 }
