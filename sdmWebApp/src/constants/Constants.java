@@ -10,4 +10,8 @@ public class Constants {
     public static final String ZONE_NAME_PARAMETER = "zoneName";
 
     public static final int INT_PARAMETER_ERROR = Integer.MIN_VALUE;
+    public static final String ALERT_VERSION_PARAMETER = "alertsVersion";
+    public static final String ALERT_TYPE_PARAMETER = "alertType";
+
+    public static final String ALERT_MANAGER_ATTRIBUTE_NAME = "alertManagerAttribute";
 }

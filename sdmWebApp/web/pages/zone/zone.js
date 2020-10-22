@@ -19,6 +19,7 @@ function getContentOfSelectedBtn(selectedBtn) {
             break;
         case 'newStore':
             res ="<h1> In newStore </h1>";
+            createNewStore()
             break;
         case  'details':
             res = "<h1>In Zone Details</h1>"
@@ -66,7 +67,7 @@ function loadZoneDetails()
 }
 
 function triggerAjaxContent() {
-    setInterval(refreshZoneDetails, refreshRate);
+    setTimeout(refreshZoneDetails, refreshRate);
 }
 
 function refreshZoneDetails() {
@@ -262,3 +263,98 @@ function addTable(id,numberOfColumns,title,headers) {
     myTableDiv.appendChild(container)
 
 }
+function createNewStore() {
+loadAvailableLocations()
+    loadAvailableItems()
+}
+function loadAvailableLocations() {
+    $.ajax
+    ({
+            data: "zoneName=" + getCurrentZone(),
+            url: buildUrlWithContextPath("locations"),
+            success: function (locations) {
+                $.each(locations || [], function (index, location) {
+                    var locationStr = "(" + location.x + "," + location.y +")"
+                    $("#availableLocations").append($("<option></option>")
+                        .attr("value", JSON.stringify({x:location.x,y:location.y}))
+                        .text(locationStr))
+                        .className="locationAvailableOption"
+                })
+            }
+        }
+    )
+}
+
+var requestedItems=[]
+function loadAvailableItems() {
+    $.ajax
+    ({
+            data: "zoneName=" + getCurrentZone(),
+            url: buildUrlWithContextPath("items"),
+            success: function (items) {
+                $.each(items || [], function (index, item) {
+                    var trItem = $(document.createElement('tr'));
+                    var td = $(document.createElement('td'));
+                    td.append($("<label></label>")
+                        .text="Item ID:" + item.m_ItemId)
+                    td.append($("<label>Enter Price:</label>"))
+                    td.append($("<input onkeypress=\"return isFloatNumber(this,event)\" name='price' type='text' required/>")
+                        .attr("id", item.m_ItemId + "price")
+                        .attr("value",0.0))
+                    var button = $(document.createElement('button')).text("Add Item")
+                    button.click(function()
+                         {
+                             var priceVal = parseFloat($("#" + item.m_ItemId + "price").val())
+                             if(priceVal <= 0.0)
+                             {
+                                 alert("Price must be positive number!!");
+                             }
+                             else {
+                                 trItem.remove()
+                                 requestedItems.push({id: item.m_ItemId, price: priceVal})
+                                 alert("Item was added successfully!!");
+
+                             }
+                         })
+                    button.appendTo(td)
+                    td.appendTo(trItem)
+                    $("#itemsTable").append(trItem)
+                })
+            }
+        }
+    )
+}
+
+$(function() {
+    $("#createStoreForm").submit(function () {
+        if(requestedItems.length === 0)
+        {
+            alert("Cannot Create Empty Store!!");
+        }
+        else {
+            $.ajax({
+                data: $(this).serialize() + "&items=" + JSON.stringify(requestedItems) + "&zoneName=" + getCurrentZone(),
+                dataType: 'json',
+                url: buildUrlWithContextPath("stores"),
+                method: 'POST',
+                error: function (response) {
+                    console.error(response);
+                },
+                success: function (response) {
+                    console.log(response);
+                    clearCreateStoreWindow()
+
+                }
+            })
+        }
+        return false;
+    });
+});
+
+function clearCreateStoreWindow() {
+    requestedItems=[]
+    $("#itemsTable").remove()
+    $("#createStoreForm").remove()
+    createNewStore()
+}
+

@@ -1,12 +1,15 @@
 package utils;
 
 import constants.Constants;
+import manager.AlertManager;
 import viewModel.UserViewModel;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ServletUtils {
 
@@ -49,4 +52,21 @@ public static LocalDate getDateParameter(HttpServletRequest request) {
 	String date = request.getParameter(Constants.ACCOUNT_DATE_PARAMETER);
 	return LocalDate.parse(date, formatter);
 }
+
+//להבין אם עובד
+	 public static AlertManager getAlertManager(ServletContext servletContext, String i_UserName) {
+		 Map<String, AlertManager> userToAlertManager;
+		synchronized (userManagerLock) {
+			userToAlertManager = ( Map<String, AlertManager>)servletContext.getAttribute(Constants.ALERT_MANAGER_ATTRIBUTE_NAME);
+			if (userToAlertManager == null) {
+				 userToAlertManager = new HashMap<>();
+			}
+			if(userToAlertManager.get(i_UserName) == null)
+			{
+				userToAlertManager.put(i_UserName,new AlertManager());
+				servletContext.setAttribute(Constants.ALERT_MANAGER_ATTRIBUTE_NAME, userToAlertManager);
+			}
+		}
+		return userToAlertManager.get(i_UserName);
+	}
 }
