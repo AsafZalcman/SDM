@@ -122,7 +122,7 @@ public class Zone {
         return m_StoreManager.isItemExist(i_StoreID, i_ItemID);
     }
 
-    public boolean isStoreIDExist(int i_StoreID){
+     public boolean isStoreIDExist(int i_StoreID){
         return m_StoreManager.isStoreIDExist(i_StoreID);
     }
 
@@ -130,7 +130,7 @@ public class Zone {
         m_OrderManager.abortOrder(i_StorageOrderIdToAbort);
     }
 
-    public void addNewStore(Store i_Store,Collection<StoreItem> i_ItemsOfStore) throws Exception {
+     public void addNewStore(Store i_Store,Collection<StoreItem> i_ItemsOfStore) throws Exception {
         m_StoreManager.addStore(i_Store);
         for (StoreItem storeItem: i_ItemsOfStore
         ) {

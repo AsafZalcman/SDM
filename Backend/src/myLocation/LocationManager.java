@@ -9,7 +9,6 @@ public class LocationManager {
     public static final int X_LOWER_LIMIT = 1;
     public static final int Y_UPPER_LIMIT = 50;
     public static final int Y_LOWER_LIMIT = 1;
-    //maybe should be Interface which implement getId and getLocation instead of Integer
     private static Map<String, List<Location>> m_ZoneToLocations = new HashMap<>();
 
     public static void isValidLocation(int x, int y) throws LocationException {
@@ -41,36 +40,19 @@ public class LocationManager {
         }
     }
 
-//  public static void setLocations(Map<Location, ILocationable> i_LocationToId) {
-//      m_ZoneToLocations = i_LocationToId;
-//  }
-
-//    public static Map<String, List<Location>> getLocations() {
- //       return m_ZoneToLocations;
-//    }
-
-//   public static void initLocations() {
-//       m_ZoneToLocations.clear();
-//   }
-
-//   public static Location getMaxLocation() {
-//       int maxY = 1;
-//       int maxX = maxY;
-//       for(Location location: m_ZoneToLocations.keySet()){
-//           if(location.x > maxX){ maxX = location.x; }
-//           if(location.y > maxY){ maxY = location.y; }
-//       }
-//       maxX++;
-//       maxY++;
-//
-//       return new Location(maxX,maxY);
-//   }
-
-//   public static ILocationable getILocationable(Location i_Location){
-//       return m_ZoneToLocations.get(i_Location);
-//   }
-
-    public static Collection<Location> getAllAvailableLocations(String i_ZoneName){
-       return m_ZoneToLocations.get(i_ZoneName);
+    public static Collection<Location> getAllAvailableLocations(String i_ZoneName) {
+        List<Location> locationList = new ArrayList<>();
+        for (int i = X_LOWER_LIMIT; i <= X_UPPER_LIMIT; i++) {
+            for (int j = Y_LOWER_LIMIT; j <= Y_UPPER_LIMIT; j++) {
+                try {
+                    if (isLocationAvailable(i_ZoneName, i, j)) {
+                        locationList.add(new Location(i, j));
+                    }
+                } catch (LocationException ignored) {
+                }
+            }
+        }
+        return locationList;
     }
+
 }

@@ -1,5 +1,6 @@
 package viewModel;
 
+import dtoModel.ItemDto;
 import dtoModel.StoreDto;
 import dtoModel.StoreOfferDto;
 import enums.PurchaseForm;
@@ -36,5 +37,10 @@ public class StoreViewModel {
         m_SuperDuperManager.addNewStore(i_ZoneName,new Store(i_StoreDto.getId(), i_StoreDto.getName(), new Location(i_StoreDto.getLocation().x, i_StoreDto.getLocation().y), i_StoreDto.getPPK(),i_StoreDto.getOwnerName()),   i_StoreDto.getItemsDto().stream()
                 .map(itemDto -> new StoreItem(new Item(itemDto.getId(), itemDto.getItemName(), itemDto.getPurchaseForm()), itemDto.getPrice()))
                 .collect(Collectors.toList()));
+    }
+
+    public ItemDto createNewStoreItem(String i_ZoneName,int i_ItemId, double i_Price)
+    {
+        return new ItemDto(new StoreItem(m_SuperDuperManager.getItem(i_ZoneName,i_ItemId),i_Price));
     }
 }

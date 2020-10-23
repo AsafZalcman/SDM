@@ -38,8 +38,12 @@ public class StoreManager {
          return m_StoreID2Store.values();
      }
 
-     public void addStore(Store i_Store)
+  synchronized    public void addStore(Store i_Store)
      {
+         if(isStoreIDExist(i_Store.getId()))
+         {
+             throw new IllegalArgumentException("Error: The id :\"" + i_Store.getId() +"\" is already occupied by another store");
+         }
          m_StoreID2Store.put(i_Store.getId(),i_Store);
      }
 
@@ -106,7 +110,7 @@ public class StoreManager {
         return m_StoreID2Store.get(i_StoreID).isItemExists(i_ItemID);
     }
 
-    public boolean isStoreIDExist(int i_storeID) {
+    synchronized public boolean isStoreIDExist(int i_storeID) {
         return m_StoreID2Store.containsKey(i_storeID);
     }
 
