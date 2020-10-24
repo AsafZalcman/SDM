@@ -24,21 +24,6 @@
 
 </div>
 
-<form id="createStoreForm">
-    <label for="id">Store Id (whole number):</label>
-    <input  type="text"  id="id" name="id" required><br>
-    <label for="storeName">Store Name:</label>
-    <input type="text" id="storeName" name="name" required><br>
-    <label for="availableLocations">Available Locations:</label>
-    <select id="availableLocations" name="location" required>
-        <option value="" disabled selected>Select Location..</option>
-    </select>
-    <label for="ppk">PPK:</label>
-    <input type="text" id="ppk" name="ppk" required onkeypress="return isFloatNumber(this,event)" ><br>
-    <input type="submit" value="Create Store">
-</form>
-    <table id="itemsTable">
-    </table>
 
 </body>
 </html>

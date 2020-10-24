@@ -10,6 +10,7 @@ import managers.SuperDuperManager;
 import models.*;
 import myLocation.Location;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,16 @@ public class StoreViewModel {
     public Collection<StoreDto> getAllStores(String i_ZoneName)
     {
         return m_SuperDuperManager.getAllStores(i_ZoneName).stream().map(StoreDto::new).collect(Collectors.toList());
+    }
+
+    public void addStoreFeedback(String i_ZoneName , int i_StoreId, LocalDate i_Date,int i_Rank, String i_Description, String i_UserName)
+    {
+        Store.StoreFeedback storeFeedback = new Store.StoreFeedback(i_Rank,i_Description,i_UserName,i_Date);
+        m_SuperDuperManager.getStore(i_ZoneName, i_StoreId).addFeedback(storeFeedback);
+    }
+
+    public StoreDto getStore(String i_ZoneName , int i_StoreId) {
+        return new StoreDto(m_SuperDuperManager.getStore(i_ZoneName, i_StoreId));
     }
 
     private boolean isStoreIDExistInTheSystem(String i_ZoneName,int i_StoreID) {

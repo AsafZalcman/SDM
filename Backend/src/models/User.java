@@ -27,4 +27,13 @@ public class User implements IUniquely {
     public String getName() {
         return m_Name;
     }
+
+    public boolean isCustomer()
+    {
+        return m_UserType == UserType.CUSTOMER;
+    }
+
+    public UserType getUserType() {
+        return m_UserType;
+    }
 }

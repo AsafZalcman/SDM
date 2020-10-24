@@ -109,7 +109,7 @@ public StorageOrderDto createOrder() {
 }
 
 public void executeOrder() {
-    m_SuperDuperManager.executeNewOrder(m_ZoneName,m_CurrentOrder.getOrderID());
+    m_SuperDuperManager.executeNewOrder(m_ZoneName,m_CurrentOrder.getOrderDto().getId());
     cleanup();
 }
 
@@ -122,7 +122,7 @@ public void executeOrder() {
 
 public void abortOrder() {
         if(m_CurrentOrder!=null) {
-            m_SuperDuperManager.abortOrder(m_ZoneName, m_CurrentOrder.getOrderID());
+            m_SuperDuperManager.abortOrder(m_ZoneName, m_CurrentOrder.getOrderDto().getId());
         }
     cleanup();
 }

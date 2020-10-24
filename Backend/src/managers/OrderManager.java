@@ -45,17 +45,17 @@ public class OrderManager {
         Order tempOrder;
         int totalDeliveryPrice = 0;
         for (Map.Entry<Store, Map<Integer, Double>> entry : i_storesToItemsMap.entrySet()) {
-            tempOrder = entry.getKey().createOrder(i_Date, i_Location, entry.getValue(), i_storesToItemsInDiscounts.getOrDefault(entry.getKey(), Collections.emptyList()));
+            tempOrder = entry.getKey().createOrder(++counter,i_UserId,i_Date, i_Location, entry.getValue(), i_storesToItemsInDiscounts.getOrDefault(entry.getKey(), Collections.emptyList()));
             storeToOrderMap.put(entry.getKey(), tempOrder);
             totalDeliveryPrice += tempOrder.getDeliveryPrice();
             allOrderItems.addAll(tempOrder.getAllItems());
         }
 
         synchronized (this) {
-            StorageOrder storageOrder = new StorageOrder(++counter, new Order(i_Date, i_Location, totalDeliveryPrice, allOrderItems), storeToOrderMap.entrySet().stream()
+            StorageOrder storageOrder = new StorageOrder(new Order(++counter, i_UserId, i_Date, i_Location, totalDeliveryPrice, allOrderItems), storeToOrderMap.entrySet().stream()
                     .collect(Collectors.toMap(entry -> entry.getKey().getId(),
-                            Map.Entry::getValue)), i_UserId);
-            m_OrdersToExecute.put(storageOrder.getOrderID(), storageOrder);
+                            Map.Entry::getValue)));
+            m_OrdersToExecute.put(storageOrder.getOrder().getId(), storageOrder);
             return storageOrder;
         }
     }

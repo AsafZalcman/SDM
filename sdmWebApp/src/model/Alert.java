@@ -1,10 +1,12 @@
 package model;
 
-public interface Alert {
+public abstract class Alert {
 
-    AlertType getType();
+    public abstract AlertType  getType();
+    private AlertType alertType = getType();
+
     public static enum AlertType
     {
-        NEW_STORE,FEEDBACK,ORDER_IN_STORE
+        NEW_STORE,FEEDBACK, NEW_ORDER
     }
 }

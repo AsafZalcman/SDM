@@ -24,6 +24,10 @@ public class AccountViewModel {
     public void transferMoney(int i_FromId, LocalDate i_Date, double i_Amount, int i_ToId) {
         m_SuperDuperManager.getAccountManager().transferMoney(i_FromId, i_Date, i_Amount, i_ToId);
     }
+    public void transferMoney(int i_FromId, LocalDate i_Date, double i_Amount, String i_ToName) {
+        int userId =  m_SuperDuperManager.getAllCustomers().stream().filter(user -> user.getName().equals(i_ToName)).findFirst().get().getId();
+        transferMoney(i_FromId, i_Date, i_Amount, userId);
+    }
 
     public List<AccountMovementDto> getAccountOperations(int i_Id, int i_FromIndex)
     {

@@ -105,10 +105,10 @@ public class Store implements IDelivery, IUniquely, ILocationable {
         return m_IncomesFromDeliveries;
     }
 
-    public Order createOrder(LocalDate i_orderDate, Location i_customerLocation, Map<Integer, Double> i_itemIdToAmountOfSellMap) {
-        return createOrder(i_orderDate,i_customerLocation,i_itemIdToAmountOfSellMap,Collections.emptyList());
+    public Order createOrder(int i_Id,int i_UserId,LocalDate i_orderDate, Location i_customerLocation, Map<Integer, Double> i_itemIdToAmountOfSellMap) {
+        return createOrder( i_Id, i_UserId,i_orderDate,i_customerLocation,i_itemIdToAmountOfSellMap,Collections.emptyList());
     }
-    public Order createOrder(LocalDate i_orderDate, Location i_customerLocation, Map<Integer, Double> i_itemIdToAmountOfSellMap, Collection<OrderItem> i_ItemsInDiscount) {
+    public Order createOrder(int i_Id,int i_UserId,LocalDate i_orderDate, Location i_customerLocation, Map<Integer, Double> i_itemIdToAmountOfSellMap, Collection<OrderItem> i_ItemsInDiscount) {
         Map<Integer, OrderItem> itemIdToStoreItemsMap = new HashMap<>();
         i_itemIdToAmountOfSellMap.keySet().forEach(itemId -> {
             StoreItem storeItem = new StoreItem(m_IdToStoreItem.get(itemId));
@@ -120,7 +120,7 @@ public class Store implements IDelivery, IUniquely, ILocationable {
                 itemIdToStoreItemsMap.values().stream(),
                 i_ItemsInDiscount.stream())
                 .collect(Collectors.toList());
-        return new Order(i_orderDate, i_customerLocation, getDeliveryPrice(i_customerLocation), allItems);
+        return new Order(i_Id, i_UserId, i_orderDate, i_customerLocation, getDeliveryPrice(i_customerLocation), allItems);
     }
 
     public void addOrder(Order i_Order)
