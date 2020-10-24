@@ -20,7 +20,7 @@ function getAlerts()
                 $.each(data.alerts || [], function(index, alertToDisplay) {
                     var details = "The user: \"" + alertToDisplay.ownerName + "\" created a new store named: \"" +alertToDisplay.storeName +"\" in one of your zones"+
                         "\nAdditional details about the new store:\n"
-                    +"Location: (" +alertToDisplay.location +"," + alertToDisplay.location.y + ")\n"
+                    +"Location: (" +alertToDisplay.location.x +"," + alertToDisplay.location.y + ")\n"
                     +"Available items related to the total items in the zone: " + alertToDisplay.availableItemsFromAllItems
                     alert(details)
                 })

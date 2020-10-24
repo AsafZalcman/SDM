@@ -13,6 +13,7 @@ import utils.ServletUtils;
 import utils.SessionUtils;
 import viewModel.ItemViewModel;
 import viewModel.StoreViewModel;
+import viewModel.ZoneViewModel;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -106,10 +107,14 @@ public class StoresServlet extends HttpServlet {
 
     private void createNewStoreAlert(StoreDto storeDto,String zoneName)
     {
-        ItemViewModel itemViewModel = new ItemViewModel();
-        AlertManager alertManager = ServletUtils.getAlertManager(getServletContext(),storeDto.getOwnerName());
+        ZoneViewModel zoneViewModel = new ZoneViewModel();
+        String zoneOwner = zoneViewModel.getZone(zoneName).getOwnerName();
+        if(!storeDto.getOwnerName().equalsIgnoreCase(zoneOwner))
+        { ItemViewModel itemViewModel = new ItemViewModel();
+        AlertManager alertManager = ServletUtils.getAlertManager(getServletContext(),zoneOwner);
         Alert alert = new NewStoreAlert(storeDto.getOwnerName(),storeDto.getName(),storeDto.getLocation(),storeDto.getItemsDto().size() + "\\" + itemViewModel.getAllItems(zoneName).size() );
         alertManager.addAlert(alert);
+        }
     }
 
     private static class ClientItem {
