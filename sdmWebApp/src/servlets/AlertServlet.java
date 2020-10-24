@@ -48,41 +48,6 @@ public class AlertServlet extends HttpServlet {
             }
         }}
 
-//  @Override
-//  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//      Integer userId = SessionUtils.getUserId(request);
-//      if (userId != null) {
-//          PrintWriter out = response.getWriter();
-//          response.setContentType("application/json");
-//          String returnMessage = "";
-
-//          synchronized (this) {
-//              AlertManager alertManager = m_UserToAlertManager.getOrDefault(getTargetUser(request), new AlertManager());
-//              try {
-//                  request
-//                  alertManager.addAlert(request);
-//                  response.setStatus(201);
-//              } catch (Exception e) {
-//                  response.setStatus(500);
-//              } finally {
-//                  out.println(ResponseUtils.getJsonResponseString(response.getStatus(), returnMessage));
-//              }
-//          }
-//      }
-//  }
-//private String getTargetUser(HttpServletRequest request)
-//{
-//    switch (Alert.AlertType.valueOf(request.getParameter(Constants.ALERT_TYPE_PARAMETER).toUpperCase()))
-//    {
-//        case NEW_STORE:{
-//            String zoneName = request.getParameter(Constants.ZONE_NAME_PARAMETER);
-//            ZoneViewModel zoneViewModel = new ZoneViewModel();
-//            return zoneViewModel.getZone(zoneName).getOwnerName();
-//        }
-//    }
-//    return null;
-//}
-
     private static class AlertAndVersion {
 
         final private Collection<Alert> alerts;

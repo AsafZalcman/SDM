@@ -19,7 +19,7 @@ public class ZoneDto {
         m_StorageItemsDtos = i_Zone.getAllStorageItems().stream().map(StorageItemDto::new).collect(Collectors.toList());
         m_Name=i_Zone.getName();
         m_OrdersDtos = Collections.emptyList();
-        m_OwnerName=i_Zone.getName();
+        m_OwnerName=i_Zone.getOwnerName();
         m_StoresDtos=i_Zone.getAllStores().stream().map(StoreDto::new).collect(Collectors.toList());
     }
 

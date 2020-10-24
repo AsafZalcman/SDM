@@ -1,5 +1,8 @@
+var zoneDetailsTabName = "details"
+var currentTab=zoneDetailsTabName
 function getContentOfSelectedBtn(selectedBtn) {
     let res = "";
+    currentTab = selectedBtn
     $('.zoneArea').hide()
     switch (selectedBtn){
         case 'makeAnOrder':
@@ -21,7 +24,7 @@ function getContentOfSelectedBtn(selectedBtn) {
             res ="<h1> In newStore </h1>";
             createNewStore()
             break;
-        case  'details':
+        case  zoneDetailsTabName:
             res = "<h1>In Zone Details</h1>"
             loadZoneDetails()
             break;
@@ -66,8 +69,10 @@ function loadZoneDetails()
     refreshZoneDetails()
 }
 
-function triggerAjaxContent() {
-    setTimeout(refreshZoneDetails, refreshRate);
+function triggerAjaxZoneDetailsTables() {
+    if(currentTab === zoneDetailsTabName) {
+        setTimeout(refreshZoneDetails, refreshRate);
+    }
 }
 
 function refreshZoneDetails() {
@@ -79,6 +84,7 @@ function refreshZoneDetails() {
             success: function(zone) {
                 loadStorageItemsList(zone.m_StorageItemsDtos);
                 loadStoresList(zone.m_StoresDtos);
+                triggerAjaxZoneDetailsTables()
 
             }
         }
@@ -125,7 +131,16 @@ function refreshZoneDetails() {
 //        "m_Sales":0.0
 //    },
 function loadStorageItemsList(items) {
-    addTable("storageItemsTable",6,"Storage Items",["ID","Name","Purchase Form", "How Many Stores Sell","Average Price","Sold So Far"])
+    if(!$("#storageItemsTable").length)  // table not exists
+    {
+        addTable("storageItemsTable", 6, "Storage Items", ["ID", "Name", "Purchase Form", "How Many Stores Sell", "Average Price", "Sold So Far"])
+    }
+        loadStorageItemsListData(items)
+
+}
+function loadStorageItemsListData(items)
+{
+    $("#storageItemsTable table tbody").empty()
     $.each(items || [], function(index, item){
         var tr = $(document.createElement('tr'));
         var tdID = $(document.createElement('td')).text(item.m_ItemDto.m_ItemId);
@@ -141,7 +156,7 @@ function loadStorageItemsList(items) {
         tdStoresSellIt.appendTo(tr);
         tdAveragePrice.appendTo(tr);
         tdSells.appendTo(tr);
-        $("#storageItemsTable table").append(tr)
+        $("#storageItemsTable table tbody").append(tr)
     });
 }
 //          "m_OrdersDto":[
@@ -179,13 +194,23 @@ function loadStorageItemsList(items) {
 //          ]
 //       }
 function loadStoresList(stores) {
-    addTable("storesTable",8,"Available Stores",["ID", "Name",
-       "Owner Name",
-       "Location",
-       "Number Of Orders",
-       "PPK",
-       "Incomes From Items",
-       "Incomes From Deliveries"])
+    if(!$("#storesTable").length)  // table not exists
+    {
+        addTable("storesTable", 8, "Available Stores", ["ID", "Name",
+            "Owner Name",
+            "Location",
+            "Number Of Orders",
+            "PPK",
+            "Incomes From Items",
+            "Incomes From Deliveries"])
+    }
+   loadStoreTableData(stores);
+}
+
+function loadStoreTableData(stores)
+{
+    $("#storesTable table tbody").empty()
+    $("#storeItemsTable table tbody").empty()
     $.each(stores || [], function(index, store){
         var tr = $(document.createElement('tr'));
         var tdID = $(document.createElement('td')).text(store.m_Id);
@@ -230,7 +255,7 @@ function loadStoresList(stores) {
                 tdPurchaseForm.appendTo(trItem);
                 tdPrice.appendTo(trItem);
                 tdSoldSoFar.appendTo(trItem);
-                $("#storeItemsTable table").append(trItem)
+                $("#storeItemsTable table tbody").append(trItem)
             });
         });
         $("#storesTable table").append(tr)

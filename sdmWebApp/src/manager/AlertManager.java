@@ -35,18 +35,4 @@ public class AlertManager {
         return alerts.size();
     }
 
-    private static class AlertBuilder{
-
-        public static Alert create(Alert.AlertType type,HttpServletRequest request) throws IOException {
-            switch (type)
-            {
-                case NEW_STORE:{
-                    return new Gson().fromJson(request.getReader(), NewStoreAlert.class);
-                }
-            }
-            return null;
-
-        }
-
-    }
 }

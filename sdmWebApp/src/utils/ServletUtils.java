@@ -53,7 +53,6 @@ public static LocalDate getDateParameter(HttpServletRequest request) {
 	return LocalDate.parse(date, formatter);
 }
 
-//להבין אם עובד
 	 public static AlertManager getAlertManager(ServletContext servletContext, String i_UserName) {
 		 Map<String, AlertManager> userToAlertManager;
 		synchronized (userManagerLock) {
