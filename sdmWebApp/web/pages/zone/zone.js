@@ -299,6 +299,17 @@ function getAllItemsMakeAnOrder(){
                         addItemToOrder(item.m_ItemId, amountVal);
                     });
 
+                    tdSubmit.append(button);
+
+
+                    tdID.appendTo(tr);
+                    tdName.appendTo(tr);
+                    tdPurchaseForm.appendTo(tr);
+                    tdPrice.appendTo(tr);
+                    tdAmount.appendTo(tr);
+                    tdSubmit.appendTo(tr);
+                    $("#selectItemTable").append(tr);
+
                 });
             }
 
