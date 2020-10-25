@@ -128,4 +128,9 @@ public class  StoreDto {
             return m_StoreFeedback.getDate();
         }
     }
+
+    @Override
+    public String toString() {
+        return m_Id + "," + m_Name;
+    }
 }

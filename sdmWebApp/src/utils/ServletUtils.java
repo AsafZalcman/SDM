@@ -2,8 +2,8 @@ package utils;
 
 import constants.Constants;
 import manager.AlertManager;
+import viewModel.OrderViewModel;
 import viewModel.UserViewModel;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
@@ -13,6 +13,8 @@ import java.util.Map;
 
 public class ServletUtils {
 
+	private static Map<Integer, OrderViewModel> m_CustomerIDToOrderViewModel = new HashMap<>();
+
 	private static final String ACCOUNT_VIEW_MODEL_ATTRIBUTE_NAME = "accountViewModel";
 	private static final String CHAT_MANAGER_ATTRIBUTE_NAME = "chatManager";
 
@@ -20,12 +22,11 @@ public class ServletUtils {
 	Note how the synchronization is done only on the question and\or creation of the relevant managers and once they exists -
 	the actual fetch of them is remained un-synchronized for performance POV
 	 */
-	private static final Object userManagerLock = new Object();
-	private static final Object chatManagerLock = new Object();
 
 	private static final String USER_VIEW_MODEL_ATTRIBUTE_NAME = "userViewModel";
 
 	private static final Object userViewModelLock = new Object();
+	private static final Object userManagerLock = new Object();
 
 	public static UserViewModel getUserViewModel(ServletContext servletContext){
 		synchronized (userViewModelLock){
@@ -34,6 +35,13 @@ public class ServletUtils {
 			}
 		}
 		return (UserViewModel) servletContext.getAttribute(USER_VIEW_MODEL_ATTRIBUTE_NAME);
+	}
+
+	public static OrderViewModel getOrderViewModel(int i_CustomerID){
+		if(!m_CustomerIDToOrderViewModel.containsKey(i_CustomerID)){
+			m_CustomerIDToOrderViewModel.put(i_CustomerID, new OrderViewModel());
+		}
+		return m_CustomerIDToOrderViewModel.get(i_CustomerID);
 	}
 
 public static int getIntParameter(HttpServletRequest request, String name) {
