@@ -226,7 +226,7 @@ function onLoadDiscountSelect(){
             try {
                 $.ajax({
                     data: parameters,
-                    url: buildUrlWithContextPath("makeOrder"),
+                    url: buildUrlWithContextPath("orders"),
                     timeout: 2000,
                     method: 'post',
                     error: function () {
