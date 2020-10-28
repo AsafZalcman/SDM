@@ -1,4 +1,5 @@
 var zoneDetailsTabName = "details"
+var createStoreTab= "newStore"
 var currentTab=zoneDetailsTabName
 var refreshRate = 2000; //milli seconds
 let itemIDtoItemName = new Map();
@@ -16,15 +17,14 @@ let itemIDtoItemName = new Map();
                 res = "<h1> In Rank </h1>";
                 break;
             case 'customerOrderHistory':
-                res = "<h1> In customerOrderHistory </h1>";
-                break;
             case 'managerOrderHistory':
-                res = "<h1> In managerOrderHistory </h1>";
+                refreshOrderHistory()
                 break;
             case 'feedback':
                 res = "<h1> In feedback </h1>";
                 break;
-            case 'newStore':
+            case createStoreTab:
+                $(".zone-content").append(await loadCreateStoreTab());
                 createNewStore()
                 break;
             case  zoneDetailsTabName:
@@ -114,21 +114,43 @@ async function loadMakeOrder(){
     }
 
     function loadSelectItemBlock() {
-    return "<div class=\"select-item-block\" hidden>\n" +
-     "        <table id=\"selectItemTable\" class=\"tableView\">\n" +
-     "            <tr>\n" +
-     "                <th>ID</th>\n" +
-     "                <th>Name</th>\n" +
-     "                <th>Purchase Form</th>\n" +
-     "                <th>Price</th>\n" +
-     "                <th>Amount</th>\n" +
-     "                <th></th>\n" +
-     "            </tr>\n" +
-     "        </table>\n" +
-     "        <form id=\"selectItemForm\" action=\"\">\n" +
-     "        <input type=\"submit\" value=\"Press to Continue\">\n" +
-     "        </form>\n" +
-     "    </div>";
+        return "<div class=\"select-item-block\" hidden>\n" +
+            "        <table id=\"selectItemTable\" class=\"tableView\">\n" +
+            "            <tr>\n" +
+            "                <th>ID</th>\n" +
+            "                <th>Name</th>\n" +
+            "                <th>Purchase Form</th>\n" +
+            "                <th>Price</th>\n" +
+            "                <th>Amount</th>\n" +
+            "                <th></th>\n" +
+            "            </tr>\n" +
+            "        </table>\n" +
+            "        <form id=\"selectItemForm\" action=\"\">\n" +
+            "        <input type=\"submit\" value=\"Press to Continue\">\n" +
+            "        </form>\n" +
+            "    </div>";
+    }
+function triggerAjaxZoneDetailsTables() {
+        setTimeout(refreshZoneDetails, refreshRate);
+}
+
+function refreshZoneDetails() {
+    if(currentTab === zoneDetailsTabName) {
+
+        $.ajax
+        (
+            {
+                url: buildUrlWithContextPath("zones"),
+                data: "zoneName=" + getCurrentZone(),
+                success: function (zone) {
+                    loadStorageItemsList(zone.m_StorageItemsDtos);
+                    loadStoresList(zone.m_StoresDtos);
+                    triggerAjaxZoneDetailsTables()
+
+                }
+            }
+        )
+    }
 }
 
 function loadSelectDiscountsBlock(){
@@ -477,7 +499,6 @@ function submitSecondStepMakeAnOrder(){
 
 
 }
-
     /*make order tab  DONE*/
 
     function loadZoneDetails() {
@@ -491,15 +512,18 @@ function submitSecondStepMakeAnOrder(){
     }
 
     function refreshZoneDetails() {
+
         $.ajax
         (
             {
                 url: buildUrlWithContextPath("zones"),
                 data: "zoneName=" + getCurrentZone(),
                 success: function (zone) {
-                    loadStorageItemsList(zone.m_StorageItemsDtos);
-                    loadStoresList(zone.m_StoresDtos);
-                    triggerAjaxZoneDetailsTables()
+                    if (currentTab === zoneDetailsTabName) {
+                        loadStorageItemsList(zone.m_StorageItemsDtos);
+                        loadStoresList(zone.m_StoresDtos);
+                        triggerAjaxZoneDetailsTables()
+                    }
 
                 }
             }
@@ -551,7 +575,6 @@ function submitSecondStepMakeAnOrder(){
 
     function loadStoreTableData(stores) {
         $("#storesTable table tbody").empty()
-        $("#storeItemsTable table tbody").empty()
         $.each(stores || [], function (index, store) {
             var tr = $(document.createElement('tr'));
             var tdID = $(document.createElement('td')).text(store.m_Id);
@@ -629,7 +652,25 @@ function submitSecondStepMakeAnOrder(){
 
     }
 
+async function loadCreateStoreTab() {
+    return "<form id=\"createStoreForm\" action=\"\">\n" +
+        "    <label for=\"id\">Store Id (whole number):</label>\n" +
+        "    <input  type=\"text\"  id=\"id\" name=\"id\" required><br>\n" +
+        "    <label for=\"storeName\">Store Name:</label>\n" +
+        "    <input type=\"text\" id=\"storeName\" name=\"name\" required><br>\n" +
+        "    <label for=\"availableLocations\">Available Locations:</label>\n" +
+        "    <select id=\"availableLocations\" name=\"location\" required>\n" +
+        "        <option value=\"\" disabled selected>Select Location..</option>\n" +
+        "    </select>\n" +
+        "    <label for=\"ppk\">PPK:</label>\n" +
+        "    <input type=\"text\" id=\"ppk\" name=\"ppk\" required onkeypress=\"return isFloatNumber(this,event)\" ><br>\n" +
+        "    <input type=\"submit\" value=\"Create Store\">\n" +
+        "</form>\n" +
+        "    <table id=\"itemsTable\">\n" +
+        "    </table>\n"
+}
     function createNewStore() {
+        signCreateStoreSubmitEvent()
         loadAvailableLocations()
         loadAvailableItems()
     }
@@ -667,8 +708,7 @@ function submitSecondStepMakeAnOrder(){
                             .text = "Item ID:" + item.m_ItemId)
                         td.append($("<label>Enter Price:</label>"))
                         td.append($("<input onkeypress=\"return isFloatNumber(this,event)\" name='price' type='text' required/>")
-                            .attr("id", item.m_ItemId + "price")
-                            .attr("value", 0.0))
+                            .attr("id", item.m_ItemId + "price"))
                         var button = $(document.createElement('button')).text("Add Item")
                         button.click(function () {
                             var priceVal = parseFloat($("#" + item.m_ItemId + "price").val())
@@ -690,7 +730,7 @@ function submitSecondStepMakeAnOrder(){
         )
     }
 
-    $(function () {
+    function signCreateStoreSubmitEvent () {
         $("#createStoreForm").submit(function () {
             if (requestedItems.length === 0) {
                 alert("Cannot Create Empty Store!!");
@@ -712,12 +752,148 @@ function submitSecondStepMakeAnOrder(){
             }
             return false;
         });
-    });
+    }
 
     function clearCreateStoreWindow() {
         requestedItems = []
-        $("#itemsTable").remove()
-        $("#createStoreForm").remove()
-        createNewStore();
+        setContentOfSelectedBtn(createStoreTab)
     }
 
+function refreshOrderHistory() {
+    $.ajax
+    (
+        {
+            url: buildUrlWithContextPath("orders"),
+            data: "zoneName=" + getCurrentZone(),
+            success: function(orders) {
+                if(isCustomer())
+                {
+                    displayOrdersForCustomer(orders)
+                }
+                else
+                {
+                    displayOrdersForManager(orders)
+                }
+            }
+        }
+    )
+}
+
+function displayOrdersForCustomer(orders)
+{
+    addTable("customerOrders",8,"Orders History",["Id","Data","Location","Number Of Stores In Order","Number Of Items" , "Price Of Items", "Price Of Delivery", "Total Price"])
+    loadCustomerHistoryTableData(orders)
+}
+function loadCustomerHistoryTableData(orders)
+{
+ //   $("#OrderDetailsTable table tbody").empty()
+    $.each(orders || [], function(index, order){
+        var tr = $(document.createElement('tr'));
+        var tdID = $(document.createElement('td')).text(order.m_OrderDto.m_Id);
+        var tdDate  = $(document.createElement('td')).text(order.m_OrderDto.m_Date);
+        var tdLocation = $(document.createElement('td')).text("("+order.m_OrderDto.m_DestLocation.x +"," +order.m_OrderDto.m_DestLocation.y +")");
+        var tdNumberOfStores = $(document.createElement('td')).text(order.m_StoreToOrderMap.length)
+        var tdNumberOfItems = $(document.createElement('td')).text(order.m_OrderDto.m_TotalItemsCount)
+        var tdPriceOfItems = $(document.createElement('td')).text(order.m_OrderDto.m_TotalItemsPrice)
+        var tdPriceOfDelivery = $(document.createElement('td')).text(order.m_OrderDto.m_DeliveryPrice)
+        var tdTotalPrice = $(document.createElement('td')).text(order.m_OrderDto.m_TotalOrderPrice)
+
+        tdID.appendTo(tr);
+        tdDate.appendTo(tr);
+        tdLocation.appendTo(tr);
+        tdNumberOfStores.appendTo(tr);
+        tdNumberOfItems.appendTo(tr);
+        tdPriceOfItems.appendTo(tr);
+        tdPriceOfDelivery.appendTo(tr);
+        tdTotalPrice.appendTo(tr);
+        tr.click(function() {
+            var currentTable = document.getElementById("OrderDetailsTable");
+            if(currentTable!==null)
+            {
+                currentTable.parentElement.removeChild(currentTable);
+            }
+            addTable("OrderDetailsTable",8,"Details Of Order number: "+order.m_OrderDto.m_Id,["ID","Name","Purchase Form","From Store","Amount","Price For Piece","Total Price","From Discount"])
+            $.each(order.simpleStoreToOrderMap || [], function(index, simpleStoreToOrderMap){
+                $.each(simpleStoreToOrderMap[1].m_ItemsDto || [], function(index, item){
+                var trItem = $(document.createElement('tr'));
+                var tdID = $(document.createElement('td')).text(item.m_ItemId);
+                var tdName = $(document.createElement('td')).text(item.m_ItemName);
+                var tdPurchaseForm = $(document.createElement('td')).text(item.m_PurchaseForm);
+                var tdFormStore = $(document.createElement('td')).text("id:"+simpleStoreToOrderMap[0].id + ", name:" +simpleStoreToOrderMap[0].name);
+                var tdAmount = $(document.createElement('td')).text(show2DecimalPlaces(item.m_AmountOfSell));
+                var tdPricePerPiece = $(document.createElement('td')).text(show2DecimalPlaces(item.m_Price));
+                var tdTotalPrice = $(document.createElement('td')).text(show2DecimalPlaces(item.m_Price * item.m_AmountOfSell));
+                var tdFormDiscount = $(document.createElement('td')).text(item.m_FromDiscount);
+                tdID.appendTo(trItem);
+                tdName.appendTo(trItem);
+                tdPurchaseForm.appendTo(trItem);
+                tdFormStore.appendTo(trItem);
+                tdAmount.appendTo(trItem);
+                tdPricePerPiece.appendTo(trItem);
+                tdTotalPrice.appendTo(trItem);
+                tdFormDiscount.appendTo(trItem);
+                $("#OrderDetailsTable table tbody").append(trItem)
+            });
+        });
+        });
+
+        $("#customerOrders table").append(tr)
+    });
+}
+
+function displayOrdersForManager(orders)
+{
+    addTable("managerOrders",7,"Orders History",["Id","Data","Location","Number Of Items" , "Price Of Items", "Price Of Delivery", "Total Price"])
+    loadManagerHistoryTableData(orders)
+}
+//probably we can avoid duplicate with customer orders
+function loadManagerHistoryTableData(orders)
+{
+ //   $("#OrderDetailsTable table tbody").empty()
+    $.each(orders || [], function(index, order){
+        var tr = $(document.createElement('tr'));
+        var tdID = $(document.createElement('td')).text(order.m_Id);
+        var tdDate  = $(document.createElement('td')).text(order.m_Date);
+        var tdLocation = $(document.createElement('td')).text("("+order.m_DestLocation.x +"," +order.m_DestLocation.y +")");
+        var tdNumberOfItems = $(document.createElement('td')).text(order.m_TotalItemsCount)
+        var tdPriceOfItems = $(document.createElement('td')).text(order.m_TotalItemsPrice)
+        var tdPriceOfDelivery = $(document.createElement('td')).text(order.m_DeliveryPrice)
+        var tdTotalPrice = $(document.createElement('td')).text(order.m_TotalOrderPrice)
+
+        tdID.appendTo(tr);
+        tdDate.appendTo(tr);
+        tdLocation.appendTo(tr);
+        tdNumberOfItems.appendTo(tr);
+        tdPriceOfItems.appendTo(tr);
+        tdPriceOfDelivery.appendTo(tr);
+        tdTotalPrice.appendTo(tr);
+        tr.click(function() {
+            var currentTable = document.getElementById("OrderDetailsTable");
+            if(currentTable!==null)
+            {
+                currentTable.parentElement.removeChild(currentTable);
+            }
+            addTable("OrderDetailsTable",7,"Details Of Order number: "+order.m_Id,["ID","Name","Purchase Form","Amount","Price For Piece","Total Price","From Discount"])
+            $.each(order.m_ItemsDto || [], function(index, item){
+                    var trItem = $(document.createElement('tr'));
+                    var tdID = $(document.createElement('td')).text(item.m_ItemId);
+                    var tdName = $(document.createElement('td')).text(item.m_ItemName);
+                    var tdPurchaseForm = $(document.createElement('td')).text(item.m_PurchaseForm);
+                    var tdAmount = $(document.createElement('td')).text(show2DecimalPlaces(item.m_AmountOfSell));
+                    var tdPricePerPiece = $(document.createElement('td')).text(show2DecimalPlaces(item.m_Price));
+                    var tdTotalPrice = $(document.createElement('td')).text(show2DecimalPlaces(item.m_Price * item.m_AmountOfSell));
+                    var tdFormDiscount = $(document.createElement('td')).text(item.m_FromDiscount);
+                    tdID.appendTo(trItem);
+                    tdName.appendTo(trItem);
+                    tdPurchaseForm.appendTo(trItem);
+                    tdFormStore.appendTo(trItem);
+                    tdAmount.appendTo(trItem);
+                    tdPricePerPiece.appendTo(trItem);
+                    tdTotalPrice.appendTo(trItem);
+                    tdFormDiscount.appendTo(trItem);
+                    $("#OrderDetailsTable table tbody").append(trItem)
+                });
+            });
+        $("#customerOrders table").append(tr)
+    });
+}

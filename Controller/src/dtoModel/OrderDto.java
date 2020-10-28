@@ -17,6 +17,8 @@ public class OrderDto {
     private final double m_TotalItemsPrice;
     private final double m_TotalOrderPrice;
     private final int m_TotalItemsKind;
+    private final int m_Id;
+    private final int m_UserId;
     public OrderDto(Order i_Order) {
         m_ItemsDto = i_Order.getAllItems().stream().map(ItemDto::new).collect(Collectors.toList());
         m_TotalItemsCount = i_Order.getAllItems().stream().map(orderItem -> orderItem.getStoreItem().getAmountOfSells() == Math.floor(orderItem.getStoreItem().getAmountOfSells()) ? (int) orderItem.getStoreItem().getAmountOfSells() : 1).reduce(0, Integer::sum);
@@ -26,6 +28,8 @@ public class OrderDto {
         m_TotalItemsKind = i_Order.getTotalItemsKinds();
         m_TotalItemsPrice=i_Order.getTotalItemsPrice();
         m_TotalOrderPrice=i_Order.getTotalOrderPrice();
+        m_Id=i_Order.getId();
+        m_UserId=i_Order.getUserId();
     }
 
     public Collection<ItemDto> getItemsDto() {
@@ -60,4 +64,13 @@ public class OrderDto {
     public int getTotalItemsKind() {
         return m_TotalItemsKind;
     }
+
+    public int getId() {
+        return m_Id;
+    }
+
+    public int getUserId() {
+        return m_UserId;
+    }
+
 }

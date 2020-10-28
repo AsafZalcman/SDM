@@ -19,6 +19,11 @@ public class UserViewModel {
         return m_SuperDuperManager.getAllCustomers().stream().map(UserDto::new).collect(Collectors.toList());
     }
 
+    public UserDto getUser (int i_UserId)
+    {
+        return new UserDto(m_SuperDuperManager.getCustomer(i_UserId));
+    }
+
     //return the unique id of the created user
     // raise exception if the user is already exists
     public int addUser(String i_Name, String i_UserType) throws Exception {

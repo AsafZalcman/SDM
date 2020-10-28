@@ -152,4 +152,8 @@ public class Zone {
    Map<Store, List<OrderItem>> storeToItemsInDiscounts = i_StoreIdToItemsInDiscounts.entrySet().stream().collect(Collectors.toMap(entry -> getStore(entry.getKey()),  Map.Entry::getValue));
    return m_OrderManager.createOrder(i_CurrentOrderDate,i_Location,storeToItemsMap,storeToItemsInDiscounts,i_UserId);
     }
+
+    public Collection<StorageOrder> getAllStorageOrders() {
+        return m_OrderManager.getStorageOrders();
+    }
 }

@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 public class Order {
+    private final int m_Id;
+    private final int m_UserId;
     private final LocalDate m_OrderDate;
     private final Location m_CustomerLocation;
     private final double m_DeliveryPrice;
@@ -15,7 +17,9 @@ public class Order {
     private final Collection< OrderItem> m_OrderItems;
 
     //maybe should be the same as Store item - only contain id and extra details (if have)
-    public Order(LocalDate i_OrderDate, Location i_CustomerLocation, double i_DeliveryPrice, Collection<OrderItem> i_OrderItems) {
+    public Order(int m_id, int m_userId, LocalDate i_OrderDate, Location i_CustomerLocation, double i_DeliveryPrice, Collection<OrderItem> i_OrderItems) {
+        m_Id = m_id;
+        m_UserId = m_userId;
         m_OrderDate = i_OrderDate;
         m_CustomerLocation = i_CustomerLocation;
         m_DeliveryPrice = i_DeliveryPrice;
@@ -62,5 +66,11 @@ public class Order {
         return m_OrderItems.stream().filter(orderItem -> !orderItem.isFromDiscount()).collect(Collectors.toList());
     }
 
+    public int getId() {
+        return m_Id;
+    }
 
+    public int getUserId() {
+        return m_UserId;
+    }
 }

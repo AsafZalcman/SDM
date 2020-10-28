@@ -2,7 +2,7 @@ package model;
 
 import java.awt.*;
 
-public class NewStoreAlert implements Alert {
+public class NewStoreAlert extends Alert {
 
    private String ownerName;
    private String storeName;
