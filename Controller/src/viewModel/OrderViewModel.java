@@ -104,7 +104,7 @@ public void addItemToOrder(Integer i_ItemId, Double i_AmountOfSells) {
 
 public StorageOrderDto createOrder() {
     StorageOrder storageOrder = m_SuperDuperManager.createOrder(m_ZoneName, m_CurrentOrderDate, m_Location, m_StoresToItemsMap, m_StoresToItemsInDiscounts, m_UserID);
-    m_CurrentOrder = new StorageOrderDto(storageOrder, StorageOrderUtil.convertStorageOrderStores(storageOrder.getStoresIdToOrder()));
+    m_CurrentOrder = new StorageOrderDto(storageOrder, StorageOrderUtil.convertStorageOrderStores(m_ZoneName,storageOrder.getStoresIdToOrder()));
     return m_CurrentOrder;
 }
 
