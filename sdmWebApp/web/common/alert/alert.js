@@ -1,4 +1,3 @@
-var alertsVersion = 0
 $(function() {
 triggerAjaxAlerts()
 })
@@ -12,11 +11,11 @@ function getAlerts()
 {
     $.ajax({
         url: buildUrlWithContextPath("alerts"),
-        data: "alertsVersion=" + alertsVersion,
+        data: "alertsVersion=" + getCurrentAlertVersion(),
         success: function (data) {
-            console.log("Server alerts version: " + data.version + ", Current alerts version: " + alertsVersion);
-            if (data.version !== alertsVersion) {
-                alertsVersion = data.version;
+            console.log("Server alerts version: " + data.version + ", Current alerts version: " + getCurrentAlertVersion());
+            if (data.version !== getCurrentAlertVersion()) {
+                setCurrentAlertVersion(data.version);
                 $.each(data.alerts || [], function(index, alertToDisplay) {
                     switch (alertToDisplay.alertType) {
                         case 'NEW_STORE':
@@ -51,11 +50,11 @@ function getAlerts()
     function createNewOrderAlert(alertToDisplay)
     {
         var details = "The user: \"" + alertToDisplay.ownerName + "\" just ordered from the store: \"" +alertToDisplay.storeName +"\" in one of your zones"+
-            "\nAdditional Details About The New Store:\n"
+            "\nAdditional Details About The Order:\n"
             +"Order Id:" + alertToDisplay.orderId + "\n"
             +"Number Of Items: " + alertToDisplay.numberOfDifferentItems + "\n"
-            +"Total Price Of Items: " + alertToDisplay.totalPriceOfItems + "\n"
-            +"Delivery Price: " + alertToDisplay.deliveryPrice + "\n"
+            +"Total Price Of Items: " + show2DecimalPlaces(alertToDisplay.totalPriceOfItems) + "\n"
+            +"Delivery Price: " + show2DecimalPlaces(alertToDisplay.deliveryPrice) + "\n"
         alert(details)
     }
 

@@ -5,16 +5,19 @@ public class NewOrderAlert extends Alert {
 
     private int orderId;
    private String ownerName;
-   private int numberOfDifferentItems;
+    private String storeName;
+    private int numberOfDifferentItems;
    private double totalPriceOfItems;
     private double deliveryPrice;
 
-    public NewOrderAlert(int orderId, String ownerName, int numberOfDifferentItems, double totalPriceOfItems, double deliveryPrice) {
+    public NewOrderAlert(int orderId, String ownerName, int numberOfDifferentItems, double totalPriceOfItems, double deliveryPrice , String storeName) {
         this.orderId = orderId;
         this.ownerName = ownerName;
         this.numberOfDifferentItems = numberOfDifferentItems;
         this.totalPriceOfItems = totalPriceOfItems;
         this.deliveryPrice = deliveryPrice;
+        this.storeName = storeName;
+
     }
 
     public int getOrderId() {

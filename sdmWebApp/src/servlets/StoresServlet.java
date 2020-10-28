@@ -2,6 +2,7 @@ package servlets;
 //new Gson().fromJson(request.getReader(), Person.class);
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import constants.Constants;
 import dtoModel.ItemDto;
 import dtoModel.StoreDto;
@@ -27,39 +28,31 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet("/stores")
 @MultipartConfig
 public class StoresServlet extends HttpServlet {
 
-    //  @Override
-    //  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    //      String userName = SessionUtils.getUsername(request);
-    //      if (userName != null) {
-    //          response.setContentType("application/json");
-    //          ZoneViewModel zoneViewModel = new ZoneViewModel();
-    //          Gson gson = new Gson();
-    //          String jsonResponse;
-    //          String zoneName = request.getParameter(Constants.ZONE_NAME_PARAMETER);
-    //          if (zoneName == null) {
-    //              //get summary of all zones
-    //              Collection<SimpleZoneDto> simpleZoneDtoCollection = zoneViewModel.getAllZones().stream().map(SimpleZoneDto::new).collect(Collectors.toList());
-    //              jsonResponse = gson.toJson(simpleZoneDtoCollection);
-    //          }
-    //          else
-    //          {
-    //              //return specific zone
-    //              System.out.println("requested zone: " + zoneName);
-    //              jsonResponse = gson.toJson(zoneViewModel.getZone(zoneName));
-    //          }
-    //          System.out.println(jsonResponse);
-//
-    //          try (PrintWriter out = response.getWriter()) {
-    //              out.print(jsonResponse);
-    //              out.flush();
-    //          }
-    //      }
-    //  }
+ @Override
+ protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+     String userName = SessionUtils.getUsername(request);
+     if (userName != null) {
+         response.setContentType("application/json");
+         ZoneViewModel zoneViewModel = new ZoneViewModel();
+         Gson gson = new GsonBuilder().enableComplexMapKeySerialization()
+                 .setPrettyPrinting().create();
+         String jsonResponse;
+         String zoneName = request.getParameter(Constants.ZONE_NAME_PARAMETER);
+         StoreViewModel storeViewModel = new StoreViewModel();
+         jsonResponse = gson.toJson(storeViewModel.getAllStores(zoneName).stream().filter(storeDto -> storeDto.getOwnerName().equals(userName)).collect(Collectors.toList()));
+
+         try (PrintWriter out = response.getWriter()) {
+             out.print(jsonResponse);
+             out.flush();
+         }
+     }
+ }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

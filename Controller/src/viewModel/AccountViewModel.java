@@ -21,12 +21,13 @@ public class AccountViewModel {
         m_SuperDuperManager.getAccountManager().loadBalance(i_Id, i_Date, i_Amount);
     }
 
-    public void transferMoney(int i_FromId, LocalDate i_Date, double i_Amount, int i_ToId) {
-        m_SuperDuperManager.getAccountManager().transferMoney(i_FromId, i_Date, i_Amount, i_ToId);
+    public void transferMoney(int i_UserId,LocalDate i_Date, double i_Amount) {
+        m_SuperDuperManager.getAccountManager().transferMoney(i_UserId, i_Date, i_Amount);
     }
-    public void transferMoney(int i_FromId, LocalDate i_Date, double i_Amount, String i_ToName) {
-        int userId =  m_SuperDuperManager.getAllCustomers().stream().filter(user -> user.getName().equals(i_ToName)).findFirst().get().getId();
-        transferMoney(i_FromId, i_Date, i_Amount, userId);
+
+    public void acceptPayment(LocalDate i_Date, double i_Amount, String i_UserId) {
+        int userId =  m_SuperDuperManager.getAllCustomers().stream().filter(user -> user.getName().equals(i_UserId)).findFirst().get().getId();
+        m_SuperDuperManager.getAccountManager().acceptPayment(userId, i_Date, i_Amount);
     }
 
     public List<AccountMovementDto> getAccountOperations(int i_Id, int i_FromIndex)

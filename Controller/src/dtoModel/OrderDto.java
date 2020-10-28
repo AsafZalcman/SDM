@@ -13,7 +13,7 @@ public class OrderDto {
     private final int m_TotalItemsCount;
     private final Location m_DestLocation;
     private final double m_DeliveryPrice;
-    private final String m_Date;
+    private final LocalDate m_Date;
     private final double m_TotalItemsPrice;
     private final double m_TotalOrderPrice;
     private final int m_TotalItemsKind;
@@ -24,7 +24,7 @@ public class OrderDto {
         m_TotalItemsCount = i_Order.getAllItems().stream().map(orderItem -> orderItem.getStoreItem().getAmountOfSells() == Math.floor(orderItem.getStoreItem().getAmountOfSells()) ? (int) orderItem.getStoreItem().getAmountOfSells() : 1).reduce(0, Integer::sum);
         m_DestLocation=i_Order.getCustomerLocation();
         m_DeliveryPrice=i_Order.getDeliveryPrice();
-        m_Date =  i_Order.getOrderDate().toString();
+        m_Date =  i_Order.getOrderDate();
         m_TotalItemsKind = i_Order.getTotalItemsKinds();
         m_TotalItemsPrice=i_Order.getTotalItemsPrice();
         m_TotalOrderPrice=i_Order.getTotalOrderPrice();
@@ -49,7 +49,7 @@ public class OrderDto {
         return m_TotalItemsCount;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return m_Date;
     }
 
