@@ -51,4 +51,25 @@ public class OrderServlet extends HttpServlet {
         }
 
     }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+        String returnMessage = "";
+        try {
+            OrderViewModel orderViewModel = ServletUtils.getOrderViewModel(SessionUtils.getUserId(request));
+            orderViewModel.cleanup();
+            response.setStatus(200);
+            returnMessage = "Order view model cleanUp successes";
+        }catch (Exception e){
+            response.setStatus(400);
+            returnMessage = e.getMessage();
+        }
+        finally {
+            try (PrintWriter out = response.getWriter()) {
+                out.print(returnMessage);
+                out.flush();
+            }
+        }
+    }
 }

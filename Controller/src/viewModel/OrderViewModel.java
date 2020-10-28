@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class OrderViewModel {
     private SuperDuperManager m_SuperDuperManager;
-    private Map<Integer, Double> m_ItemIdToAmount;
+    private Map<Integer, Double> m_ItemIdToAmount = new HashMap<>();
     private Map<Integer,Map<StoreDiscountDto, Integer>> m_UsedDiscounts = new HashMap<>();
     private Store m_CurrentStore;
     private LocalDate m_CurrentOrderDate;
@@ -24,8 +24,8 @@ public class OrderViewModel {
     private StorageOrderDto m_CurrentOrder;
     private Location m_Location;
     private String m_ZoneName;
-    private Map<Integer,ItemDto> m_AvailableItemsToBuy;
-    private Map<Integer,Map<Integer,Double>> m_StoresToItemsMap;
+    private Map<Integer,ItemDto> m_AvailableItemsToBuy = new HashMap<>();;
+    private Map<Integer,Map<Integer,Double>> m_StoresToItemsMap = new HashMap<>();;
     private  Map<Integer,List<OrderItem>> m_StoresToItemsInDiscounts = new HashMap<>();
 
     public OrderViewModel() {
@@ -38,8 +38,7 @@ public class OrderViewModel {
     }
 
  public Collection<ItemDto> getAvailableItemsForOrder() {
-     if (m_AvailableItemsToBuy == null) {
-         m_AvailableItemsToBuy = new HashMap<>();
+     if (m_AvailableItemsToBuy.isEmpty()) {
          List<ItemDto> allItems = m_SuperDuperManager.getAllItems(m_ZoneName).stream().map(ItemDto::new).collect(Collectors.toList());
 
          if (m_CurrentStore != null) {
@@ -100,9 +99,6 @@ public void addItemToOrder(Integer i_ItemId, Double i_AmountOfSells) {
         }
     }
 
-    if (m_ItemIdToAmount == null) {
-        m_ItemIdToAmount = new HashMap<>();
-    }
      m_ItemIdToAmount.put(i_ItemId,i_AmountOfSells);
 }
 
@@ -181,7 +177,7 @@ private void addItemToDiscountsMap(int i_StoreId,OrderItem i_OrderItem)
 
     public Map<StoreDto, List<StoreDiscountDto>> getAvailableDiscountsForCurrentOrder ()
     {
-        if (m_StoresToItemsMap == null) {
+        if (m_StoresToItemsMap.isEmpty()) {
             initStoresToItemsMap();
         }
 
@@ -219,8 +215,6 @@ private void addItemToDiscountsMap(int i_StoreId,OrderItem i_OrderItem)
     }
 
     private void initStoresToItemsMap () {
-        m_StoresToItemsMap = new HashMap<>();
-
         if (m_CurrentStore != null) {
             m_StoresToItemsMap.put(m_CurrentStore.getId(), m_ItemIdToAmount);
         } else {

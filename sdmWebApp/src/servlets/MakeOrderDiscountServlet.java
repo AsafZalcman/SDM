@@ -2,6 +2,7 @@ package servlets;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dtoModel.StoreDiscountDto;
 import utils.ServletUtils;
 import utils.SessionUtils;
 import viewModel.OrderViewModel;
@@ -35,5 +36,32 @@ public class MakeOrderDiscountServlet extends HttpServlet {
             response.setStatus(400);
             out.println(e.getMessage());
         }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+        Gson gson = new Gson();
+        String returnMessage = "";
+        try {
+            OrderViewModel orderViewModel = ServletUtils.getOrderViewModel(SessionUtils.getUserId(request));
+            Integer storeID = Integer.parseInt(request.getParameter("storeID"));
+            Integer selectedItem = request.getParameter("offer") != null ? Integer.parseInt(request.getParameter("offer")) : null;
+            StoreDiscountDto discount = gson.fromJson(request.getParameter("discount"), StoreDiscountDto.class);
+
+            orderViewModel.buyDiscount(storeID, discount, selectedItem);
+            response.setStatus(200);
+            returnMessage = "Discount buy success";
+        }catch (Exception e){
+            response.setStatus(400);
+            returnMessage = e.getMessage();
+        }
+        finally {
+            try (PrintWriter out = response.getWriter()) {
+                out.print(returnMessage);
+                out.flush();
+            }
+        }
+
     }
 }

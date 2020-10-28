@@ -1,6 +1,8 @@
 var zoneDetailsTabName = "details"
 var currentTab=zoneDetailsTabName
 var refreshRate = 2000; //milli seconds
+let itemIDtoItemName = new Map();
+
 
     async function setContentOfSelectedBtn(selectedBtn) {
         currentTab = selectedBtn
@@ -143,14 +145,34 @@ function loadSelectDiscountsBlock(){
         "    </div>";
 }
 
+function loadOrderSummeryBlock(){
+    return "<div id=\"order-summery-block\" hidden>\n" +
+        "        <h1>In Order Summery!</h1>\n" +
+        "    </div>";
+}
 
-    function activateOnLoadMakeAnOrder() {
+
+    async function activateOnLoadMakeAnOrder() {
         $("#datepicker").datepicker();
-    getAllAvailableLocationsMakeAnOrder();
-    getAllZoneStoresMakeAnOrder();
-    onLoadRadioButtonsMakeAnOrder();
-    submitFirstStepMakeAnOrder();
-    onLoadDiscountSelect();
+        await cleanOrderView();
+        getAllAvailableLocationsMakeAnOrder();
+        getAllZoneStoresMakeAnOrder();
+        onLoadRadioButtonsMakeAnOrder();
+        submitFirstStepMakeAnOrder();
+        onLoadDiscountSelect();
+    }
+
+function cleanOrderView(){
+    $.ajax({
+        url: buildUrlWithContextPath("orders"),
+        method: 'PUT',
+        error: function (response) {
+            console.error("Failed to send ajax:" + response.responseText);
+        },
+        success: function (response) {
+           console.log(response);
+        }
+    });
 }
 
 function onLoadDiscountSelect(){
@@ -158,9 +180,23 @@ function onLoadDiscountSelect(){
         var storeID = $(this).val();
         $('#discounts' + storeID).show();
     });
+
+    $("#selectDiscountForm").submit(function (){
+        $('#select-discounts-block').find("*").attr("disabled", "disabled");
+        $.ajax({
+            url: buildUrlWithContextPath("makeOrder"),
+            method: 'GET',
+            error: function (response) {
+                console.error("Failed to send ajax:" + response.responseText);
+            },
+            success: function (storageOrderDto) {
+                console.log(storageOrderDto);
+                $("#order-summery-block").show();
+            }
+        });
+        return false;
+    });
 }
-
-
 
     function getAllAvailableLocationsMakeAnOrder() {
         $.ajax({
@@ -269,8 +305,7 @@ function onLoadDiscountSelect(){
         }
     }
 
-
-function getAllItemsMakeAnOrder(){
+    function getAllItemsMakeAnOrder(){
     try {
         $.ajax({
             url: buildUrlWithContextPath("makeOrder/item"),
@@ -279,7 +314,9 @@ function getAllItemsMakeAnOrder(){
                 console.error("Failed to submit" + err);
             },
             success: function (items) {
+                itemIDtoItemName.clear();
                 $.each(items || [], function (index, item) {
+                    itemIDtoItemName.set(item.m_ItemId, item.m_ItemName);
                     var tr = $(document.createElement('tr'));
                     var tdID = $(document.createElement('td')).text(item.m_ItemId);
                     var tdName = $(document.createElement('td')).text(item.m_ItemName);
@@ -319,8 +356,8 @@ function getAllItemsMakeAnOrder(){
         }
     }
 
-
-function setDiscountToDiv(storeID, storeName, discounts){
+function setDiscountToDiv(storeID, storeName,itemsArray, discounts){
+    console.log(itemsArray);
     $('#storeDiscount').append($("<option></option>").attr("value", storeID)
         .text(storeName));
 
@@ -332,9 +369,80 @@ function setDiscountToDiv(storeID, storeName, discounts){
         console.log("Discount number " + index + " is " + discount);
         var discountDiv = document.createElement('div');
         discountDiv.id = "discountNum" + index;
+
         var discountName = document.createElement('h3');
         discountName.textContent = discount.m_Name;
+
+        var ifYouBuy = document.createElement('label');
+        ifYouBuy.textContent = "If You Buy: " + discount.m_DiscountCondition.value + " " + itemIDtoItemName.get(discount.m_DiscountCondition.key);
+
+        var br = document.createElement('br');
+
+        var thenYouGet = document.createElement('label');
+        thenYouGet.textContent = "Then You Get:";
+
+
+        let theOffer = document.createElement('form');
+        var index;
+        for (index = 0; index < discount.m_StoreOfferDtos.length; index++){
+            let labelOffer = document.createElement('label');
+            labelOffer.htmlFor = "radio" + index;
+            labelOffer.className = "radio";
+            labelOffer.textContent = discount.m_StoreOfferDtos[index].m_Quantity + " " + itemIDtoItemName.get(discount.m_StoreOfferDtos[index].m_ItemId) + " For additional " + discount.m_StoreOfferDtos[index].m_ForAdditional + " shekels.";
+
+            let radioOffer = document.createElement('input');
+            radioOffer.type = "radio";
+            radioOffer.id = "radio" + index;
+            radioOffer.name = "offer";
+            radioOffer.value = discount.m_StoreOfferDtos[index].m_ItemId;
+
+            if(discount.m_StoreDiscountOperator != "ONE-OF"){
+                radioOffer.disabled = true;
+            }
+
+            var radioBr = document.createElement('br');
+
+            theOffer.append(labelOffer);
+            theOffer.append(radioOffer);
+            theOffer.append(radioBr);
+        }
+
+        let submitOffer = document.createElement('input');
+        submitOffer.className = "submitOffer";
+        submitOffer.type = "submit";
+        submitOffer.value = "Buy Discount";
+
+
+        var inputBr = document.createElement('br');
+        theOffer.append(inputBr);
+        theOffer.append(submitOffer);
+
+
+        theOffer.action = "";
+        theOffer.onsubmit = function buyDiscountSubmit(){
+            $.ajax({
+                data: $(this).serialize() + "&storeID=" + storeID + "&discount=" +  JSON.stringify(discount),
+                dataType: 'json',
+                url: buildUrlWithContextPath("makeOrder/discount"),
+                method: 'POST',
+                error: function (response) {
+                    console.error(response);
+                },
+                success: function (response) {
+                    console.log(response);
+                    alert("Discount added to your chart successfully");
+                }
+            });
+        }
+
+
+
         discountDiv.append(discountName);
+        discountDiv.append(ifYouBuy);
+        discountDiv.append(br);
+        discountDiv.append(thenYouGet);
+        discountDiv.append(theOffer);
+
         discountDiv.className = "discountComp";
 
         discountsContainer.append(discountDiv);
@@ -354,7 +462,7 @@ function submitSecondStepMakeAnOrder(){
                 },
                 success: function (response) {
                     $.each(response, function(key, value) {
-                        setDiscountToDiv(value[0].m_Id, value[0].m_Name, value[1]);
+                        setDiscountToDiv(value[0].m_Id, value[0].m_Name,value[0].m_Items, value[1]);
                     });
                    $("#select-discounts-block").show();
                    $('.select-item-block').find("*").attr("disabled", "disabled");
@@ -369,7 +477,6 @@ function submitSecondStepMakeAnOrder(){
 
 
 }
-
 
     /*make order tab  DONE*/
 
@@ -399,7 +506,6 @@ function submitSecondStepMakeAnOrder(){
         )
     }
 
-
     function loadStorageItemsList(items) {
         if (!$("#storageItemsTable").length)  // table not exists
         {
@@ -407,8 +513,6 @@ function submitSecondStepMakeAnOrder(){
         }
         loadStorageItemsListData(items)
     }
-
-
 
     function loadStorageItemsListData(items) {
         $("#storageItemsTable table tbody").empty()
