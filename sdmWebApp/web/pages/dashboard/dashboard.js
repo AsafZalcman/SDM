@@ -29,7 +29,7 @@ function appendToAccountArea(account) {
  //   var scroller = $("#accountarea");
  //   var height = scroller[0].scrollHeight - $(scroller).height();
  //   $(scroller).stop().animate({ scrollTop: height }, "slow");
-    $("#balance").textContent="Balance:" +account.m_Balance
+    $("#balance").textContent="Balance:" +show2DecimalPlaces(account.m_Balance)
 
 }
 
@@ -42,9 +42,9 @@ function createAccountEntry (accountMovement){
         var tr = $(document.createElement('tr'));
         var tdDate = $(document.createElement('td')).text(accountMovement.m_Date);
         var tdMovementType = $(document.createElement('td')).text(accountMovement.m_MovementType);
-        var tdAmount = $(document.createElement('td')).text(accountMovement.m_Amount);
-        var tdBalanceBefore = $(document.createElement('td')).text(accountMovement.m_BalanceBefore);
-        var tdBalanceAfter = $(document.createElement('td')).text(accountMovement.m_BalanceAfter);
+        var tdAmount = $(document.createElement('td')).text(show2DecimalPlaces(accountMovement.m_Amount));
+        var tdBalanceBefore = $(document.createElement('td')).text(show2DecimalPlaces(accountMovement.m_BalanceBefore));
+        var tdBalanceAfter = $(document.createElement('td')).text(show2DecimalPlaces(accountMovement.m_BalanceAfter));
 
         tdDate.appendTo(tr);
         tdMovementType.appendTo(tr);

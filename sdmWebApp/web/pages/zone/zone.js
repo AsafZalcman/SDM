@@ -212,6 +212,11 @@ function onLoadDiscountSelect(){
                 console.error("Failed to send ajax:" + response.responseText);
             },
             success: function (storageOrderDto) {
+                //only for asaf until implementation
+                $.ajax({
+                    url: buildUrlWithContextPath("makeOrder"),
+                    method: 'POST',
+                })
                 console.log(storageOrderDto);
                 $("#order-summery-block").show();
             }
@@ -772,7 +777,7 @@ function refreshOrderHistory() {
                 }
                 else
                 {
-                    displayOrdersForManager(orders)
+                    displayOrdersForManager(orderszone)
                 }
             }
         }
@@ -784,19 +789,19 @@ function displayOrdersForCustomer(orders)
     addTable("customerOrders",8,"Orders History",["Id","Data","Location","Number Of Stores In Order","Number Of Items" , "Price Of Items", "Price Of Delivery", "Total Price"])
     loadCustomerHistoryTableData(orders)
 }
+
 function loadCustomerHistoryTableData(orders)
 {
- //   $("#OrderDetailsTable table tbody").empty()
     $.each(orders || [], function(index, order){
         var tr = $(document.createElement('tr'));
-        var tdID = $(document.createElement('td')).text(order.m_OrderDto.m_Id);
-        var tdDate  = $(document.createElement('td')).text(order.m_OrderDto.m_Date);
-        var tdLocation = $(document.createElement('td')).text("("+order.m_OrderDto.m_DestLocation.x +"," +order.m_OrderDto.m_DestLocation.y +")");
-        var tdNumberOfStores = $(document.createElement('td')).text(order.m_StoreToOrderMap.length)
-        var tdNumberOfItems = $(document.createElement('td')).text(order.m_OrderDto.m_TotalItemsCount)
-        var tdPriceOfItems = $(document.createElement('td')).text(order.m_OrderDto.m_TotalItemsPrice)
-        var tdPriceOfDelivery = $(document.createElement('td')).text(order.m_OrderDto.m_DeliveryPrice)
-        var tdTotalPrice = $(document.createElement('td')).text(order.m_OrderDto.m_TotalOrderPrice)
+        var tdID = $(document.createElement('td')).text(order.orderDto.m_Id);
+        var tdDate  = $(document.createElement('td')).text(order.orderDto.m_Date.day + "." + order.orderDto.m_Date.month+ "." + order.orderDto.m_Date.year);
+        var tdLocation = $(document.createElement('td')).text("("+order.orderDto.m_DestLocation.x +"," +order.orderDto.m_DestLocation.y +")");
+        var tdNumberOfStores = $(document.createElement('td')).text(order.simpleStoreToOrderMap.length)
+        var tdNumberOfItems = $(document.createElement('td')).text(order.orderDto.m_TotalItemsCount)
+        var tdPriceOfItems = $(document.createElement('td')).text(show2DecimalPlaces(order.orderDto.m_TotalItemsPrice))
+        var tdPriceOfDelivery = $(document.createElement('td')).text(show2DecimalPlaces(order.orderDto.m_DeliveryPrice))
+        var tdTotalPrice = $(document.createElement('td')).text(show2DecimalPlaces(order.orderDto.m_TotalOrderPrice))
 
         tdID.appendTo(tr);
         tdDate.appendTo(tr);
@@ -812,7 +817,7 @@ function loadCustomerHistoryTableData(orders)
             {
                 currentTable.parentElement.removeChild(currentTable);
             }
-            addTable("OrderDetailsTable",8,"Details Of Order number: "+order.m_OrderDto.m_Id,["ID","Name","Purchase Form","From Store","Amount","Price For Piece","Total Price","From Discount"])
+            addTable("OrderDetailsTable",8,"Details Of Order number: "+order.orderDto.m_Id,["ID","Name","Purchase Form","From Store","Amount","Price For Piece","Total Price","From Discount"])
             $.each(order.simpleStoreToOrderMap || [], function(index, simpleStoreToOrderMap){
                 $.each(simpleStoreToOrderMap[1].m_ItemsDto || [], function(index, item){
                 var trItem = $(document.createElement('tr'));
@@ -849,16 +854,15 @@ function displayOrdersForManager(orders)
 //probably we can avoid duplicate with customer orders
 function loadManagerHistoryTableData(orders)
 {
- //   $("#OrderDetailsTable table tbody").empty()
     $.each(orders || [], function(index, order){
         var tr = $(document.createElement('tr'));
         var tdID = $(document.createElement('td')).text(order.m_Id);
-        var tdDate  = $(document.createElement('td')).text(order.m_Date);
+        var tdDate  = $(document.createElement('td')).text(order.m_Date.day + "." + order.m_Date.month+ "." + order.m_Date.year);
         var tdLocation = $(document.createElement('td')).text("("+order.m_DestLocation.x +"," +order.m_DestLocation.y +")");
         var tdNumberOfItems = $(document.createElement('td')).text(order.m_TotalItemsCount)
-        var tdPriceOfItems = $(document.createElement('td')).text(order.m_TotalItemsPrice)
-        var tdPriceOfDelivery = $(document.createElement('td')).text(order.m_DeliveryPrice)
-        var tdTotalPrice = $(document.createElement('td')).text(order.m_TotalOrderPrice)
+        var tdPriceOfItems = $(document.createElement('td')).text(show2DecimalPlaces(order.m_TotalItemsPrice))
+        var tdPriceOfDelivery = $(document.createElement('td')).text(show2DecimalPlaces(order.m_DeliveryPrice))
+        var tdTotalPrice = $(document.createElement('td')).text(show2DecimalPlaces(order.m_TotalOrderPrice))
 
         tdID.appendTo(tr);
         tdDate.appendTo(tr);
@@ -886,7 +890,6 @@ function loadManagerHistoryTableData(orders)
                     tdID.appendTo(trItem);
                     tdName.appendTo(trItem);
                     tdPurchaseForm.appendTo(trItem);
-                    tdFormStore.appendTo(trItem);
                     tdAmount.appendTo(trItem);
                     tdPricePerPiece.appendTo(trItem);
                     tdTotalPrice.appendTo(trItem);
@@ -894,6 +897,6 @@ function loadManagerHistoryTableData(orders)
                     $("#OrderDetailsTable table tbody").append(trItem)
                 });
             });
-        $("#customerOrders table").append(tr)
+        $("#managerOrders table").append(tr)
     });
 }

@@ -32,10 +32,15 @@ public class AccountManager {
         m_IdToAccountMap.get(i_Id).doOperation(AccountMovement.AccountOperationType.LOAD,i_Date,i_Amount);
     }
 
-    public void transferMoney(int i_FromId, LocalDate i_Date, double i_Amount , int i_ToId)
+    public void transferMoney(int i_Id, LocalDate i_Date, double i_Amount)
     {
-        m_IdToAccountMap.get(i_FromId).doOperation(AccountMovement.AccountOperationType.TRANSFER_PAYMENT,i_Date,i_Amount);
-        m_IdToAccountMap.get(i_ToId).doOperation(AccountMovement.AccountOperationType.ACCEPT_PAYMENT,i_Date,i_Amount);
+        m_IdToAccountMap.get(i_Id).doOperation(AccountMovement.AccountOperationType.TRANSFER_PAYMENT,i_Date,i_Amount);
+    }
+
+    public void acceptPayment(int i_Id, LocalDate i_Date, double i_Amount)
+    {
+        m_IdToAccountMap.get(i_Id).doOperation(AccountMovement.AccountOperationType.ACCEPT_PAYMENT,i_Date,i_Amount);
+
     }
 
     private boolean isAccountExists(int i_Id) {

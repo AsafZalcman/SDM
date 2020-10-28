@@ -66,21 +66,16 @@ public class OrderServlet extends HttpServlet {
         Integer userId = SessionUtils.getUserId(request);
         if (userId != null) {
             response.setContentType("application/json");
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().enableComplexMapKeySerialization()
+                    .setPrettyPrinting().create();
             UserViewModel userViewModel = new UserViewModel();
             String zoneName = request.getParameter(Constants.ZONE_NAME_PARAMETER);
 
             OrderHistoryViewModel orderHistoryViewModel = new OrderHistoryViewModel();
             String jsonResponse;
             if ( userViewModel.getUser(userId).isCustomer()) {
-                List<Map<SimpleStoreDto, SimpleStoreDto>> a = new ArrayList<>();
-                Map<SimpleStoreDto,SimpleStoreDto> b = new HashMap<>();
-                b.put(new SimpleStoreDto("asaf",1),new SimpleStoreDto("lior",2));
-                b.put(new SimpleStoreDto("dor",3),new SimpleStoreDto("rotem",4));
-a.add(b);
-                jsonResponse = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().create().toJson(a);
-         //       jsonResponse = gson.toJson(orderHistoryViewModel.getAllStorageOrderOfUser(zoneName, userId).stream()
-         //               .map(SimpleStorageOrder::new).collect(Collectors.toList()));
+                jsonResponse = gson.toJson(orderHistoryViewModel.getAllStorageOrderOfUser(zoneName, userId).stream()
+                        .map(SimpleStorageOrder::new).collect(Collectors.toList()));
             } else {
                 jsonResponse = gson.toJson(orderHistoryViewModel.getAllStorageOrderByOwner(zoneName, SessionUtils.getUsername(request)));
             }
@@ -104,7 +99,7 @@ a.add(b);
         public SimpleStorageOrder(StorageOrderDto storageOrderDto) {
         orderDto=storageOrderDto.getOrderDto();
         simpleStoreToOrderMap = storageOrderDto.getStoresToOrders().entrySet().stream().collect(Collectors.toMap(
-                storeDtoOrderDtoEntry -> new SimpleStoreDto(storageOrderDto.getStoreName(),storageOrderDto.getStoreId()),
+                storeDtoOrderDtoEntry -> new SimpleStoreDto(storeDtoOrderDtoEntry.getKey().getName(),storeDtoOrderDtoEntry.getKey().getId()),
                 Map.Entry::getValue));
         }
 
