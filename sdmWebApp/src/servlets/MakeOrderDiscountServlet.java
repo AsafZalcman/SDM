@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import constants.Constants;
 import dtoModel.StoreDiscountDto;
+import utils.ResponseUtils;
 import utils.ServletUtils;
 import utils.SessionUtils;
 import viewModel.OrderViewModel;
@@ -44,6 +45,7 @@ public class MakeOrderDiscountServlet extends HttpServlet {
             throws ServletException, IOException{
         Gson gson = new Gson();
         String returnMessage = "";
+        response.setContentType("application/json");
         try {
             OrderViewModel orderViewModel = ServletUtils.getOrderViewModel(SessionUtils.getUserId(request));
             Integer storeID = Integer.parseInt(request.getParameter(Constants.STORE_ID_PARAMETER));
@@ -59,8 +61,7 @@ public class MakeOrderDiscountServlet extends HttpServlet {
         }
         finally {
             try (PrintWriter out = response.getWriter()) {
-                out.print(returnMessage);
-                out.flush();
+                out.println(ResponseUtils.getJsonResponseString(response.getStatus(),returnMessage));
             }
         }
 

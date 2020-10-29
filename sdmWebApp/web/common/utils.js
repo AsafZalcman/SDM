@@ -26,4 +26,11 @@ function isFloatNumber(item,evt) {
     return true;
 }
 
+function getDistanceBetweenTwoPoints(pointA, pointB){
+    var a = pointA.x - pointB.x;
+    var b = pointA.y - pointB.y;
+
+    return Math.sqrt( a*a + b*b );
+}
+
 

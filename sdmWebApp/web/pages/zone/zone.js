@@ -3,6 +3,7 @@ var createStoreTab= "newStore"
 var currentTab=zoneDetailsTabName
 var refreshRate = 2000; //milli seconds
 let itemIDtoItemName = new Map();
+let storeIDtoDiscounts = new Map();
 var emptyOrder
 
 
@@ -71,7 +72,8 @@ async function loadMakeOrder(){
     var selectItemsDiv = loadSelectItemBlock();
     var selectDiscounts = loadSelectDiscountsBlock();
     var orderSummeryDiv = loadOrderSummeryBlock();
-    var container = "<div class=\"makeAnOrder\" id=\"makeAnOrder\">" + "\n" + mainBlockDiv + "\n" +  selectItemsDiv + "\n" + selectDiscounts + "\n" + orderSummeryDiv + "\n" + "</div>";
+    var feedbackDiv = loadOrderFeedbacksBlock();
+    var container = "<div class=\"makeAnOrder\" id=\"makeAnOrder\">" + "\n" + mainBlockDiv + "\n" +  selectItemsDiv + "\n" + selectDiscounts + "\n" + orderSummeryDiv + "\n" + feedbackDiv + "\n" + "</div>";
 
     return container;
     }
@@ -181,6 +183,15 @@ function loadOrderSummeryBlock(){
         "    </div>";
 }
 
+function loadOrderFeedbacksBlock(){
+    return "<div id=\"store-feedback\" hidden>\n" +
+        "        <h1>Feedback The Participating Stores:</h1>\n" +
+        "        <div id=\"feedbacks\">\n" +
+        "            \n" +
+        "        </div>\n" +
+        "    </div>";
+}
+
 
     async function activateOnLoadMakeAnOrder() {
         emptyOrder=true
@@ -206,7 +217,97 @@ function cleanOrderView(){
     });
 }
 
-function addSummarySubmitForm(order){
+function loadOrderFeedbacksDetails(stores){
+    $.each(stores, function (index, store) {
+        var storeDetails = store[0];
+        var myDiv = document.getElementById("feedbacks");
+        var container = document.createElement('div');
+        container.id = "feedbacks-store" + storeDetails.m_Id;
+        var h1Title = document.createElement('h1');
+        h1Title.textContent = storeDetails.m_Name + "'s store:";
+
+        var feedbackForm = document.createElement('form');
+
+        var label1 = document.createElement('label');
+        var radio1 = document.createElement('input');
+        label1.htmlFor = "radio1";
+        label1.className = "radio";
+        label1.textContent = "1";
+        radio1.id = "radio1";
+        radio1.type = "radio";
+        radio1.name = "feedback";
+        radio1.value = "1";
+
+
+        var label2 = document.createElement('label');
+        var radio2 = document.createElement('input');
+        label2.htmlFor = "radio2";
+        label2.className = "radio";
+        label2.textContent = "2";
+        radio2.id = "radio2";
+        radio2.type = "radio";
+        radio2.name = "feedback";
+        radio2.value = "2";
+
+        var label3 = document.createElement('label');
+        var radio3 = document.createElement('input');
+        label3.htmlFor = "radio3";
+        label3.className = "radio";
+        label3.textContent = "3";
+        radio3.id = "radio3";
+        radio3.type = "radio";
+        radio3.name = "feedback";
+        radio3.value = "3";
+
+        var label4 = document.createElement('label');
+        var radio4 = document.createElement('input');
+        label4.htmlFor = "radio4";
+        label4.className = "radio";
+        label4.textContent = "4";
+        radio4.id = "radio4";
+        radio4.type = "radio";
+        radio4.name = "feedback";
+        radio4.value = "4";
+
+        var label5 = document.createElement('label');
+        var radio5 = document.createElement('input');
+        label5.htmlFor = "radio5";
+        label5.className = "radio";
+        label5.textContent = "5";
+        radio5.id = "radio5";
+        radio5.type = "radio";
+        radio5.name = "feedback";
+        radio5.value = "5";
+
+        var fbTextArea = document.createElement('textarea');
+
+        var fbSubmit = document.createElement('input');
+        fbSubmit.type = "submit";
+        fbSubmit.value = "Send!";
+
+        feedbackForm.appendChild(label1);
+        feedbackForm.appendChild(radio1);
+        feedbackForm.appendChild(label2);
+        feedbackForm.appendChild(radio2);
+        feedbackForm.appendChild(label3);
+        feedbackForm.appendChild(radio3);
+        feedbackForm.appendChild(label4);
+        feedbackForm.appendChild(radio4);
+        feedbackForm.appendChild(label5);
+        feedbackForm.appendChild(radio5);
+
+        feedbackForm.appendChild(fbTextArea);
+        feedbackForm.appendChild(fbSubmit);
+
+        container.appendChild(h1Title);
+        container.appendChild(feedbackForm);
+
+        myDiv.appendChild(container);
+    });
+}
+
+function addSummarySubmitForm(storageOrderDto){
+    var order = storageOrderDto.m_OrderDto;
     var myDiv = document.getElementById("order-summery-block");
     var container = document.createElement('div');
     container.id = "order-summary-submit";
@@ -228,9 +329,10 @@ function addSummarySubmitForm(order){
             error: function (response) {
                 console.error("Failed to send ajax:" + response.responseText);
             },
-            success: function (storageOrderDto) {
+            success: function (res) {
                 alert("Your Order saved successfully");
-
+                loadOrderFeedbacksDetails(storageOrderDto.m_StoreToOrderMap);
+                $('#store-feedback').show();
             }
         });
     };
@@ -262,12 +364,16 @@ function loadOrderSummeryDetails(storageOrderDto){
         var tdID = $(document.createElement('td')).text(storeToOrder[0].m_Id);
         var tdName = $(document.createElement('td')).text(storeToOrder[0].m_Name);
         var tdPPK = $(document.createElement('td')).text(show2DecimalPlaces(storeToOrder[0].m_PPK));
+        var tdDistance = $(document.createElement('td')).text(show2DecimalPlaces(getDistanceBetweenTwoPoints(storeToOrder[0].m_Location, storeToOrder[1].m_DestLocation)));
+        var tdDeliveryPrice = $(document.createElement('td')).text(show2DecimalPlaces(storeToOrder[1].m_DeliveryPrice));
 
 
 
         tdID.appendTo(tr);
         tdName.appendTo(tr);
         tdPPK.appendTo(tr);
+        tdDistance.appendTo(tr);
+        tdDeliveryPrice.appendTo(tr);
 
         tr.click(function () {
             var currentTable = document.getElementById("storeOrderItemsTable");
@@ -301,13 +407,120 @@ function loadOrderSummeryDetails(storageOrderDto){
     });
 
 
-    addSummarySubmitForm(storageOrderDto.m_OrderDto);
+    addSummarySubmitForm(storageOrderDto);
+}
+
+function loadDiscountForStoreID(storeID, discounts){
+    $('#discounts').empty();
+
+    var discountsContainer = document.createElement('div');
+    discountsContainer.id = "discounts" + storeID;
+
+    $.each(discounts || [], function(index, discount){
+        console.log("Discount number " + index + " is " + discount);
+        var discountDiv = document.createElement('div');
+        discountDiv.id = "discountNum" + index;
+
+        var discountName = document.createElement('h3');
+        discountName.textContent = discount.m_Name;
+
+        var ifYouBuy = document.createElement('label');
+        ifYouBuy.textContent = "If You Buy: " + discount.m_DiscountCondition.value + " " + itemIDtoItemName.get(discount.m_DiscountCondition.key);
+
+        var br = document.createElement('br');
+
+        var thenYouGet = document.createElement('label');
+        if(discount.m_StoreDiscountOperator === "ONE-OF") {
+            thenYouGet.textContent = "Then You Get ONE-OF the following: ";
+        }else{
+            thenYouGet.textContent = "Then You Get: ";
+        }
+
+
+        let theOffer = document.createElement('form');
+        var index;
+        for (index = 0; index < discount.m_StoreOfferDtos.length; index++){
+            let labelOffer = document.createElement('label');
+            labelOffer.htmlFor = "radio" + index;
+            labelOffer.className = "radio";
+            labelOffer.textContent = discount.m_StoreOfferDtos[index].m_Quantity + " " + itemIDtoItemName.get(discount.m_StoreOfferDtos[index].m_ItemId) + " For additional " + discount.m_StoreOfferDtos[index].m_ForAdditional + " shekels.";
+
+            let radioOffer = document.createElement('input');
+            radioOffer.type = "radio";
+            radioOffer.id = "radio" + index;
+            radioOffer.name = "offer";
+            radioOffer.value = discount.m_StoreOfferDtos[index].m_ItemId;
+
+            if(discount.m_StoreDiscountOperator !== "ONE-OF"){
+                radioOffer.disabled = true;
+            }else{
+                if(index === 0){
+                    radioOffer.defaultChecked = true;
+                }
+            }
+
+            var radioBr = document.createElement('br');
+
+            theOffer.append(labelOffer);
+            theOffer.append(radioOffer);
+            theOffer.append(radioBr);
+        }
+
+        let submitOffer = document.createElement('input');
+        submitOffer.className = "submitOffer";
+        submitOffer.type = "submit";
+        submitOffer.value = "Buy Discount";
+
+
+        var inputBr = document.createElement('br');
+        theOffer.append(inputBr);
+        theOffer.append(submitOffer);
+
+
+        theOffer.action = "";
+        theOffer.onsubmit = function buyDiscountSubmit(){
+            $.ajax({
+                data: $(this).serialize() + "&storeId=" + storeID + "&discount=" +  JSON.stringify(discount),
+                dataType: 'json',
+                url: buildUrlWithContextPath("makeOrder/discount"),
+                method: 'POST',
+                error: function (response) {
+                    console.error(response);
+                },
+                success: function (response) {
+                    console.log(response);
+                    alert("Discount added to your chart successfully");
+                    //here should re-fetch the discounts form servlet.
+                    $('#storeDiscount').empty();
+                    $('#discounts').empty();
+                    getAllAvialDiscount();
+                }
+            });
+            return false;
+        }
+
+
+
+        discountDiv.append(discountName);
+        discountDiv.append(ifYouBuy);
+        discountDiv.append(br);
+        discountDiv.append(thenYouGet);
+        discountDiv.append(theOffer);
+
+        discountDiv.className = "discountComp";
+
+        discountsContainer.append(discountDiv);
+    });
+
+    $('#discounts').append(discountsContainer);
 }
 
 function onLoadDiscountSelect(){
     $('#storeDiscount').change(function (){
         var storeID = $(this).val();
-        $('#discounts' + storeID).show();
+        //$('#discounts').find("*").attr("hidden", "hidden");
+        //$('#discounts' + storeID).show();
+        loadDiscountForStoreID(storeID, storeIDtoDiscounts.get(parseInt(storeID)));
     });
 
     $("#selectDiscountForm").submit(function (){
@@ -491,127 +704,35 @@ function setDiscountToDiv(storeID, storeName,itemsArray, discounts){
     console.log(itemsArray);
     $('#storeDiscount').append($("<option></option>").attr("value", storeID)
         .text(storeName));
-
-    var discountsContainer = document.createElement('div');
-    discountsContainer.id = "discounts" + storeID;
-    discountsContainer.hidden = true;
-
-    $.each(discounts || [], function(index, discount){
-        console.log("Discount number " + index + " is " + discount);
-        var discountDiv = document.createElement('div');
-        discountDiv.id = "discountNum" + index;
-
-        var discountName = document.createElement('h3');
-        discountName.textContent = discount.m_Name;
-
-        var ifYouBuy = document.createElement('label');
-        ifYouBuy.textContent = "If You Buy: " + discount.m_DiscountCondition.value + " " + itemIDtoItemName.get(discount.m_DiscountCondition.key);
-
-        var br = document.createElement('br');
-
-        var thenYouGet = document.createElement('label');
-        if(discount.m_StoreDiscountOperator === "ONE-OF") {
-            thenYouGet.textContent = "Then You Get ONE-OF the following: ";
-        }else{
-            thenYouGet.textContent = "Then You Get: ";
-        }
-
-
-        let theOffer = document.createElement('form');
-        var index;
-        for (index = 0; index < discount.m_StoreOfferDtos.length; index++){
-            let labelOffer = document.createElement('label');
-            labelOffer.htmlFor = "radio" + index;
-            labelOffer.className = "radio";
-            labelOffer.textContent = discount.m_StoreOfferDtos[index].m_Quantity + " " + itemIDtoItemName.get(discount.m_StoreOfferDtos[index].m_ItemId) + " For additional " + discount.m_StoreOfferDtos[index].m_ForAdditional + " shekels.";
-
-            let radioOffer = document.createElement('input');
-            radioOffer.type = "radio";
-            radioOffer.id = "radio" + index;
-            radioOffer.name = "offer";
-            radioOffer.value = discount.m_StoreOfferDtos[index].m_ItemId;
-
-            if(discount.m_StoreDiscountOperator !== "ONE-OF"){
-                radioOffer.disabled = true;
-            }else{
-                if(index === 0){
-                    radioOffer.defaultChecked = true;
-                }
-            }
-
-            var radioBr = document.createElement('br');
-
-            theOffer.append(labelOffer);
-            theOffer.append(radioOffer);
-            theOffer.append(radioBr);
-        }
-
-        let submitOffer = document.createElement('input');
-        submitOffer.className = "submitOffer";
-        submitOffer.type = "submit";
-        submitOffer.value = "Buy Discount";
-
-
-        var inputBr = document.createElement('br');
-        theOffer.append(inputBr);
-        theOffer.append(submitOffer);
-
-
-        theOffer.action = "";
-        theOffer.onsubmit = function buyDiscountSubmit(){
-            $.ajax({
-                data: $(this).serialize() + "&storeID=" + storeID + "&discount=" +  JSON.stringify(discount),
-                dataType: 'json',
-                url: buildUrlWithContextPath("makeOrder/discount"),
-                method: 'POST',
-                error: function (response) {
-                    console.error(response);
-                },
-                success: function (response) {
-                    console.log(response);
-                    alert("Discount added to your chart successfully");
-                }
-            });
-            return false;
-        }
-
-
-
-        discountDiv.append(discountName);
-        discountDiv.append(ifYouBuy);
-        discountDiv.append(br);
-        discountDiv.append(thenYouGet);
-        discountDiv.append(theOffer);
-
-        discountDiv.className = "discountComp";
-
-        discountsContainer.append(discountDiv);
-    });
-    $('#discounts').append(discountsContainer);
 }
 
+function getAllAvialDiscount(){
+    try {
+        $.ajax({
+            url: buildUrlWithContextPath("makeOrder/discount"),
+            method: 'get',
+            error: function () {
+                console.error("Failed to submit");
+            },
+            success: function (response) {
+                $.each(response, function (key, value) {
+                    storeIDtoDiscounts.set(value[0].m_Id, value[1]);
+                    setDiscountToDiv(value[0].m_Id, value[0].m_Name, value[0].m_Items, value[1]);
+                });
+                $("#select-discounts-block").show();
+                $('.select-item-block').find("*").attr("disabled", "disabled");
+            }
+        });
+    } catch (e) {
+        console.log("Error invoking the ajax !" + e);
+    }
+
+}
 
 function submitSecondStepMakeAnOrder(){
     $("#selectItemForm").submit(function (){
         if(!emptyOrder) {
-            try {
-                $.ajax({
-                    url: buildUrlWithContextPath("makeOrder/discount"),
-                    method: 'get',
-                    error: function () {
-                        console.error("Failed to submit");
-                    },
-                    success: function (response) {
-                        $.each(response, function (key, value) {
-                            setDiscountToDiv(value[0].m_Id, value[0].m_Name, value[0].m_Items, value[1]);
-                        });
-                        $("#select-discounts-block").show();
-                        $('.select-item-block').find("*").attr("disabled", "disabled");
-                    }
-                });
-            } catch (e) {
-                console.log("Error invoking the ajax !" + e);
-            }
+            getAllAvialDiscount();
         }
         else
         {
