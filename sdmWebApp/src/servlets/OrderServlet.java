@@ -79,7 +79,7 @@ public class OrderServlet extends HttpServlet {
                 jsonResponse = gson.toJson(orderHistoryViewModel.getAllStorageOrderOfUser(zoneName, userId).stream()
                         .map(SimpleStorageOrder::new).collect(Collectors.toList()));
             } else {
-                int storeId = Integer.parseInt(request.getParameter("storeId"));
+                int storeId = Integer.parseInt(request.getParameter(Constants.STORE_ID_PARAMETER));
                 StoreViewModel storeViewModel = new StoreViewModel();
                 StoreDto storeDto = storeViewModel.getStore(zoneName,storeId);
                 jsonResponse = gson.toJson(storeDto.getAllOrders());

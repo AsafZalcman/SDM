@@ -24,7 +24,7 @@ break
                 refreshManagerOrderHistory()
                 break;
             case 'feedback':
-                res = "<h1> In feedback </h1>";
+                refreshFeedbacksContent()
                 break;
             case createStoreTab:
                 $(".zone-content").append(await loadCreateStoreTab());
@@ -1047,3 +1047,64 @@ function loadManagerHistoryTableData(orders)
         $("#managerOrders table").append(tr)
     });
 }
+
+function refreshFeedbacksContent()
+{
+    $.ajax
+    (
+        {
+            url: buildUrlWithContextPath("stores"),
+            data: "zoneName=" + getCurrentZone(),
+            success: function(stores) {
+                displayFeedbacksForManager(stores)
+            }
+        }
+    )
+}
+
+function displayFeedbacksForManager()
+{
+    var divList = document.createElement("div")
+    $.each(stores || [], function(index, store) {
+            $('<li>' + store.m_Name + '</li>')
+                .click(function() {
+                    $.ajax
+                    (
+                        {
+                            url: buildUrlWithContextPath("storeFeedback"),
+                            data: "zoneName=" + getCurrentZone() + "&storeId=" + store.m_Id,
+                            success: function(feedbacks) {
+                                var currentTable = document.getElementById("feedbacksTable");
+                                if(currentTable!==null)
+                                {
+                                    currentTable.parentElement.removeChild(currentTable);
+                                }
+                                addTable("feedbacksTable",4,"Feedbacks of the store \"" +store.m_Name +"\"",["Author","Data","Rank","Description"], "zone-content");
+                                loadFeedbacksTableData(feedbacks)
+                            }
+                        }
+                    )
+                }).appendTo(divList)
+        }
+    )
+    $("#zone-content").append(divList)
+}
+
+function loadFeedbacksTableData(feedbacks)
+{
+    $.each(feedbacks || [], function(index, feedback){
+        var tr = $(document.createElement('tr'));
+        var tdAuthor = $(document.createElement('td')).text(feedback.m_UserName);
+        var tdDate  = $(document.createElement('td')).text(feedback.m_Date.day + "." + feedback.m_Date.month+ "." + feedback.m_Date.year);
+        var tdRank = $(document.createElement('td')).text(feedback.m_Rank)
+        var tdDescription = $(document.createElement('td')).text(show2DecimalPlaces(feedback.Description === null? "-" : feedback.Description ))
+
+        tdAuthor.appendTo(tr);
+        tdDate.appendTo(tr);
+        tdRank.appendTo(tr);
+        tdDescription.appendTo(tr);
+
+        $("#feedbacksTable table").append(tr)
+    });
+}
+

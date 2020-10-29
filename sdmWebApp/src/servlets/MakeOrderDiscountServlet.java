@@ -2,6 +2,7 @@ package servlets;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import constants.Constants;
 import dtoModel.StoreDiscountDto;
 import utils.ServletUtils;
 import utils.SessionUtils;
@@ -45,7 +46,7 @@ public class MakeOrderDiscountServlet extends HttpServlet {
         String returnMessage = "";
         try {
             OrderViewModel orderViewModel = ServletUtils.getOrderViewModel(SessionUtils.getUserId(request));
-            Integer storeID = Integer.parseInt(request.getParameter("storeID"));
+            Integer storeID = Integer.parseInt(request.getParameter(Constants.STORE_ID_PARAMETER));
             Integer selectedItem = request.getParameter("offer") != null ? Integer.parseInt(request.getParameter("offer")) : null;
             StoreDiscountDto discount = gson.fromJson(request.getParameter("discount"), StoreDiscountDto.class);
 

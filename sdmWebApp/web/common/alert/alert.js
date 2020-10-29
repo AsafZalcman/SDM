@@ -64,7 +64,7 @@ function getAlerts()
             "\nAdditional Details About The Feedback:\n"
             +"Rank:" + alertToDisplay.rank + "\n"
             +"Date: " + alertToDisplay.date + "\n"
-           if(alertToDisplay.description === undefined || alertToDisplay.description === null || alertToDisplay.description==="")
+           if(alertToDisplay.description !== undefined && alertToDisplay.description !== null && alertToDisplay.description!=="")
            {
                details+= "Description: " + alertToDisplay.description
            }
