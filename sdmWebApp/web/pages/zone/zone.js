@@ -3,6 +3,7 @@ var createStoreTab= "newStore"
 var currentTab=zoneDetailsTabName
 var refreshRate = 2000; //milli seconds
 let itemIDtoItemName = new Map();
+var emptyOrder
 
 
     async function setContentOfSelectedBtn(selectedBtn) {
@@ -17,8 +18,10 @@ let itemIDtoItemName = new Map();
                 res = "<h1> In Rank </h1>";
                 break;
             case 'customerOrderHistory':
+                refreshCustomerOrderHistory()
+break
             case 'managerOrderHistory':
-                refreshOrderHistory()
+                refreshManagerOrderHistory()
                 break;
             case 'feedback':
                 res = "<h1> In feedback </h1>";
@@ -180,6 +183,7 @@ function loadOrderSummeryBlock(){
 
 
     async function activateOnLoadMakeAnOrder() {
+        emptyOrder=true
         $("#datepicker").datepicker();
         await cleanOrderView();
         getAllAvailableLocationsMakeAnOrder();
@@ -420,7 +424,8 @@ function onLoadDiscountSelect(){
                     alert(response.responseText);
                 },
                 success: function (r) {
-                    alert("Item add successfully");
+                    alert("Item add successfully")
+                    emptyOrder=false
                 },
                 complete: function () {
                     $("#" + id + "amount").val("");
@@ -588,23 +593,29 @@ function setDiscountToDiv(storeID, storeName,itemsArray, discounts){
 
 function submitSecondStepMakeAnOrder(){
     $("#selectItemForm").submit(function (){
-        try {
-            $.ajax({
-                url: buildUrlWithContextPath("makeOrder/discount"),
-                method: 'get',
-                error: function () {
-                    console.error("Failed to submit");
-                },
-                success: function (response) {
-                    $.each(response, function(key, value) {
-                        setDiscountToDiv(value[0].m_Id, value[0].m_Name,value[0].m_Items, value[1]);
-                    });
-                   $("#select-discounts-block").show();
-                   $('.select-item-block').find("*").attr("disabled", "disabled");
-                }
-            });
-        } catch (e) {
-            console.log("Error invoking the ajax !" + e);
+        if(!emptyOrder) {
+            try {
+                $.ajax({
+                    url: buildUrlWithContextPath("makeOrder/discount"),
+                    method: 'get',
+                    error: function () {
+                        console.error("Failed to submit");
+                    },
+                    success: function (response) {
+                        $.each(response, function (key, value) {
+                            setDiscountToDiv(value[0].m_Id, value[0].m_Name, value[0].m_Items, value[1]);
+                        });
+                        $("#select-discounts-block").show();
+                        $('.select-item-block').find("*").attr("disabled", "disabled");
+                    }
+                });
+            } catch (e) {
+                console.log("Error invoking the ajax !" + e);
+            }
+        }
+        else
+        {
+            alert("Cannot create an empty order!")
         }
         return false;
     });
@@ -872,21 +883,14 @@ async function loadCreateStoreTab() {
         setContentOfSelectedBtn(createStoreTab)
     }
 
-function refreshOrderHistory() {
+function refreshCustomerOrderHistory() {
     $.ajax
     (
         {
             url: buildUrlWithContextPath("orders"),
             data: "zoneName=" + getCurrentZone(),
             success: function(orders) {
-                if(isCustomer())
-                {
-                    displayOrdersForCustomer(orders)
-                }
-                else
-                {
-                    displayOrdersForManager(orderszone)
-                }
+                displayOrdersForCustomer(orders)
             }
         }
     )
@@ -954,10 +958,45 @@ function loadCustomerHistoryTableData(orders)
     });
 }
 
-function displayOrdersForManager(orders)
+function refreshManagerOrderHistory() {
+    $.ajax
+    (
+        {
+            url: buildUrlWithContextPath("stores"),
+            data: "zoneName=" + getCurrentZone(),
+            success: function(stores) {
+                displayOrdersForManager(stores)
+            }
+        }
+    )
+}
+
+function displayOrdersForManager(stores)
 {
-    addTable("managerOrders",7,"Orders History",["Id","Data","Location","Number Of Items" , "Price Of Items", "Price Of Delivery", "Total Price"], "zone-content");
-    loadManagerHistoryTableData(orders)
+    var divList = document.createElement("div")
+    $.each(stores || [], function(index, store) {
+        $('<li>' + store.m_Name + '</li>')
+       .click(function() {
+           $.ajax
+           (
+               {
+                   url: buildUrlWithContextPath("orders"),
+                   data: "zoneName=" + getCurrentZone() + "&storeId=" + store.m_Id,
+                   success: function(orders) {
+                       var currentTable = document.getElementById("managerOrders");
+                       if(currentTable!==null)
+                       {
+                           currentTable.parentElement.removeChild(currentTable);
+                       }
+                       addTable("managerOrders",7,"Orders History",["Id","Data","Location","Number Of Items" , "Price Of Items", "Price Of Delivery", "Total Price"], "zone-content");
+                       loadManagerHistoryTableData(orders)
+                   }
+               }
+           )
+       }).appendTo(divList)
+            }
+    )
+    $("#zone-content").append(divList)
 }
 //probably we can avoid duplicate with customer orders
 function loadManagerHistoryTableData(orders)

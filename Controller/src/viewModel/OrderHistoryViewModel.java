@@ -25,23 +25,23 @@ public class OrderHistoryViewModel {
                 collect(Collectors.toList());
     }
 
-    public Collection<OrderDto> getAllStorageOrderByOwner(String i_ZoneName, String i_UserName) {
+// public Collection<OrderDto> getAllStorageOrderByOwner(String i_ZoneName, String i_UserName) {
 
-        List<StorageOrder> storageOrders = new ArrayList<>(getAllStorageOrders(i_ZoneName));
-        List<OrderDto> res = new ArrayList<>();
-        for (StorageOrder storageOrder: storageOrders
-             ) {
-            Map<Integer, Order> storeIdToOrder =storageOrder.getStoresIdToOrder();
-            for (Map.Entry<Integer,Order>entry : storeIdToOrder.entrySet()
-                 ) {
-                if(i_UserName.equalsIgnoreCase(m_SuperDuperManager.getStore(i_ZoneName,entry.getKey()).getOwnerName()))
-                {
-                    res.add(new OrderDto(entry.getValue()));
-                }
-            }
-        }
-       return res;
-    }
+//     List<StorageOrder> storageOrders = new ArrayList<>(getAllStorageOrders(i_ZoneName));
+//     List<OrderDto> res = new ArrayList<>();
+//     for (StorageOrder storageOrder: storageOrders
+//          ) {
+//         Map<Integer, Order> storeIdToOrder =storageOrder.getStoresIdToOrder();
+//         for (Map.Entry<Integer,Order>entry : storeIdToOrder.entrySet()
+//              ) {
+//             if(i_UserName.equalsIgnoreCase(m_SuperDuperManager.getStore(i_ZoneName,entry.getKey()).getOwnerName()))
+//             {
+//                 res.add(new OrderDto(entry.getValue()));
+//             }
+//         }
+//     }
+//    return res;
+// }
 
     private Collection<StorageOrder> getAllStorageOrders(String i_ZoneName)
     {

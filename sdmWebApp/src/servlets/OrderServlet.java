@@ -1,6 +1,7 @@
 package servlets;
 import com.google.gson.Gson;
 import constants.Constants;
+import dtoModel.StoreDto;
 import utils.ServletUtils;
 import utils.SessionUtils;
 import viewModel.OrderViewModel;
@@ -9,6 +10,7 @@ import com.google.gson.GsonBuilder;
 import dtoModel.OrderDto;
 import dtoModel.StorageOrderDto;
 import viewModel.OrderHistoryViewModel;
+import viewModel.StoreViewModel;
 import viewModel.UserViewModel;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -71,13 +73,16 @@ public class OrderServlet extends HttpServlet {
             UserViewModel userViewModel = new UserViewModel();
             String zoneName = request.getParameter(Constants.ZONE_NAME_PARAMETER);
 
-            OrderHistoryViewModel orderHistoryViewModel = new OrderHistoryViewModel();
             String jsonResponse;
             if ( userViewModel.getUser(userId).isCustomer()) {
+                OrderHistoryViewModel orderHistoryViewModel = new OrderHistoryViewModel();
                 jsonResponse = gson.toJson(orderHistoryViewModel.getAllStorageOrderOfUser(zoneName, userId).stream()
                         .map(SimpleStorageOrder::new).collect(Collectors.toList()));
             } else {
-                jsonResponse = gson.toJson(orderHistoryViewModel.getAllStorageOrderByOwner(zoneName, SessionUtils.getUsername(request)));
+                int storeId = Integer.parseInt(request.getParameter("storeId"));
+                StoreViewModel storeViewModel = new StoreViewModel();
+                StoreDto storeDto = storeViewModel.getStore(zoneName,storeId);
+                jsonResponse = gson.toJson(storeDto.getAllOrders());
             }
 
             try (PrintWriter out = response.getWriter()) {

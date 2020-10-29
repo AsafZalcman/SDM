@@ -39,7 +39,6 @@ public class StoresServlet extends HttpServlet {
      String userName = SessionUtils.getUsername(request);
      if (userName != null) {
          response.setContentType("application/json");
-         ZoneViewModel zoneViewModel = new ZoneViewModel();
          Gson gson = new GsonBuilder().enableComplexMapKeySerialization()
                  .setPrettyPrinting().create();
          String jsonResponse;
