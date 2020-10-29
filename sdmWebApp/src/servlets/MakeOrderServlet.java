@@ -1,6 +1,7 @@
 package servlets;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dtoModel.OrderDto;
 import dtoModel.StorageOrderDto;
 import dtoModel.StoreDto;
@@ -30,7 +31,9 @@ public class MakeOrderServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Gson gson = new Gson();
+        //Gson gson = new Gson();
+        Gson gson = new GsonBuilder().enableComplexMapKeySerialization()
+                .setPrettyPrinting().create();
         OrderViewModel orderViewModel = ServletUtils.getOrderViewModel(SessionUtils.getUserId(request));
 
         PrintWriter out = response.getWriter();

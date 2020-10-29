@@ -134,30 +134,35 @@ input[type=submit] {
 input[type=submit]:hover {
     background-color: #45a049;
 }
-#selectItemTable {
+
+/* Table css */
+.tableView {
     margin: 0 auto;
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 60%;
 }
 
-#selectItemTable td, #selectItemTable th {
+.tableView td, .tableView th {
     border: 1px solid #ddd;
     padding: 8px;
     color: white;
 }
 
-#selectItemTable tr:nth-child(even){background-color: #f2f2f2;}
+.tableView tr:nth-child(even){background-color: #f2f2f2;}
 
-#selectItemTable tr:hover {background-color: #ddd;}
+.tableView tr:hover {background-color: #ddd;}
 
-#selectItemTable th {
+.tableView th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: center;
     background-color: #4CAF50;
     color: white;
 }
+
+/* Table css */
+
 .select-item-block, #selectItemForm{
     text-align: center;
 }
@@ -197,5 +202,10 @@ input[type=submit]:hover {
     color: #eee;
     margin: 20px auto;
     padding: 10px;
+}
+
+.zone-content{
+    color: white;
+    text-align: center;
 }
 

@@ -67,7 +67,8 @@ async function loadMakeOrder(){
     var mainBlockDiv = loadMainBlock();
     var selectItemsDiv = loadSelectItemBlock();
     var selectDiscounts = loadSelectDiscountsBlock();
-    var container = "<div class=\"makeAnOrder\" id=\"makeAnOrder\">" + "\n" + mainBlockDiv + "\n" +  selectItemsDiv + "\n" + selectDiscounts  + "\n" + "</div>";
+    var orderSummeryDiv = loadOrderSummeryBlock();
+    var container = "<div class=\"makeAnOrder\" id=\"makeAnOrder\">" + "\n" + mainBlockDiv + "\n" +  selectItemsDiv + "\n" + selectDiscounts + "\n" + orderSummeryDiv + "\n" + "</div>";
 
     return container;
     }
@@ -213,10 +214,10 @@ function onLoadDiscountSelect(){
             },
             success: function (storageOrderDto) {
                 //only for asaf until implementation
-                $.ajax({
-                    url: buildUrlWithContextPath("makeOrder"),
-                    method: 'POST',
-                })
+                // $.ajax({
+                //     url: buildUrlWithContextPath("makeOrder"),
+                //     method: 'POST',
+                // })
                 console.log(storageOrderDto);
                 $("#order-summery-block").show();
             }
@@ -427,8 +428,12 @@ function setDiscountToDiv(storeID, storeName,itemsArray, discounts){
             radioOffer.name = "offer";
             radioOffer.value = discount.m_StoreOfferDtos[index].m_ItemId;
 
-            if(discount.m_StoreDiscountOperator != "ONE-OF"){
+            if(discount.m_StoreDiscountOperator !== "ONE-OF"){
                 radioOffer.disabled = true;
+            }else {
+                if (index === 0){
+                    radioOffer.required = true;
+                }
             }
 
             var radioBr = document.createElement('br');
@@ -464,6 +469,7 @@ function setDiscountToDiv(storeID, storeName,itemsArray, discounts){
                     alert("Discount added to your chart successfully");
                 }
             });
+            return false;
         }
 
 
@@ -638,10 +644,10 @@ function submitSecondStepMakeAnOrder(){
         var myTableDiv = document.getElementById("zone-content");
         var container = document.createElement('div');
         container.id = id
-        var spanTitle = document.createElement('span')
+        var spanTitle = document.createElement('h1')
         spanTitle.textContent = title;
         var table = document.createElement('table');
-        table.className = "table"
+        table.className = "tableView"
         var tableHeaders = document.createElement('thead');
         var tr = document.createElement('TR');
         var tableBody = document.createElement('tbody');
