@@ -49,13 +49,27 @@ public class MakeOrderServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)   {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         Integer userId = SessionUtils.getUserId(request);
+        String returnMessage = "";
         if (userId != null) {
             OrderViewModel orderViewModel = ServletUtils.getOrderViewModel(userId);
-            payForOrder(orderViewModel.getCurrentOrder(),userId);
-            createPaymentAlert(orderViewModel.getCurrentOrder(),SessionUtils.getUsername(request));
-            orderViewModel.executeOrder();
+            try {
+                payForOrder(orderViewModel.getCurrentOrder(), userId);
+                createPaymentAlert(orderViewModel.getCurrentOrder(), SessionUtils.getUsername(request));
+                orderViewModel.executeOrder();
+                response.setStatus(200);
+                returnMessage = "Order Saved";
+            }catch (Exception e){
+                response.setStatus(400);
+                returnMessage = e.getMessage();
+            }
+            finally {
+                try (PrintWriter out = response.getWriter()) {
+                    out.print(returnMessage);
+                    out.flush();
+                }
+            }
         }
     }
 

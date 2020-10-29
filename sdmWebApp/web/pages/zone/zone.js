@@ -170,7 +170,11 @@ function loadSelectDiscountsBlock(){
 
 function loadOrderSummeryBlock(){
     return "<div id=\"order-summery-block\" hidden>\n" +
-        "        <h1>In Order Summery!</h1>\n" +
+        "        <h1>Order Summary:</h1>\n" +
+        "        <h3>Press on each store at the table for more information</h3>\n" +
+        "        <div id=\"order-summary-details\">\n" +
+        "            \n" +
+        "        </div>\n" +
         "    </div>";
 }
 
@@ -204,23 +208,36 @@ function addSummarySubmitForm(order){
     container.id = "order-summary-submit";
     var h1Title = document.createElement('h1');
     h1Title.textContent = "Total Summary:";
-    var itemPriceLabel = document.createElement('label');
+    var itemPriceLabel = document.createElement('h3');
     itemPriceLabel.textContent = "Total Items Price: " + order.m_TotalItemsPrice;
-    var deliveryPriceLabel = document.createElement('label');
+    var deliveryPriceLabel = document.createElement('h3');
     deliveryPriceLabel.textContent = "Total Delivery Price: " + order.m_DeliveryPrice;
-    var totalPriceLabel = document.createElement('label');
+    var totalPriceLabel = document.createElement('h3');
     totalPriceLabel.textContent = "Total Price: " + order.m_TotalOrderPrice;
 
     var okSubmit = document.createElement('button');
     okSubmit.textContent = "Save Order";
     okSubmit.onclick = function (){
-      alert("Your Order saved successfully");
+        $.ajax({
+            url: buildUrlWithContextPath("makeOrder"),
+            method: 'POST',
+            error: function (response) {
+                console.error("Failed to send ajax:" + response.responseText);
+            },
+            success: function (storageOrderDto) {
+                alert("Your Order saved successfully");
+
+            }
+        });
     };
+    okSubmit.className = "okButton";
     var cancelSubmit = document.createElement('button');
     cancelSubmit.textContent = "Cancel Order";
     cancelSubmit.onclick = function (){
         alert("Your Order Canceled");
+        location.href = "http://localhost:8080/SDM/pages/zone/zone.html";
     };
+    cancelSubmit.className = "cancelButton";
 
 
     container.appendChild(h1Title);
@@ -233,7 +250,7 @@ function addSummarySubmitForm(order){
 }
 
 function loadOrderSummeryDetails(storageOrderDto){
-    addTable("storesOrderSummeryTable", 5, "Stores", ["ID", "Name", "PPK", "Distance From Customer", "Delivery Price"], "order-summery-block");
+    addTable("storesOrderSummeryTable", 5, "Stores", ["ID", "Name", "PPK", "Distance From Customer", "Delivery Price"], "order-summary-details");
 
     $.each(storageOrderDto.m_StoreToOrderMap, function (index, storeToOrder) {
 
@@ -253,7 +270,7 @@ function loadOrderSummeryDetails(storageOrderDto){
             if (currentTable !== null) {
                 currentTable.parentElement.removeChild(currentTable);
             }
-            addTable("storeOrderItemsTable", 7, "Order Items Of " + storeToOrder[0].m_Name, ["ID", "Name", "Purchase Form", "Amount", "Price Per Unit", "Total Price", "From Discount"], "order-summery-block")
+            addTable("storeOrderItemsTable", 7, "Order Items Of " + storeToOrder[0].m_Name, ["ID", "Name", "Purchase Form", "Amount", "Price Per Unit", "Total Price", "From Discount"], "order-summary-details")
             $.each( storeToOrder[1].m_ItemsDto || [], function (index, storeItem) {
                 var trItem = $(document.createElement('tr'));
                 var tdID = $(document.createElement('td')).text(storeItem.m_ItemId);
@@ -297,11 +314,6 @@ function onLoadDiscountSelect(){
                 console.error("Failed to send ajax:" + response.responseText);
             },
             success: function (storageOrderDto) {
-                //only for asaf until implementation
-                // $.ajax({
-                //     url: buildUrlWithContextPath("makeOrder"),
-                //     method: 'POST',
-                // })
                 console.log(storageOrderDto);
                 loadOrderSummeryDetails(storageOrderDto);
                 $('#select-discounts-block').find("*").attr("disabled", "disabled");
@@ -516,9 +528,9 @@ function setDiscountToDiv(storeID, storeName,itemsArray, discounts){
 
             if(discount.m_StoreDiscountOperator !== "ONE-OF"){
                 radioOffer.disabled = true;
-            }else {
-                if (index === 0){
-                    radioOffer.required = true;
+            }else{
+                if(index === 0){
+                    radioOffer.defaultChecked = true;
                 }
             }
 
