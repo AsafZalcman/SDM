@@ -32,7 +32,23 @@ import java.util.List;
 @WebServlet("/storeFeedback")
 @MultipartConfig
 public class StoreFeedbackServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String userName = SessionUtils.getUsername(request);
+        String returnMessage = "";
+        if (userName != null) {
+            int storeId = Integer.parseInt(request.getParameter(Constants.STORE_ID_PARAMETER));
+            String zoneName = request.getParameter(Constants.ZONE_NAME_PARAMETER);
 
+            StoreViewModel storeViewModel = new StoreViewModel();
+            StoreDto storeDto = storeViewModel.getStore(zoneName,storeId);
+            returnMessage = new Gson().toJson(storeDto.getFeedbacks());
+                try (PrintWriter out = response.getWriter()) {
+                    out.print(returnMessage);
+                    out.flush();
+                }
+            }
+        }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String userName = SessionUtils.getUsername(request);
