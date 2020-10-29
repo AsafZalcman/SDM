@@ -1,6 +1,7 @@
 package servlets;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dtoModel.OrderDto;
 import dtoModel.StorageOrderDto;
 import dtoModel.StoreDto;
@@ -30,7 +31,9 @@ public class MakeOrderServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Gson gson = new Gson();
+        //Gson gson = new Gson();
+        Gson gson = new GsonBuilder().enableComplexMapKeySerialization()
+                .setPrettyPrinting().create();
         OrderViewModel orderViewModel = ServletUtils.getOrderViewModel(SessionUtils.getUserId(request));
 
         PrintWriter out = response.getWriter();
@@ -46,13 +49,27 @@ public class MakeOrderServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)   {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         Integer userId = SessionUtils.getUserId(request);
+        String returnMessage = "";
         if (userId != null) {
             OrderViewModel orderViewModel = ServletUtils.getOrderViewModel(userId);
-            payForOrder(orderViewModel.getCurrentOrder(),userId);
-            createPaymentAlert(orderViewModel.getCurrentOrder(),SessionUtils.getUsername(request));
-            orderViewModel.executeOrder();
+            try {
+                payForOrder(orderViewModel.getCurrentOrder(), userId);
+                createPaymentAlert(orderViewModel.getCurrentOrder(), SessionUtils.getUsername(request));
+                orderViewModel.executeOrder();
+                response.setStatus(200);
+                returnMessage = "Order Saved";
+            }catch (Exception e){
+                response.setStatus(400);
+                returnMessage = e.getMessage();
+            }
+            finally {
+                try (PrintWriter out = response.getWriter()) {
+                    out.print(returnMessage);
+                    out.flush();
+                }
+            }
         }
     }
 
