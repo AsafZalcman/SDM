@@ -198,6 +198,91 @@ function cleanOrderView(){
     });
 }
 
+function addSummarySubmitForm(order){
+    var myDiv = document.getElementById("order-summery-block");
+    var container = document.createElement('div');
+    container.id = "order-summary-submit";
+    var h1Title = document.createElement('h1');
+    h1Title.textContent = "Total Summary:";
+    var itemPriceLabel = document.createElement('label');
+    itemPriceLabel.textContent = "Total Items Price: " + order.m_TotalItemsPrice;
+    var deliveryPriceLabel = document.createElement('label');
+    deliveryPriceLabel.textContent = "Total Delivery Price: " + order.m_DeliveryPrice;
+    var totalPriceLabel = document.createElement('label');
+    totalPriceLabel.textContent = "Total Price: " + order.m_TotalOrderPrice;
+
+    var okSubmit = document.createElement('button');
+    okSubmit.textContent = "Save Order";
+    okSubmit.onclick = function (){
+      alert("Your Order saved successfully");
+    };
+    var cancelSubmit = document.createElement('button');
+    cancelSubmit.textContent = "Cancel Order";
+    cancelSubmit.onclick = function (){
+        alert("Your Order Canceled");
+    };
+
+
+    container.appendChild(h1Title);
+    container.appendChild(itemPriceLabel);
+    container.appendChild(deliveryPriceLabel);
+    container.appendChild(totalPriceLabel);
+    container.appendChild(okSubmit);
+    container.appendChild(cancelSubmit);
+    myDiv.appendChild(container);
+}
+
+function loadOrderSummeryDetails(storageOrderDto){
+    addTable("storesOrderSummeryTable", 5, "Stores", ["ID", "Name", "PPK", "Distance From Customer", "Delivery Price"], "order-summery-block");
+
+    $.each(storageOrderDto.m_StoreToOrderMap, function (index, storeToOrder) {
+
+        var tr = $(document.createElement('tr'));
+        var tdID = $(document.createElement('td')).text(storeToOrder[0].m_Id);
+        var tdName = $(document.createElement('td')).text(storeToOrder[0].m_Name);
+        var tdPPK = $(document.createElement('td')).text(show2DecimalPlaces(storeToOrder[0].m_PPK));
+
+
+
+        tdID.appendTo(tr);
+        tdName.appendTo(tr);
+        tdPPK.appendTo(tr);
+
+        tr.click(function () {
+            var currentTable = document.getElementById("storeOrderItemsTable");
+            if (currentTable !== null) {
+                currentTable.parentElement.removeChild(currentTable);
+            }
+            addTable("storeOrderItemsTable", 7, "Order Items Of " + storeToOrder[0].m_Name, ["ID", "Name", "Purchase Form", "Amount", "Price Per Unit", "Total Price", "From Discount"], "order-summery-block")
+            $.each( storeToOrder[1].m_ItemsDto || [], function (index, storeItem) {
+                var trItem = $(document.createElement('tr'));
+                var tdID = $(document.createElement('td')).text(storeItem.m_ItemId);
+                var tdName = $(document.createElement('td')).text(storeItem.m_ItemName);
+                var tdPurchaseForm = $(document.createElement('td')).text(storeItem.m_PurchaseForm);
+                var tdAmount = $(document.createElement('td')).text(storeItem.m_AmountOfSell);
+                var tdPricePerUnit = $(document.createElement('td')).text(show2DecimalPlaces(storeItem.m_Price));
+                var tdTotalPrice = $(document.createElement('td')).text(show2DecimalPlaces(parseInt(storeItem.m_Price) * parseInt(storeItem.m_AmountOfSell)));
+                var tdIsPartOfDiscount = $(document.createElement('td')).text(storeItem.m_FromDiscount);
+
+                tdID.appendTo(trItem);
+                tdName.appendTo(trItem);
+                tdPurchaseForm.appendTo(trItem);
+                tdAmount.appendTo(trItem);
+                tdPricePerUnit.appendTo(trItem);
+                tdTotalPrice.appendTo(trItem);
+                tdIsPartOfDiscount.appendTo(trItem);
+
+                $("#storeOrderItemsTable table tbody").append(trItem);
+            });
+        });
+
+        $("#storesOrderSummeryTable table").append(tr);
+    });
+
+
+    addSummarySubmitForm(storageOrderDto.m_OrderDto);
+}
+
 function onLoadDiscountSelect(){
     $('#storeDiscount').change(function (){
         var storeID = $(this).val();
@@ -205,7 +290,6 @@ function onLoadDiscountSelect(){
     });
 
     $("#selectDiscountForm").submit(function (){
-        $('#select-discounts-block').find("*").attr("disabled", "disabled");
         $.ajax({
             url: buildUrlWithContextPath("makeOrder"),
             method: 'GET',
@@ -219,6 +303,8 @@ function onLoadDiscountSelect(){
                 //     method: 'POST',
                 // })
                 console.log(storageOrderDto);
+                loadOrderSummeryDetails(storageOrderDto);
+                $('#select-discounts-block').find("*").attr("disabled", "disabled");
                 $("#order-summery-block").show();
             }
         });
@@ -548,7 +634,7 @@ function submitSecondStepMakeAnOrder(){
     function loadStorageItemsList(items) {
         if (!$("#storageItemsTable").length)  // table not exists
         {
-            addTable("storageItemsTable", 6, "Storage Items", ["ID", "Name", "Purchase Form", "How Many Stores Sell", "Average Price", "Sold So Far"])
+            addTable("storageItemsTable", 6, "Storage Items", ["ID", "Name", "Purchase Form", "How Many Stores Sell", "Average Price", "Sold So Far"], "zone-content");
         }
         loadStorageItemsListData(items)
     }
@@ -583,7 +669,7 @@ function submitSecondStepMakeAnOrder(){
                 "Number Of Orders",
                 "PPK",
                 "Incomes From Items",
-                "Incomes From Deliveries"])
+                "Incomes From Deliveries"], "zone-content");
         }
         loadStoreTableData(stores);
     }
@@ -619,7 +705,7 @@ function submitSecondStepMakeAnOrder(){
                 if (currentTable !== null) {
                     currentTable.parentElement.removeChild(currentTable);
                 }
-                addTable("storeItemsTable", 5, "Available Items Of " + store.m_Name, ["ID", "Name", "Purchase Form", "Price", "Sold So Far"])
+                addTable("storeItemsTable", 5, "Available Items Of " + store.m_Name, ["ID", "Name", "Purchase Form", "Price", "Sold So Far"], "zone-content")
                 $.each(store.m_Items || [], function (index, storeItem) {
                     var trItem = $(document.createElement('tr'));
                     var tdID = $(document.createElement('td')).text(storeItem.m_ItemId);
@@ -640,11 +726,11 @@ function submitSecondStepMakeAnOrder(){
         });
     }
 
-    function addTable(id, numberOfColumns, title, headers) {
-        var myTableDiv = document.getElementById("zone-content");
+    function addTable(id, numberOfColumns, title, headers, tableDiv) {
+        var myTableDiv = document.getElementById(tableDiv);
         var container = document.createElement('div');
-        container.id = id
-        var spanTitle = document.createElement('h1')
+        container.id = id;
+        var spanTitle = document.createElement('h1');
         spanTitle.textContent = title;
         var table = document.createElement('table');
         table.className = "tableView"
@@ -796,7 +882,7 @@ function refreshOrderHistory() {
 
 function displayOrdersForCustomer(orders)
 {
-    addTable("customerOrders",8,"Orders History",["Id","Data","Location","Number Of Stores In Order","Number Of Items" , "Price Of Items", "Price Of Delivery", "Total Price"])
+    addTable("customerOrders",8,"Orders History",["Id","Data","Location","Number Of Stores In Order","Number Of Items" , "Price Of Items", "Price Of Delivery", "Total Price"], "zone-content")
     loadCustomerHistoryTableData(orders)
 }
 
@@ -827,7 +913,7 @@ function loadCustomerHistoryTableData(orders)
             {
                 currentTable.parentElement.removeChild(currentTable);
             }
-            addTable("OrderDetailsTable",8,"Details Of Order number: "+order.orderDto.m_Id,["ID","Name","Purchase Form","From Store","Amount","Price For Piece","Total Price","From Discount"])
+            addTable("OrderDetailsTable",8,"Details Of Order number: "+order.orderDto.m_Id,["ID","Name","Purchase Form","From Store","Amount","Price For Piece","Total Price","From Discount"], "zone-content")
             $.each(order.simpleStoreToOrderMap || [], function(index, simpleStoreToOrderMap){
                 $.each(simpleStoreToOrderMap[1].m_ItemsDto || [], function(index, item){
                 var trItem = $(document.createElement('tr'));
@@ -858,7 +944,7 @@ function loadCustomerHistoryTableData(orders)
 
 function displayOrdersForManager(orders)
 {
-    addTable("managerOrders",7,"Orders History",["Id","Data","Location","Number Of Items" , "Price Of Items", "Price Of Delivery", "Total Price"])
+    addTable("managerOrders",7,"Orders History",["Id","Data","Location","Number Of Items" , "Price Of Items", "Price Of Delivery", "Total Price"], "zone-content");
     loadManagerHistoryTableData(orders)
 }
 //probably we can avoid duplicate with customer orders
@@ -887,7 +973,7 @@ function loadManagerHistoryTableData(orders)
             {
                 currentTable.parentElement.removeChild(currentTable);
             }
-            addTable("OrderDetailsTable",7,"Details Of Order number: "+order.m_Id,["ID","Name","Purchase Form","Amount","Price For Piece","Total Price","From Discount"])
+            addTable("OrderDetailsTable",7,"Details Of Order number: "+order.m_Id,["ID","Name","Purchase Form","Amount","Price For Piece","Total Price","From Discount"], "zone-content");
             $.each(order.m_ItemsDto || [], function(index, item){
                     var trItem = $(document.createElement('tr'));
                     var tdID = $(document.createElement('td')).text(item.m_ItemId);
