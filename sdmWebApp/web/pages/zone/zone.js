@@ -406,7 +406,11 @@ function setDiscountToDiv(storeID, storeName,itemsArray, discounts){
         var br = document.createElement('br');
 
         var thenYouGet = document.createElement('label');
-        thenYouGet.textContent = "Then You Get:";
+        if(discount.m_StoreDiscountOperator === "ONE-OF") {
+            thenYouGet.textContent = "Then You Get ONE-OF the following: ";
+        }else{
+            thenYouGet.textContent = "Then You Get: ";
+        }
 
 
         let theOffer = document.createElement('form');
