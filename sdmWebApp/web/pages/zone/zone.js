@@ -630,7 +630,7 @@ function onLoadDiscountSelect(){
         $('.select-item-block').hide();
         $('#pre-form').submit(function () {
             var parameters = $(this).serialize();
-
+var isStaticOrder = this.method.value === "static"
             parameters = parameters.concat("&zone=" + getCurrentZone());
 
             try {
@@ -643,7 +643,7 @@ function onLoadDiscountSelect(){
                         console.error("Failed to submit");
                     },
                     success: async function (r) {
-                        await getAllItemsMakeAnOrder();
+                        await getAllItemsMakeAnOrder(isStaticOrder);
                         $('.select-item-block').show();
                         $('#pre-form fieldset').prop('disabled', 'disabled');
 
@@ -680,7 +680,7 @@ function onLoadDiscountSelect(){
         }
     }
 
-    function getAllItemsMakeAnOrder(){
+    function getAllItemsMakeAnOrder(isStatic){
     try {
         $.ajax({
             url: buildUrlWithContextPath("makeOrder/item"),
@@ -699,20 +699,19 @@ function onLoadDiscountSelect(){
                     var tdPrice = $(document.createElement('td')).text(item.m_Price);
                     var tdAmount = $(document.createElement('td'));
                     var tdSubmit = $(document.createElement('td'));
+if(!isStatic || item.m_Price > 0.0) {
+    tdAmount.append($("<input onkeypress=\"return isFloatNumber(this,event)\" name='amount' type='text' style='color: white; text-align: center;' required/>")
+        .attr("id", item.m_ItemId + "amount"));
 
-                    tdAmount.append($("<input onkeypress=\"return isFloatNumber(this,event)\" name='amount' type='text' style='color: white; text-align: center;' required/>")
-                        .attr("id", item.m_ItemId + "amount"));
+    var button = $(document.createElement('button')).text("Add Item");
+    button.addClass("addItemBtn");
+    button.click(function () {
+        var amountVal = parseFloat($("#" + item.m_ItemId + "amount").val());
+        addItemToOrder(item.m_ItemId, amountVal);
+    });
 
-                    var button = $(document.createElement('button')).text("Add Item");
-                    button.addClass("addItemBtn");
-                    //button.setAttribute('onclick', 'addItemToOrder(item.m_ItemId, parseFloat($("#" + item.m_ItemId + "amount").val()))');
-                    button.click(function () {
-                        var amountVal = parseFloat($("#" + item.m_ItemId + "amount").val());
-                        addItemToOrder(item.m_ItemId, amountVal);
-                    });
-
-                    tdSubmit.append(button);
-
+    tdSubmit.append(button);
+}
 
                     tdID.appendTo(tr);
                     tdName.appendTo(tr);
@@ -1214,7 +1213,7 @@ function refreshFeedbacksContent()
     )
 }
 
-function displayFeedbacksForManager()
+function displayFeedbacksForManager(stores)
 {
     var divList = document.createElement("div")
     $.each(stores || [], function(index, store) {
@@ -1249,7 +1248,7 @@ function loadFeedbacksTableData(feedbacks)
         var tdAuthor = $(document.createElement('td')).text(feedback.m_UserName);
         var tdDate  = $(document.createElement('td')).text(feedback.m_Date.day + "." + feedback.m_Date.month+ "." + feedback.m_Date.year);
         var tdRank = $(document.createElement('td')).text(feedback.m_Rank)
-        var tdDescription = $(document.createElement('td')).text(feedback.Description === undefined? "-" : feedback.Description )
+        var tdDescription = $(document.createElement('td')).text(feedback.m_Description === undefined? "-" : feedback.m_Description )
 
         tdAuthor.appendTo(tr);
         tdDate.appendTo(tr);
