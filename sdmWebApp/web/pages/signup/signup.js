@@ -5,7 +5,8 @@ $(function() {
                 url: buildUrlWithContextPath("users"),
                 method: 'POST',
                 error: function (response) {
-                    console.error("Failed to send ajax:" + response.responseText);
+                    alert(response.responseText);
+                    //console.error("Failed to send ajax:" + response.responseText);
                 },
                 success: function () {
                         console.log('Redirect to dashboard');

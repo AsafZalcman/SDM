@@ -206,7 +206,9 @@ private void addItemToDiscountsMap(int i_StoreId,OrderItem i_OrderItem)
                         .filter(storeDiscount -> storeDiscount.isAvailable(itemIdToLeftAmount))
                         .map(StoreDiscountDto::new)
                         .collect(Collectors.toList());
-                res.put(new StoreDto(store), currentAvailableDiscounts);
+                if(currentAvailableDiscounts.size()>0) {
+                    res.put(new StoreDto(store), currentAvailableDiscounts);
+                }
             }
 
         }
