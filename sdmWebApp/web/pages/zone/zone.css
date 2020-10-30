@@ -82,6 +82,7 @@ option {
 .orderType{
     clear: none;
 }
+/*
 input[type=radio] {
     display: none;
 }
@@ -117,6 +118,8 @@ label.radio:after {
 input[type=radio]:checked + label:after {
     opacity: 1;
 }
+*/
+
 input::placeholder {
     color: #eee;
 }
@@ -234,5 +237,24 @@ input[type=submit]:hover {
 .cancelButton{
     width: 11%;
     background-color: #8e0909;
+}
+
+.boxBorder{
+    width: 60%;
+    border: solid white 1px;
+    color: #eee;
+    margin: 20px auto;
+    padding: 10px;
+}
+
+textarea {
+    width: 100%;
+    height: 150px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    resize: none;
 }
 
