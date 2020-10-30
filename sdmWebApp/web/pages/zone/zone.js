@@ -998,7 +998,7 @@ async function loadCreateStoreTab() {
                         var button = $(document.createElement('button')).text("Add Item")
                         button.click(function () {
                             var priceVal = parseFloat($("#" + item.m_ItemId + "price").val())
-                            if (priceVal <= 0.0) {
+                            if (isNaN(priceVal) || priceVal <= 0.0) {
                                 alert("Price must be positive number!!");
                             } else {
                                 trItem.remove()
@@ -1020,6 +1020,11 @@ async function loadCreateStoreTab() {
         $("#createStoreForm").submit(function () {
             if (requestedItems.length === 0) {
                 alert("Cannot Create Empty Store!!");
+            }
+                else if(isNaN(parseInt(this.id.value)) || parseInt(this.id.value) <=0 || parseInt(this.id.value) !== parseFloat(this.id.value))
+            {
+                alert("Store id must be a whole number!!");
+
             } else {
                 $.ajax({
                     data: $(this).serialize() + "&items=" + JSON.stringify(requestedItems) + "&zoneName=" + getCurrentZone(),
