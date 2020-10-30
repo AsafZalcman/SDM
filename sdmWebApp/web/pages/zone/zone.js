@@ -45,7 +45,6 @@ break
 
     $(function () {
         var customerMenuButtons = $("<button onclick=\"switchContent(event,'makeAnOrder')\">Make an order</button>\n" +
-            "    <button onclick=\"switchContent(event,'rank')\">Rank managers</button>\n" +
             "    <button onclick=\"switchContent(event,'customerOrderHistory')\">Orders history</button>");
         var managerMenuButtons = $("<button onclick=\"switchContent(event,'managerOrderHistory')\">Orders history</button>\n" +
             "    <button onclick=\"switchContent(event,'feedback')\">Feedbacks</button>\n" +
@@ -461,15 +460,12 @@ function loadDiscountForStoreID(storeID, discounts){
         var br = document.createElement('br');
 
         var thenYouGet = document.createElement('label');
-        if(discount.m_StoreDiscountOperator === "ONE-OF") {
-            thenYouGet.textContent = "Then You Get ONE-OF the following: ";
-        }else{
-            thenYouGet.textContent = "Then You Get: ";
-        }
+
 
 
         let theOffer = document.createElement('form');
         var index;
+        var sum = 0;
         for (index = 0; index < discount.m_StoreOfferDtos.length; index++){
             let labelOffer = document.createElement('label');
             labelOffer.htmlFor = "radio" + index;
@@ -495,6 +491,15 @@ function loadDiscountForStoreID(storeID, discounts){
             theOffer.append(labelOffer);
             theOffer.append(radioOffer);
             theOffer.append(radioBr);
+
+            sum += parseInt(discount.m_StoreOfferDtos[index].m_ForAdditional);
+        }
+
+
+        if(discount.m_StoreDiscountOperator === "ONE-OF") {
+            thenYouGet.textContent = "Then You Get ONE-OF the following: ";
+        }else{
+            thenYouGet.textContent = "Then You Get All of the following for total price of " + sum + " shekels.";
         }
 
         let submitOffer = document.createElement('input');
@@ -522,7 +527,7 @@ function loadDiscountForStoreID(storeID, discounts){
                     console.log(response);
                     alert("Discount added to your chart successfully");
                     //here should re-fetch the discounts form servlet.
-                    $('#storeDiscount').empty();
+                    $('#storeDiscount option').remove();
                     $('#discounts').empty();
                     getAllAvialDiscount();
                 }
@@ -731,9 +736,8 @@ if(!isStatic || item.m_Price > 0.0) {
     }
 
 function setDiscountToDiv(storeID, storeName,itemsArray, discounts){
-    console.log(itemsArray);
-    $('#storeDiscount').append($("<option></option>").attr("value", storeID)
-        .text(storeName));
+        $('#storeDiscount').append($("<option></option>").attr("value", storeID)
+            .text(storeName));
 }
 
 function getAllAvialDiscount(){
@@ -745,10 +749,17 @@ function getAllAvialDiscount(){
                 console.error("Failed to submit");
             },
             success: function (response) {
-                $.each(response, function (key, value) {
-                    storeIDtoDiscounts.set(value[0].m_Id, value[1]);
-                    setDiscountToDiv(value[0].m_Id, value[0].m_Name, value[0].m_Items, value[1]);
-                });
+                if(Object.keys(response).length === 0 && response.constructor === Object){
+                    var h2NoAviel = document.createElement('h2');
+                    h2NoAviel.textContent = "No Available Discounts!";
+                    $('#discounts').append(h2NoAviel);
+                }else {
+                    $.each(response, function (key, value) {
+                        storeIDtoDiscounts.set(value[0].m_Id, value[1]);
+                        setDiscountToDiv(value[0].m_Id, value[0].m_Name, value[0].m_Items, value[1]);
+                    });
+                    $("#storeDiscount").prop("selectedIndex", 0).change();
+                }
                 $("#select-discounts-block").show();
                 $('.select-item-block').find("*").attr("disabled", "disabled");
             }
