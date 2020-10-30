@@ -18,18 +18,9 @@ function refreshUsersList(users) {
     });
 }
 
-//entries = the added chat strings represented as a single string
 function appendToAccountArea(account) {
-//    $("#chatarea").children(".success").removeClass("success");
-    
-    // add the relevant entries
     $.each(account.m_AccountMovementsList || [], appendAccountEntry);
-    
-    // handle the scroller to auto scroll to the end of the chat area
- //   var scroller = $("#accountarea");
- //   var height = scroller[0].scrollHeight - $(scroller).height();
- //   $(scroller).stop().animate({ scrollTop: height }, "slow");
-    $("#balance").textContent="Balance:" +show2DecimalPlaces(account.m_Balance)
+    $("#balanceLabel").text("Balance:" +show2DecimalPlaces(account.m_Balance))
 
 }
 
@@ -55,27 +46,6 @@ function createAccountEntry (accountMovement){
     return tr
 }
 
-/*
-
-           data will arrive in the next form:
-           {
-              "accountDto": [
-                             {
-                              "balance":
-                              accountMovements:
-                              [
-
-                                     accountOperationType:
-                                      date:
-                                      amount:
-                                     balanceBefore:
-                                     balanceAfter:
-                                ]
-                              ],
-              "version":1
-           }
-           */
-
 function ajaxUsersList() {
     $.ajax({
         url: USER_LIST_URL,
@@ -94,22 +64,6 @@ function ajaxAccountContent() {
         data: "accountversion=" + accountVersion,
         dataType: 'json',
         success: function (data) {
-            /*
-
-             data will arrive in the next form:
-             {
-               {"accountDto":
-               {"m_Balance":33.0,
-               "m_AccountOperationList":
-                    [{
-                            "m_AccountOperationType":"load",
-                            "m_Date":"12.3.2020",
-                            "m_Amount":24.0,
-                            "m_BalanceBefore":10.0,
-                            "m_BalanceAfter":34.0}]}
-               ,"version":1}
-             }
-             */
             console.log("Server account version: " + data.version + ", Current account version: " + accountVersion);
             if (data.version !== accountVersion) {
                 accountVersion = data.version;
