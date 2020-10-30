@@ -189,6 +189,7 @@ function loadOrderFeedbacksBlock(){
         "        <div id=\"feedbacks\">\n" +
         "            \n" +
         "        </div>\n" +
+        "<input type=\"submit\" value=\"Press here to Make new Order!\" onclick=\"setContentOfSelectedBtn('makeAnOrder')\"/>\n" +
         "    </div>";
 }
 
@@ -218,11 +219,13 @@ function cleanOrderView(){
 }
 
 function loadOrderFeedbacksDetails(stores){
+    console.log(stores);
     $.each(stores, function (index, store) {
         var storeDetails = store[0];
         var myDiv = document.getElementById("feedbacks");
         var container = document.createElement('div');
         container.id = "feedbacks-store" + storeDetails.m_Id;
+        container.className = "boxBorder";
         var h1Title = document.createElement('h1');
         h1Title.textContent = storeDetails.m_Name + "'s store:";
 
@@ -231,59 +234,87 @@ function loadOrderFeedbacksDetails(stores){
         var label1 = document.createElement('label');
         var radio1 = document.createElement('input');
         label1.htmlFor = "radio1";
-        label1.className = "radio";
+        label1.className = "radioTo";
         label1.textContent = "1";
         radio1.id = "radio1";
         radio1.type = "radio";
-        radio1.name = "feedback";
+        radio1.name = "rank";
         radio1.value = "1";
+
 
 
         var label2 = document.createElement('label');
         var radio2 = document.createElement('input');
         label2.htmlFor = "radio2";
-        label2.className = "radio";
+        label2.className = "radioTo";
         label2.textContent = "2";
         radio2.id = "radio2";
         radio2.type = "radio";
-        radio2.name = "feedback";
+        radio2.name = "rank";
         radio2.value = "2";
 
         var label3 = document.createElement('label');
         var radio3 = document.createElement('input');
         label3.htmlFor = "radio3";
-        label3.className = "radio";
+        label3.className = "radioTo";
         label3.textContent = "3";
         radio3.id = "radio3";
         radio3.type = "radio";
-        radio3.name = "feedback";
+        radio3.name = "rank";
         radio3.value = "3";
 
         var label4 = document.createElement('label');
         var radio4 = document.createElement('input');
         label4.htmlFor = "radio4";
-        label4.className = "radio";
+        label4.className = "radioTo";
         label4.textContent = "4";
         radio4.id = "radio4";
         radio4.type = "radio";
-        radio4.name = "feedback";
+        radio4.name = "rank";
         radio4.value = "4";
 
         var label5 = document.createElement('label');
         var radio5 = document.createElement('input');
         label5.htmlFor = "radio5";
-        label5.className = "radio";
+        label5.className = "radioTo";
         label5.textContent = "5";
         radio5.id = "radio5";
         radio5.type = "radio";
-        radio5.name = "feedback";
+        radio5.name = "rank";
         radio5.value = "5";
 
+        radio5.checked = true;
+
         var fbTextArea = document.createElement('textarea');
+        fbTextArea.name = "description";
+        fbTextArea.placeholder = "Enter your feedback here.....";
 
         var fbSubmit = document.createElement('input');
         fbSubmit.type = "submit";
         fbSubmit.value = "Send!";
+
+        feedbackForm.onsubmit = function ()
+        {
+            var parameters = $(this).serialize();
+
+            parameters = parameters.concat("&zoneName=" + getCurrentZone() + "&storeId=" + storeDetails.m_Id + "&date=" + JSON.stringify(store[1].m_Date));
+
+
+            $.ajax({
+                url: buildUrlWithContextPath("storeFeedback"),
+                method: 'POST',
+                data: parameters,
+                error: function (response) {
+                    console.error("Failed to send ajax:" + response.responseText);
+                },
+                success: function (res) {
+                    alert("Feedback saved!");
+                    $('#feedbackForm').trigger("reset");
+                    $('#feedbackForm').find("*").attr("disabled", "disabled");
+                }
+            });
+            return false;
+        }
 
         feedbackForm.appendChild(label1);
         feedbackForm.appendChild(radio1);
@@ -1218,7 +1249,7 @@ function loadFeedbacksTableData(feedbacks)
         var tdAuthor = $(document.createElement('td')).text(feedback.m_UserName);
         var tdDate  = $(document.createElement('td')).text(feedback.m_Date.day + "." + feedback.m_Date.month+ "." + feedback.m_Date.year);
         var tdRank = $(document.createElement('td')).text(feedback.m_Rank)
-        var tdDescription = $(document.createElement('td')).text(show2DecimalPlaces(feedback.Description === null? "-" : feedback.Description ))
+        var tdDescription = $(document.createElement('td')).text(feedback.Description === undefined? "-" : feedback.Description )
 
         tdAuthor.appendTo(tr);
         tdDate.appendTo(tr);
