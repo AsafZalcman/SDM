@@ -22,18 +22,15 @@
     <form id="uploadForm" class="loadXml" action="/zones" enctype="multipart/form-data" method="POST">
         Select a File:
         <br>
-        <input type="file" id=fileInput" accept="text/xml" name="fileInput" required><br>
+        <input type="file" id=fileInput" accept="text/xml" name="fileInput" required>
         <br>
         <input type="Submit" value="Upload File"><br>
     </form>
-    <span class="manageAccount">Manage your account</span>
     <div class="loggedInUsers">Logged-In Users
     <div id="usersList" class="usersList"></div>
     </div>
-    <div class="v1_23"></div>
-    <div class="v1_24"></div>
     <div class="zonesArea">
-        <span>Table of zones</span>
+        <span style="color: white;">Table of zones</span>
     <table id = "zonesTable" class="table">
         <thead>
         <tr>
@@ -53,13 +50,14 @@
         <p id="accountMovementsLabel">Account Movements</p>
         </form>
         <div id="loadMoney">
+            <h1>Load Money!</h1><br>
             <form id="amountToLoadForm" method="Post" action="account">
-                <input type="text"  placeholder="Enter amount to load" required onkeypress="return isFloatNumber(this,event)" id="amountToLoad" name="amountToLoad"/>
+                <p>Amount: <input type="text"  placeholder="Enter amount to load" required onkeypress="return isFloatNumber(this,event)" id="amountToLoad" name="amountToLoad"/></p>
                 <p>Date: <input type="text" id="datepicker" name="date" required></p>
                 <input type="submit" value="Load money">
             </form>
         </div>
-        <table id = "accountMovements" class="table">
+        <table id = "accountMovements" class="table tableAccount">
     <thead>
     <tr>
         <th colspan="1">Date</th>

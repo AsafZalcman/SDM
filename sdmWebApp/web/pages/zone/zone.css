@@ -258,3 +258,41 @@ textarea {
     resize: none;
 }
 
+.basic-store-details{
+    width: 60%;
+    border: solid white 1px;
+    color: #eee;
+    margin: 20px auto;
+    padding: 10px;
+    text-align: center;
+}
+
+.store-items-details{
+    width: 60%;
+    border: solid white 1px;
+    color: #eee;
+    margin: 20px auto;
+    padding: 10px;
+    text-align: center;
+}
+
+#itemsTable{
+    width: 60%;
+    border: solid white 1px;
+    color: #eee;
+    margin: 20px auto;
+    padding: 10px;
+    text-align: center;
+}
+
+.store-list{
+    color: white;
+    vertical-align: top;
+    display: inline-block;
+    font-size: 24px;
+    border-radius: 14px;
+    box-shadow: 3px 0px 3px 1px;
+    overflow: auto;
+    text-align: left;
+}
+

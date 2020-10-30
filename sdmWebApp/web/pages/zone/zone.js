@@ -939,7 +939,9 @@ function submitSecondStepMakeAnOrder(){
     }
 
 async function loadCreateStoreTab() {
-    return "<form id=\"createStoreForm\" action=\"\">\n" +
+    return "    <div class=\"basic-store-details\">\n" +
+        "        <h1>Enter Basic store details:</h1>\n" +
+        "<form id=\"createStoreForm\" action=\"\">\n" +
         "    <label for=\"id\">Store Id (whole number):</label>\n" +
         "    <input  type=\"text\"  id=\"id\" name=\"id\" required><br>\n" +
         "    <label for=\"storeName\">Store Name:</label>\n" +
@@ -952,8 +954,12 @@ async function loadCreateStoreTab() {
         "    <input type=\"text\" id=\"ppk\" name=\"ppk\" required onkeypress=\"return isFloatNumber(this,event)\" ><br>\n" +
         "    <input type=\"submit\" value=\"Create Store\">\n" +
         "</form>\n" +
+        "    </div>\n" +
+        "    <div class=\"store-items-details\">\n" +
+        "        <h1>Select items:</h1>\n" +
         "    <table id=\"itemsTable\">\n" +
-        "    </table>\n"
+        "    </table>\n" +
+        "    </div>\n";
 }
     function createNewStore() {
         signCreateStoreSubmitEvent()
@@ -991,12 +997,14 @@ async function loadCreateStoreTab() {
                         var trItem = $(document.createElement('tr'));
                         var td = $(document.createElement('td'));
                         td.append($("<label></label>")
-                            .text = "Item ID:" + item.m_ItemId)
-                        td.append($("<label>Enter Price:</label>"))
+                            .text = "Item ID: " + item.m_ItemId + ",")
+                        td.append($("<label> Enter Price:</label>"))
                         td.append($("<input onkeypress=\"return isFloatNumber(this,event)\" name='price' type='text' required/>")
                             .attr("id", item.m_ItemId + "price"))
-                        var button = $(document.createElement('button')).text("Add Item")
-                        button.click(function () {
+                        var button = document.createElement('button');
+                        button.textContent = "Add Item";
+                        button.className = "okButton";
+                        button.onclick = function () {
                             var priceVal = parseFloat($("#" + item.m_ItemId + "price").val())
                             if (isNaN(priceVal) || priceVal <= 0.0) {
                                 alert("Price must be positive number!!");
@@ -1006,8 +1014,9 @@ async function loadCreateStoreTab() {
                                 alert("Item was added successfully!!");
 
                             }
-                        })
-                        button.appendTo(td)
+                        };
+                        //button.appendTo(td)
+                        td.append(button);
                         td.appendTo(trItem)
                         $("#itemsTable").append(trItem)
                     })
@@ -1140,7 +1149,11 @@ function refreshManagerOrderHistory() {
 
 function displayOrdersForManager(stores)
 {
-    var divList = document.createElement("div")
+    var container = document.createElement("div");
+    var h1Titel = document.createElement("h1");
+    h1Titel.textContent = "Select store to view the orders:";
+    var divList = document.createElement("div");
+    divList.className = "store-list";
     $.each(stores || [], function(index, store) {
         $('<li>' + store.m_Name + '</li>')
        .click(function() {
@@ -1163,7 +1176,9 @@ function displayOrdersForManager(stores)
        }).appendTo(divList)
             }
     )
-    $("#zone-content").append(divList)
+    container.append(h1Titel);
+    container.append(divList);
+    $("#zone-content").append(container);
 }
 //probably we can avoid duplicate with customer orders
 function loadManagerHistoryTableData(orders)
@@ -1231,7 +1246,11 @@ function refreshFeedbacksContent()
 
 function displayFeedbacksForManager(stores)
 {
-    var divList = document.createElement("div")
+    var container = document.createElement("div");
+    var h1Titel = document.createElement("h1");
+    h1Titel.textContent = "Select store to view the feedbacks:";
+    var divList = document.createElement("div");
+    divList.className = "store-list";
     $.each(stores || [], function(index, store) {
             $('<li>' + store.m_Name + '</li>')
                 .click(function() {
@@ -1253,8 +1272,10 @@ function displayFeedbacksForManager(stores)
                     )
                 }).appendTo(divList)
         }
-    )
-    $("#zone-content").append(divList)
+    );
+    container.append(h1Titel);
+    container.append(divList);
+    $("#zone-content").append(container);
 }
 
 function loadFeedbacksTableData(feedbacks)
