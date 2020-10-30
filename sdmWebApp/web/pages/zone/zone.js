@@ -2,6 +2,7 @@ var zoneDetailsTabName = "details"
 var createStoreTab= "newStore"
 var currentTab=zoneDetailsTabName
 var refreshRate = 2000; //milli seconds
+let storeIDtoStoreDetails = new Map();
 let itemIDtoItemName = new Map();
 let storeIDtoDiscounts = new Map();
 var emptyOrder
@@ -110,6 +111,7 @@ async function loadMakeOrder(){
             "                <select name=\"selectStore\" id=\"selectStore\">\n" +
             "                    <option value=\"\" disabled selected>Select store..</option>\n" +
             "                </select>\n" +
+            "                <h3>Total Delivery Price: </h3>\n" +
             "            </div>\n" +
             "\n" +
             "            <input type=\"submit\" value=\"Press to Continue\">\n" +
@@ -197,6 +199,10 @@ function loadOrderFeedbacksBlock(){
         emptyOrder=true
         $("#datepicker").datepicker();
         await cleanOrderView();
+        $('.orderType').find("*").prop("disabled", true);
+        $('#orderLocation').change(function (){
+            $('.orderType').find("*").prop("disabled", false);
+        });
         getAllAvailableLocationsMakeAnOrder();
         getAllZoneStoresMakeAnOrder();
         onLoadRadioButtonsMakeAnOrder();
@@ -608,8 +614,9 @@ function onLoadDiscountSelect(){
             },
             success: function (zone) {
                 $.each(zone.m_StoresDtos, function (index, store) {
+                    storeIDtoStoreDetails.set(store.m_Id, store);
                     $('#selectStore').append($("<option></option>").attr("value", store.m_Id)
-                        .text(store.m_Name));
+                        .text(store.m_Name + "(ID: " + store.m_Id + "), Location: (" + store.m_Location.x + ", " + store.m_Location.x + ")"));
                 });
             }
         });
@@ -626,6 +633,16 @@ function onLoadDiscountSelect(){
                 $("#selectStore").prop('required', false);
 
             }
+        });
+
+        $('#selectStore').change( function (){
+            let storeID = $(this).val();
+            let storeDetails = storeIDtoStoreDetails.get(parseInt(storeID));
+            let customerLocation = $('#orderLocation').val();
+            let distance = getDistanceBetweenTwoPoints(storeDetails.m_Location, JSON.parse(customerLocation));
+            let price = parseFloat(distance) * parseFloat(storeDetails.m_PPK);
+
+            $('.staticSelectStore h3').text("Total Delivery Price: " + show2DecimalPlaces(price));
         });
 
         $('input[type="radio"]').trigger('click');  // trigger the event
