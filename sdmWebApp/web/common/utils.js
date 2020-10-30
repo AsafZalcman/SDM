@@ -2,7 +2,7 @@ function isCustomer(){return localStorage["userRole"] === "Customer"}
 function setUserRole(role){localStorage["userRole"] = role}
 function setCurrentZone(zoneName){localStorage["currentZone"] = zoneName}
 function getCurrentZone(){return localStorage["currentZone"]}
-function getCurrentAlertVersion(){return localStorage["alertsVersion"]}
+function getCurrentAlertVersion(){return isNaN(parseInt(localStorage["alertsVersion"]))? 0:localStorage["alertsVersion"]}
 function setCurrentAlertVersion(alertsVersion){localStorage["alertsVersion"] = alertsVersion}
 
 function show2DecimalPlaces (value){return Number(Math.round(parseFloat(value + 'e' + 2)) + 'e-' + 2).toFixed(2)}

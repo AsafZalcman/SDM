@@ -11,7 +11,6 @@ $(function() {
                 success: function () {
                         console.log('Redirect to dashboard');
                     setUserRole(document.getElementById('role').value)
-                    setCurrentAlertVersion(0)
                     window.location.href = buildUrlWithContextPath("pages/dashboard/dashboard.html")
                     }
             })
