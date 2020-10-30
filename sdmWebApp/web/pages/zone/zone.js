@@ -1041,7 +1041,7 @@ async function loadCreateStoreTab() {
                     url: buildUrlWithContextPath("stores"),
                     method: 'POST',
                     error: function (response) {
-                        console.error(response);
+                        alert("Error:" + response.responseJSON.errorMessage)
                     },
                     success: function (response) {
                         console.log(response);
