@@ -470,7 +470,7 @@ function loadDiscountForStoreID(storeID, discounts){
             let labelOffer = document.createElement('label');
             labelOffer.htmlFor = "radio" + index;
             labelOffer.className = "radio";
-            labelOffer.textContent = discount.m_StoreOfferDtos[index].m_Quantity + " " + itemIDtoItemName.get(discount.m_StoreOfferDtos[index].m_ItemId) + " For additional " + discount.m_StoreOfferDtos[index].m_ForAdditional + " shekels.";
+            labelOffer.textContent = discount.m_StoreOfferDtos[index].m_Quantity + " " + itemIDtoItemName.get(discount.m_StoreOfferDtos[index].m_ItemId) + " For additional " + discount.m_StoreOfferDtos[index].m_ForAdditional + " shekels per unit.";
 
             let radioOffer = document.createElement('input');
             radioOffer.type = "radio";
@@ -492,14 +492,14 @@ function loadDiscountForStoreID(storeID, discounts){
             theOffer.append(radioOffer);
             theOffer.append(radioBr);
 
-            sum += parseInt(discount.m_StoreOfferDtos[index].m_ForAdditional);
+            sum += parseInt(discount.m_StoreOfferDtos[index].m_ForAdditional * discount.m_StoreOfferDtos[index].m_Quantity );
         }
 
 
         if(discount.m_StoreDiscountOperator === "ONE-OF") {
             thenYouGet.textContent = "Then You Get ONE-OF the following: ";
         }else{
-            thenYouGet.textContent = "Then You Get All of the following for total price of " + sum + " shekels.";
+            thenYouGet.textContent = "Then You Get All of the following for total price of " + sum + " shekels:";
         }
 
         let submitOffer = document.createElement('input');
